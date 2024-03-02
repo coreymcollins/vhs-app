@@ -25,7 +25,7 @@ export default async function Home() {
                 <li>Thirsty Dead: 062896013809</li>
                 <li>Little Bigfoot: 017153840735</li>
                 <li>Great American Bash: 028485107526</li>
-                <li>I'm Gonna Git You Sucka: 027616164131</li>
+                <li>{ "I'm Gonna Git You Sucka: 027616164131" } </li>
             </ul>
         </main>
     )
