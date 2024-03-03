@@ -100,12 +100,40 @@ a {
   text-decoration: none;
 }
 
+h1,
+h2,
+h3 {
+  margin-bottom: 1rem;
+}
+
 ul {
   margin-top: 1rem;
 }
 
 li:not(last-child) {
   margin-bottom: 1rem;
+}
+
+thead {
+  background-color: #fff;
+  color: #000;
+}
+
+thead td {
+  vertical-align: middle;
+}
+
+td {
+  padding: .5rem 1rem;
+  vertical-align: top;
+}
+
+.add-form {
+  margin-bottom: 2rem;
+}
+
+.cover-front {
+  max-width: 300px;
 }
 
 @media (prefers-color-scheme: dark) {

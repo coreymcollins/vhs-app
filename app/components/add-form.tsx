@@ -1,27 +1,30 @@
 'use client'
 
-import { useFormState, useFormStatus } from 'react-dom'
-import { createEntry } from '@/app/actions'
+import { useState } from 'react';
+import { createEntry } from '@/app/actions';
 
 const initialState = {
     message: 'All fields are required.',
-}
-
-function SubmitButton() {
-    const { pending } = useFormStatus()
-
-    return (
-        <button type="submit" aria-disabled={pending}>
-            Add
-        </button>
-    )
-}
+};
 
 export function AddForm() {
-    const [state, formAction] = useFormState( createEntry, initialState );
+    const [state, setState] = useState(initialState);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        
+        const formData = new FormData(event.currentTarget);
+        
+        try {
+            const response = await createEntry(initialState, formData);
+            setState({ message: 'Tape added successfully.' });
+        } catch (error) {
+            setState({ message: 'Error adding tape.' });
+        }
+    };
 
     return (
-        <form action={formAction}>
+        <form onSubmit={handleSubmit} className="add-form">
             <label htmlFor="barcode">Barcode</label>
             <input type="text" id="barcode" name="barcode" required />
             
@@ -36,12 +39,15 @@ export function AddForm() {
             
             <label htmlFor="year">Year</label>
             <input type="number" id="year" name="year" required />
+
+            <label htmlFor="coverfront">Front Cover</label>
+            <input type="file" id="coverfront" name="coverfront" accept="image/*" required />
             
-            <SubmitButton />
+            <button type="submit">Add</button>
             
             <p aria-live="polite" role="status">
-                {state?.message}
+                {state.message}
             </p>
         </form>
-    )
+    );
 }

@@ -10,23 +10,55 @@ export default async function Home() {
     
     return (
         <main>
-            <h1>These are my tapes</h1>
+            <h1>Add a new tape</h1>
             <AddForm />
-            <ul>
+
+            <h2>Current library</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Barcode</td>
+                        <td>Title</td>
+                        <td>Description</td>
+                        <td>Genre</td>
+                        <td>Release Year</td>
+                        <td>Front Cover</td>
+                    </tr>
+                </thead>
+                <tbody>
                 {tapes.map(( tape ) => (
-                    <li key={tape.title}>
-                        {tape.title}
-                    </li>
+                    <tr key={`${tape.barcode}-table-row`}>
+                        <td key={`${tape.barcode}-${tape.id}`}>
+                            {tape.id}
+                        </td>
+                        <td key={tape.barcode}>
+                            {tape.barcode}
+                        </td>
+                        <td key={`${tape.barcode}-${tape.title}`}>
+                            {tape.title}
+                        </td>
+                        <td key={`${tape.barcode}-${tape.description}`}>
+                            {tape.description}
+                        </td>
+                        <td key={`${tape.barcode}-${tape.genre}`}>
+                            {tape.genre}
+                        </td>
+                        <td key={`${tape.barcode}-${tape.year}`}>
+                            {tape.year}
+                        </td>
+                        <td key={`${tape.barcode}-${tape.coverfront}`}>
+                            { tape.coverfront ? (
+                                <img src={`data:image/jpeg;base64,${tape.coverfront.toString('base64')}`} alt={`${tape.title} front cover`} className="cover-front" />
+                            ) : (
+                                <>No image available</>
+                            )}
+                        </td>
+                    </tr>
                 ))}
-            </ul>
-            <h2>Barcodes for testing</h2>
-            <ul>
-                <li>Spice Girls: 085393635534</li>
-                <li>Thirsty Dead: 062896013809</li>
-                <li>Little Bigfoot: 017153840735</li>
-                <li>Great American Bash: 028485107526</li>
-                <li>{ "I'm Gonna Git You Sucka: 027616164131" } </li>
-            </ul>
+                </tbody>
+            </table>
         </main>
     )
 }

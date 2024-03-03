@@ -33,15 +33,23 @@ export async function createEntry(
     if ( ! parse.success ) {
         console.error('Form data parsing failed:', parse.error)
         return { message: `Failed to add entry: ${parse.error.message}` }
-        // return { message: `Failed to add title with the following data: ${parse}` }
     }
 
     const data = parse.data
+    const coverFrontFile = formData.get('coverfront') as File | null
+
+    if (!coverFrontFile) {
+        console.error( 'Cover front file is missing' )
+        return{ message: 'Cover front file is missing' }
+    }
 
     try {
+        const coverFrontBuffer = await coverFrontFile.arrayBuffer()
+        const coverFrontData = Buffer.from(coverFrontBuffer)
+
         await sql`
-            INSERT INTO tapes (barcode, title, description, genre, year)
-            VALUES (${data.barcode}, ${data.title}, ${data.description}, ${data.genre}, ${data.year})
+            INSERT INTO tapes (barcode, title, description, genre, year, coverfront)
+            VALUES (${data.barcode}, ${data.title}, ${data.description}, ${data.genre}, ${data.year}, ${coverFrontData})
         `
         revalidatePath( '/' )
 
@@ -49,6 +57,5 @@ export async function createEntry(
     } catch (e) {
         console.error('Database insertion failed:', e)
         return { message: 'Failed to add entry to the database' }
-        // return { message: `Failed to add title with the following data: ${data.barcode}, ${data.title}, ${data.description}, ${data.genre}, ${data.year}` }
     }
 }
