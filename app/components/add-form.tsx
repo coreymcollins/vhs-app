@@ -41,7 +41,7 @@ export function AddForm() {
             <input type="number" id="year" name="year" required />
 
             <label htmlFor="coverfront">Front Cover</label>
-            <input type="file" id="coverfront" name="coverfront" accept="image/*" required />
+            <input type="file" id="coverfront" name="coverfront" accept="image/*" />
             
             <button type="submit">Add</button>
             
