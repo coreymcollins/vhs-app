@@ -2,8 +2,6 @@ import { Buffer } from 'buffer';
 
 export function SearchResultTable({searchResult}: {searchResult: any}) {
 
-    const imageCoverFront = searchResult.coverfront ? Buffer.from( searchResult.coverfront ).toString( 'base64' ) : null
-    
     return (
         <table>
             <thead>
@@ -38,8 +36,8 @@ export function SearchResultTable({searchResult}: {searchResult: any}) {
                         {searchResult.year}
                     </td>
                     <td key={`${searchResult.barcode}-coverfront`}>
-                        { imageCoverFront && imageCoverFront.length > 0 ? (
-                            <img src={`data:image/jpeg;base64,${imageCoverFront}`} alt={`${searchResult.title} front cover`} className="cover-front" />
+                        { searchResult.coverfront && searchResult.coverfront.length > 0 ? (
+                            <img src={`data:image/jpeg;base64,${searchResult.coverfront}`} alt={`${searchResult.title} front cover`} className="cover-front" />
                         ) : (
                             <>No image available</>
                         )}

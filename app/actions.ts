@@ -3,10 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import postgres from 'postgres'
 import { z } from 'zod'
-
-let sql = postgres(process.env.DATABASE_URL || process.env.POSTGRES_URL!, {
-    ssl: 'allow'
-})
+import sql from './components/database'
 
 export async function createEntry(
     prevState: {
@@ -57,5 +54,26 @@ export async function createEntry(
     } catch (e) {
         console.error('Database insertion failed:', e)
         return { message: 'Failed to add entry to the database' }
+    }
+}
+
+function serializeResult(result: any) {
+    if (result.coverfront instanceof Uint8Array) {
+        result.coverfront = Buffer.from(result.coverfront).toString('base64')
+    }
+
+    return result;
+}
+
+export async function searchByBarcode(barcode: string) {
+    try {
+        const result = await sql`
+            SELECT * FROM tapes WHERE barcode = ${barcode}
+        `
+        
+        return result.length > 0 ? serializeResult(result[0]) : null;
+    } catch (error) {
+        console.error(`Database search failed: ${error}`)
+        throw new Error('Failed to search for the item in the database')
     }
 }
