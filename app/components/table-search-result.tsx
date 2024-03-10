@@ -1,6 +1,6 @@
-import { Buffer } from 'buffer';
+import { SingleTapeRow } from './single-tape-row';
 
-export function SearchResultTable({searchResult}: {searchResult: any}) {
+export function SearchResultTable({tape}: {tape: any}) {
 
     return (
         <table>
@@ -16,33 +16,7 @@ export function SearchResultTable({searchResult}: {searchResult: any}) {
                 </tr>
             </thead>
             <tbody>
-                <tr key={`${searchResult.barcode}-table-row-search`}>
-                    <td key={`${searchResult.barcode}-${searchResult.id}`}>
-                        {searchResult.id}
-                    </td>
-                    <td key={searchResult.barcode}>
-                        {searchResult.barcode}
-                    </td>
-                    <td key={`${searchResult.barcode}-${searchResult.title}`}>
-                        {searchResult.title}
-                    </td>
-                    <td key={`${searchResult.barcode}-${searchResult.description}`}>
-                        {searchResult.description}
-                    </td>
-                    <td key={`${searchResult.barcode}-${searchResult.genre}`}>
-                        {searchResult.genre}
-                    </td>
-                    <td key={`${searchResult.barcode}-${searchResult.year}`}>
-                        {searchResult.year}
-                    </td>
-                    <td key={`${searchResult.barcode}-coverfront`}>
-                        { searchResult.coverfront && searchResult.coverfront.length > 0 ? (
-                            <img src={`data:image/jpeg;base64,${searchResult.coverfront}`} alt={`${searchResult.title} front cover`} className="cover-front" />
-                        ) : (
-                            <>No image available</>
-                        )}
-                    </td>
-                </tr>
+                <SingleTapeRow key={`searchResult-${tape.id}`}  tape={tape} context="search" />
             </tbody>
         </table>
     )

@@ -43,7 +43,7 @@ export function SearchForm() {
             
             { searchResult ? (
                 <>
-                    <SearchResultTable searchResult={searchResult} />
+                    <SearchResultTable tape={searchResult} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">

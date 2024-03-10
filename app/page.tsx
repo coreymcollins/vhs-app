@@ -1,6 +1,7 @@
 import { AddForm } from './components/add-form'
 import { SearchForm } from './components/search-form';
 import sql from './components/database';
+import { SingleTapeRow } from './components/single-tape-row';
 
 interface Tape {
     id: number;
@@ -46,36 +47,9 @@ export default async function Home() {
                     </tr>
                 </thead>
                 <tbody>
-                {tapes.map(( tape ) => (
-                    <tr key={`${tape.barcode}-table-row`}>
-                        <td key={`${tape.barcode}-${tape.id}`}>
-                            {tape.id}
-                        </td>
-                        <td key={tape.barcode}>
-                            {tape.barcode}
-                        </td>
-                        <td key={`${tape.barcode}-${tape.title}`}>
-                            {tape.title}
-                        </td>
-                        <td key={`${tape.barcode}-${tape.description}`}>
-                            {tape.description}
-                        </td>
-                        <td key={`${tape.barcode}-${tape.genre}`}>
-                            {tape.genre}
-                        </td>
-                        <td key={`${tape.barcode}-${tape.year}`}>
-                            {tape.year}
-                        </td>
-                        <td key={`${tape.barcode}-coverfront`}>
-                            { tape.coverfront && tape.coverfront.length > 0 ? (
-                                <img src={`data:image/jpeg;base64,${tape.coverfront.toString('base64')}`} alt={`${tape.title} front cover`} className="cover-front" />
-
-                            ) : (
-                                <>No image available</>
-                            )}
-                        </td>
-                    </tr>
-                ))}
+                    {tapes.map(( tape ) => (
+                        <SingleTapeRow key={`listing-${tape.id}`} tape={tape} context="listing" />
+                    ))}
                 </tbody>
             </table>
         </main>
