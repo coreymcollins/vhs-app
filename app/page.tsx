@@ -1,4 +1,3 @@
-import postgres from 'postgres'
 import { AddForm } from './components/add-form'
 import { SearchForm } from './components/search-form';
 import sql from './components/database';
