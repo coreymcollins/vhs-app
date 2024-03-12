@@ -2,9 +2,10 @@ import { AddForm } from './components/add-form'
 import { SearchForm } from './components/search-form';
 import sql from './components/database';
 import { SingleTapeRow } from './components/single-tape-row';
+import { BarcodeScanQuagga } from './components/search-form-scan-quagga';
 
 interface Tape {
-    id: number;
+    tape_id: number;
     barcode: string;
     title: string;
     description: string;
@@ -17,7 +18,20 @@ export default async function Home() {
     let tapes: Tape[] = []
 
     try {
-        tapes = await sql`SELECT * FROM tapes`;
+        tapes = await sql`
+            SELECT tapes.tape_id,
+            tapes.barcode,
+            tapes.title,
+            tapes.description,
+            tapes.year,
+            tapes.coverfront,
+            STRING_AGG(genres.genre_name, ', ') AS genre_names
+            FROM tapes
+            LEFT JOIN tapes_genres ON tapes.tape_id = tapes_genres.tape_id
+            LEFT JOIN genres ON tapes_genres.genre_id = genres.genre_id
+            GROUP BY tapes.tape_id, tapes.barcode, tapes.title, tapes.description, tapes.year, tapes.coverfront
+            ORDER BY tapes.tape_id;
+        `;
     } catch (error) {
         console.error('Error connecting to the database:', error);
     }
@@ -28,6 +42,9 @@ export default async function Home() {
 
             <h2>Search for an existing tape</h2>
             <SearchForm />
+
+            <h2>Search for an existing tape by barcode</h2>
+            <BarcodeScanQuagga />
 
             <h2>Add new tape</h2>
             <AddForm />
@@ -41,14 +58,14 @@ export default async function Home() {
                         <td>Barcode</td>
                         <td>Title</td>
                         <td>Description</td>
-                        <td>Genre</td>
+                        <td>Genres</td>
                         <td>Release Year</td>
                         <td>Front Cover</td>
                     </tr>
                 </thead>
                 <tbody>
                     {tapes.map(( tape ) => (
-                        <SingleTapeRow key={`listing-${tape.id}`} tape={tape} context="listing" />
+                        <SingleTapeRow key={`listing-${tape.tape_id}`} tape={tape} context="listing" />
                     ))}
                 </tbody>
             </table>

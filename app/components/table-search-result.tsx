@@ -1,6 +1,6 @@
-import { SingleTapeRow } from './single-tape-row';
+import { MultiTapeRow } from './multi-tape-row';
 
-export function SearchResultTable({tape}: {tape: any}) {
+export function SearchResultTable({tapes}: {tapes: any[]}) {
 
     return (
         <table>
@@ -16,7 +16,7 @@ export function SearchResultTable({tape}: {tape: any}) {
                 </tr>
             </thead>
             <tbody>
-                <SingleTapeRow key={`searchResult-${tape.id}`}  tape={tape} context="search" />
+                <MultiTapeRow key="searchResult"  tapes={tapes} context="search" />
             </tbody>
         </table>
     )

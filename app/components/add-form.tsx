@@ -24,7 +24,7 @@ export function AddForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="add-form">
+        <form onSubmit={handleSubmit} className="add-form form">
             <label htmlFor="barcode">Barcode</label>
             <input type="text" id="barcode" name="barcode" required />
             

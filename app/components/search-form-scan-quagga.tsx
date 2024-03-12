@@ -1,0 +1,114 @@
+'use client'
+
+import { useState } from 'react';
+import { searchByBarcode } from '@/app/actions';
+import { SearchResultTable } from './table-search-result';
+import Quagga from '@ericblade/quagga2';
+
+const initialState = {
+    message: 'Enter a barcode number or upload an image to perform a search.',
+};
+
+export function BarcodeScanQuagga() {
+    const [state, setState] = useState(initialState);
+    const [searchResult, setSearchResult] = useState<any | null>(null)
+    
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        
+        const formData = new FormData(event.currentTarget);
+        const barcode = formData.get('barcode') as string;
+        
+        try {
+            const result = await searchByBarcode(barcode)
+
+            if (result) {
+                setState({ message: `Tape found` })
+                setSearchResult(result)
+            } else {
+                setState({ message: `No tapes found for barcode: ${barcode}` })
+                setSearchResult(null)
+            }
+        } catch (error) {
+            setState({ message: `Error searching for tape: ${error}` })
+            setSearchResult(null)
+        }
+    };
+
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const image = new Image();
+                image.onload = async () => {
+                    try {
+                        // Decode barcode from the image
+                        const barcode = await decodeBarcodeFromImage(image);
+                        if (barcode) {
+                            const result = await searchByBarcode(barcode);
+                            if (result) {
+                                setState({ message: `Tape found` });
+                                setSearchResult(result);
+                            } else {
+                                setState({ message: `No tapes found for barcode: ${barcode}` });
+                                setSearchResult(null);
+                            }
+                        } else {
+                            setState({ message: `No barcode found in the image.` });
+                            setSearchResult(null);
+                        }
+                    } catch (error) {
+                        setState({ message: `Error decoding barcode: ${error}` });
+                        setSearchResult(null);
+                    }
+                };
+                image.src = e.target?.result as string;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const decodeBarcodeFromImage = (image: HTMLImageElement): Promise<string | null> => {
+        return new Promise((resolve, reject) => {
+            Quagga.decodeSingle(
+                {
+                    src: image.src,
+                    numOfWorkers: 0,
+                    inputStream: {
+                        size: 800,
+                    },
+                    decoder: {
+                        readers: ['upc_reader'], // Specify UPC-A reader
+                    },
+                },
+                (result) => {
+                    if (result && result.codeResult) {
+                        resolve(result.codeResult.code);
+                    } else {
+                        resolve(null);
+                    }
+                }
+            );
+        });
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="search-form form">           
+            <label htmlFor="image">Upload Image</label>
+            <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
+            
+            <button type="submit">Search</button>
+            
+            { searchResult ? (
+                <>
+                    <SearchResultTable tapes={searchResult} />
+                </>
+            ) : (
+                <p aria-live="polite" role="status">
+                    {state.message}
+                </p>
+            )}
+        </form>
+    );
+}

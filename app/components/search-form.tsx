@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react';
-import { searchByBarcode } from '@/app/actions';
 import { SearchResultTable } from './table-search-result';
+import { searchByQuery } from '@/app/actions';
 
 const initialState = {
     message: 'Enter a barcode number to perform a search.',
@@ -11,21 +11,21 @@ const initialState = {
 export function SearchForm() {
     const [state, setState] = useState(initialState);
     const [searchResult, setSearchResult] = useState<any | null>(null)
-
+    
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
         const formData = new FormData(event.currentTarget);
-        const barcode = formData.get('barcode') as string
+        const searchQuery = formData.get('search-query') as string
         
         try {
-            const result = await searchByBarcode(barcode)
+            const result = await searchByQuery(searchQuery)
 
             if (result) {
                 setState({ message: `Tape found` })
                 setSearchResult(result)
             } else {
-                setState({ message: `No tapes found for barcode: ${barcode}` })
+                setState({ message: `No tapes found for barcode: ${searchQuery}` })
                 setSearchResult(null)
             }
         } catch (error) {
@@ -36,14 +36,14 @@ export function SearchForm() {
 
     return (
         <form onSubmit={handleSubmit} className="search-form form">
-            <label htmlFor="barcode">Barcode</label>
-            <input type="text" id="barcode" name="barcode" required />
-            
+            <label htmlFor="search-query">Search Query</label>
+            <input type="text" id="search-query" name="search-query" required />
+
             <button type="submit">Search</button>
             
             { searchResult ? (
                 <>
-                    <SearchResultTable tape={searchResult} />
+                    <SearchResultTable tapes={searchResult} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">

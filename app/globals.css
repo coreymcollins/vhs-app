@@ -117,10 +117,22 @@ li:not(last-child) {
 thead {
   background-color: #fff;
   color: #000;
+  display: none;
 }
 
 thead td {
   vertical-align: middle;
+}
+
+tbody tr,
+tbody td {
+  display: block;
+}
+
+tbody tr:not(last-child) {
+  border-bottom: 1px solid white;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
 }
 
 td {
@@ -128,7 +140,14 @@ td {
   vertical-align: top;
 }
 
-.add-form {
+tbody td::before {
+  content: attr(data-label) ': ';
+  float: left;
+  font-weight: 600;
+  margin-right: .5rem;
+}
+
+.form {
   margin-bottom: 2rem;
 }
 
@@ -139,5 +158,25 @@ td {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+}
+
+@media (min-width: 800px) {
+
+  thead {
+      display: table-header-group;
+  }
+
+  tbody tr {
+    display: table-row;
+  }
+
+  tbody td {
+    display: table-cell;
+  }
+
+  tbody td::before {
+    content: '';
+    display: none;
   }
 }

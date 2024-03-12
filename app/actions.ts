@@ -76,3 +76,30 @@ export async function searchByBarcode(barcode: string) {
         throw new Error('Failed to search for the item in the database')
     }
 }
+
+export async function searchByQuery(queryString: string) {
+    try {
+        const isNumeric = /^\d+$/.test(queryString);
+
+        const result = await sql`
+            SELECT * FROM tapes
+            WHERE ${
+                isNumeric && queryString.length < 5
+                    ? sql`
+                        year = ${queryString}
+                    `
+                    : sql`
+                        LOWER(title) LIKE ${'%'+queryString.toLowerCase()+'%'}
+                        OR LOWER(description) LIKE ${'%'+queryString.toLowerCase()+'%'}
+                        OR LOWER(genre) LIKE ${'%'+queryString.toLowerCase()+'%'}
+                        OR CAST(barcode AS TEXT) LIKE ${'%'+queryString+'%'}
+                    `
+            }
+        `;
+
+        return result.length > 0 ? result.map(row => serializeResult(row)) : null;
+    } catch (error) {
+        console.error(`Database search failed: ${error}`);
+        throw new Error('Failed to search for the item in the database');
+    }
+}
