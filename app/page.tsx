@@ -43,9 +43,6 @@ export default async function Home() {
         <main>
             <h1>VHS Library</h1>
 
-            <LoginForm />
-            <AddUser />
-
             <h2>Search for an existing tape</h2>
             <SearchForm />
 
