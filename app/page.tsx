@@ -1,8 +1,11 @@
-import { AddForm } from './components/add-form'
-import { SearchForm } from './components/search-form';
-import sql from './components/database';
-import { SingleTapeRow } from './components/single-tape-row';
-import { BarcodeScanQuagga } from './components/search-form-scan-quagga';
+import { AddForm } from './components/add-tape'
+import { SearchForm } from './components/search-form'
+import sql from './components/database'
+import { SingleTapeRow } from './components/single-tape-row'
+import { BarcodeScanQuagga } from './components/search-form-scan-quagga'
+import { AddUser } from './components/add-user'
+import LoginForm from './components/login-form'
+import { SearchResultTable } from './components/table-search-result'
 
 interface Tape {
     tape_id: number;
@@ -40,6 +43,9 @@ export default async function Home() {
         <main>
             <h1>VHS Library</h1>
 
+            <LoginForm />
+            <AddUser />
+
             <h2>Search for an existing tape</h2>
             <SearchForm />
 
@@ -51,24 +57,7 @@ export default async function Home() {
 
             <h2>Current library</h2>
 
-            <table>
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Barcode</td>
-                        <td>Title</td>
-                        <td>Description</td>
-                        <td>Genres</td>
-                        <td>Release Year</td>
-                        <td>Front Cover</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tapes.map(( tape ) => (
-                        <SingleTapeRow key={`listing-${tape.tape_id}`} tape={tape} context="listing" />
-                    ))}
-                </tbody>
-            </table>
+            <SearchResultTable tapes={tapes} />
         </main>
     )
 }

@@ -5,7 +5,7 @@ import { SearchResultTable } from './table-search-result';
 import { searchByQuery } from '@/app/actions';
 
 const initialState = {
-    message: 'Enter a barcode number to perform a search.',
+    message: 'Enter a search query to perform a search.',
 };
 
 export function SearchForm() {
@@ -25,7 +25,7 @@ export function SearchForm() {
                 setState({ message: `Tape found` })
                 setSearchResult(result)
             } else {
-                setState({ message: `No tapes found for barcode: ${searchQuery}` })
+                setState({ message: `No tapes found for query: ${searchQuery}` })
                 setSearchResult(null)
             }
         } catch (error) {
