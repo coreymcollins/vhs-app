@@ -5,7 +5,7 @@ const initialState = {
     message: 'Scan a barcode to perform a search.',
 };
 
-const handleImageScan = (event: React.ChangeEvent<HTMLInputElement>) => {
+const HandleImageScan = (event: React.ChangeEvent<HTMLInputElement>) => {
     const [state, setState] = useState(initialState);
     const file = event.target.files?.[0]
 
@@ -44,4 +44,4 @@ const handleImageScan = (event: React.ChangeEvent<HTMLInputElement>) => {
     }
 }
 
-export default handleImageScan
+export default HandleImageScan
