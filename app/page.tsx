@@ -1,7 +1,6 @@
 import { AddForm } from './components/add-tape'
 import { SearchForm } from './components/search-form'
 import sql from './components/database'
-import { SingleTapeRow } from './components/single-tape-row'
 import { BarcodeScanQuagga } from './components/search-form-scan-quagga'
 import { AddUser } from './components/add-user'
 import LoginForm from './components/login-form'
@@ -42,6 +41,8 @@ export default async function Home() {
     return (
         <main>
             <h1>VHS Library</h1>
+
+            <h2>Edit an existing tape</h2>
 
             <h2>Search for an existing tape</h2>
             <SearchForm />

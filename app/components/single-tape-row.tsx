@@ -1,5 +1,4 @@
 export function SingleTapeRow({tape, context}: {tape: any, context: string}) {
-
     const genres = tape.genre_names ? tape.genre_names.split(', ').sort() : [];
 
     return (

@@ -14,7 +14,7 @@ export async function createEntry(
         barcode: z.string().min(1),
         title: z.string().min(1),
         description: z.string().min(1),
-        genre: z.string().min(1),
+        genres: z.array(z.string().min(1)),
         year: z.number().min(4),
     })
 
@@ -22,7 +22,7 @@ export async function createEntry(
         barcode: formData.get( 'barcode' ),
         title: formData.get( 'title' ),
         description: formData.get( 'description' ),
-        genre: formData.get( 'genre' ),
+        genres: formData.getAll( 'genres' ),
         year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
     })
 
@@ -43,12 +43,26 @@ export async function createEntry(
         const coverFrontBuffer = await coverFrontFile.arrayBuffer()
         const coverFrontData = Buffer.from(coverFrontBuffer)
 
-        await sql`
-            INSERT INTO tapes (barcode, title, description, genre, year, coverfront)
-            VALUES (${data.barcode}, ${data.title}, ${data.description}, ${data.genre}, ${data.year}, ${coverFrontData})
-        `
-        revalidatePath( '/' )
+        await sql.begin(async( sql ) => {
+            const result = await sql`
+                INSERT INTO tapes (barcode, title, description, year, coverfront)
+                VALUES (${data.barcode}, ${data.title}, ${data.description}, ${data.year}, ${coverFrontData})
+                RETURNING tape_id;
+            `;
 
+            const tape_id = result[0].tape_id;
+
+            // Add the genres.
+            for ( const genre of data.genres ) {
+                await sql`
+                    INSERT INTO tapes_genres (tape_id, genre_id)
+                    VALUES (${tape_id}, (SELECT genre_id FROM genres WHERE genre_name = ${genre}));
+                `
+            }
+
+        })
+
+        revalidatePath( '/' )
         return { message: `Added title ${data.title}` }
     } catch (e) {
         console.error('Database insertion failed:', e)
@@ -112,5 +126,20 @@ export async function searchByQuery(queryString: string) {
     } catch (error) {
         console.error(`Database search failed: ${error}`);
         throw new Error('Failed to search for the item in the database');
+    }
+}
+
+export async function searchGenres() {
+    try {
+        const result = await sql`
+            SELECT genre_name FROM genres
+            ORDER BY genre_name;
+        `;
+        
+        const genres = result.map(( row: any ) => row.genre_name )
+        return genres
+    } catch ( error ) {
+        console.error( `Failed to fetch genres: ${error}`)
+        throw new Error( 'Failed to fetch genres from the database' )
     }
 }
