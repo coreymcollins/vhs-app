@@ -43,7 +43,7 @@ export function AddForm() {
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
             <div className="form-row">
                 <label htmlFor="barcode">Barcode</label>
-                <input type="text" id="barcode" name="barcode" className="input-barcode" maxLength={30} required />
+                <input type="text" id="barcode" name="barcode" className="input-barcode" maxLength={30} />
             </div>
             
             <div className="form-row">
