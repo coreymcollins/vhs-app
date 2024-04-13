@@ -8,17 +8,25 @@ export default async function Home() {
         <main>
             <h1>VHS Library</h1>
 
-            <h2>Current library</h2>
-            <Link href="/library">View Full Library</Link>
+            <div className="page-section">
+                <h2>Current library</h2>
+                <Link href="/library">View Full Library</Link>
+            </div>
 
-            <h2>Search for an existing tape</h2>
-            <SearchForm />
+            <div className="page-section">
+                <h2>Search for an existing tape</h2>
+                <SearchForm />
+            </div>
 
-            <h2>Search for an existing tape by barcode</h2>
-            <BarcodeScanQuagga />
+            <div className="page-section">
+                <h2>Search for an existing tape by barcode</h2>
+                <BarcodeScanQuagga />
+            </div>
 
-            <h2>Add new tape</h2>
-            <AddForm />
+            <div className="page-section">
+                <h2>Add new tape</h2>
+                <AddForm />
+            </div>
         </main>
     )
 }

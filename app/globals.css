@@ -113,6 +113,10 @@ li:not(last-child) {
     margin-bottom: 1rem;
 }
 
+.page-section {
+    margin-bottom: 2rem;
+}
+
 thead {
     background-color: #fff;
     color: #000;
