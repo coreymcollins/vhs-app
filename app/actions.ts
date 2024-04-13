@@ -11,7 +11,7 @@ export async function createEntry(
     formData: FormData,
     ) {
     const schema = z.object({
-        barcode: z.string().min(1),
+        barcode: z.string(),
         title: z.string().min(1),
         description: z.string().min(1),
         genres: z.array(z.string().min(1)),

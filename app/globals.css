@@ -186,6 +186,21 @@ tbody td::before {
     padding: .5rem;
 }
 
+.genres-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.checkbox-label {
+    align-items: center;
+    display: flex;
+}
+
+.checkbox-genre {
+    margin-right: .5rem;
+}
+
 .add-form-tape button[type="submit"] {
     font-size: 1rem;
     grid-column: span 2;
@@ -235,5 +250,23 @@ tbody td::before {
     tbody td::before {
         content: '';
         display: none;
+    }
+
+    .genres-checkboxes {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1000px) {
+
+    .genres-checkboxes {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (min-width: 1400px) {
+
+    .genres-checkboxes {
+        grid-template-columns: repeat(7, 1fr);
     }
 }

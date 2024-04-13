@@ -57,13 +57,14 @@ export function AddForm() {
             </div>
             
             <div className="form-row">
-                <label htmlFor="genres">Genres</label>
-                {/* <input type="text" id="genre" name="genre" required /> */}
-                <select id="genres" name="genres" className="input-genres" multiple required>
+                <label htmlFor="Genres">Genres</label>
+                <div className="genres-checkboxes">
                     {genres.map(( genre, index ) => (
-                        <option key={index} value={genre}>{genre}</option>
+                        <label key={index} className="checkbox-label">
+                            <input type="checkbox" name="genres" value={genre} className="checkbox-genre" />{genre}
+                        </label>
                     ))}
-                </select>
+                </div>
             </div>
             
             <div className="form-row">
