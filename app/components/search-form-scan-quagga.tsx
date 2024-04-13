@@ -97,9 +97,7 @@ export function BarcodeScanQuagga() {
         <form onSubmit={handleSubmit} className="search-form form">           
             <label htmlFor="image">Upload Image</label>
             <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
-            
-            <button type="submit">Search</button>
-            
+                    
             { searchResult ? (
                 <>
                     <SearchResultTable tapes={searchResult} />
