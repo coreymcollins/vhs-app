@@ -14,7 +14,7 @@ export default async function Home() {
             </div>
 
             <div className="page-section">
-                <h2>Search for an existing tape</h2>
+                <h2>Search for an existing tape by keyword</h2>
                 <SearchForm />
             </div>
 
