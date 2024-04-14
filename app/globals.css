@@ -113,6 +113,17 @@ li:not(last-child) {
     margin-bottom: 1rem;
 }
 
+.site-header {
+    display: block;
+    height: 300px;
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 2rem 0 0;
+    position: relative;
+    text-align: center;
+    width: 640px;
+}
+
 .page-section {
     margin-bottom: 2rem;
 }

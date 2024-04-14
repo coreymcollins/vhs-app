@@ -1,11 +1,12 @@
 import { SearchForm } from './components/search-form'
 import { BarcodeScanQuagga } from './components/search-form-scan-quagga'
 import Link from 'next/link'
+import PageHeader from './components/header'
 
 export default async function Home() {   
     return (
         <main>
-            <h1>VHS Library</h1>
+            <PageHeader />
 
             <div className="page-section">
                 <h2>Current library</h2>

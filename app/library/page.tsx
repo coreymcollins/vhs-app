@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import sql from '../components/database';
 import { SearchResultTable } from '../components/table-search-result'
+import PageHeader from '../components/header';
 
 interface Tape {
     tape_id: number;
@@ -36,7 +36,7 @@ export default async function LibraryPage() {
     
     return (
         <main>
-            <h1><Link href="/">VHS Library</Link></h1>
+            <PageHeader />
 
             <h2>Full Library</h2>
             <SearchResultTable tapes={tapes} />
