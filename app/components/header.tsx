@@ -11,6 +11,7 @@ export default function PageHeader() {
                     width={640}
                     height={84}
                     alt="Revival Video logo"
+                    className="site-logo"
                 />
             </Link>
             <h1>Revival Video VHS Library</h1>

@@ -117,11 +117,16 @@ li:not(last-child) {
     display: block;
     height: 300px;
     margin: 0 auto;
-    max-width: 100%;
-    padding: 2rem 0 0;
+    max-width: 640px;
+    padding: 2rem 1rem 0;
     position: relative;
     text-align: center;
-    width: 640px;
+    width: 100%;
+}
+
+.site-logo {
+    height: auto;
+    max-width: 100%;
 }
 
 .page-section {
@@ -268,6 +273,10 @@ tbody td::before {
 
     .genres-checkboxes {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .site-header {
+        padding: 2rem 0 0;
     }
 }
 
