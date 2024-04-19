@@ -208,6 +208,11 @@ select {
     padding: .5rem;
 }
 
+input[type="file"] {
+    color: transparent;
+    font-size: 0rem;
+}
+
 .genres-checkboxes {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
