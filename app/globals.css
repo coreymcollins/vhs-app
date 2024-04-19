@@ -296,6 +296,10 @@ input[type="file"]::file-selector-button {
     .site-header {
         padding: 2rem 0 0;
     }
+
+    td {
+        padding: .5rem 1rem;
+    }
 }
 
 @media (min-width: 1000px) {
