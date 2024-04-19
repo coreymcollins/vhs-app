@@ -99,18 +99,19 @@ export async function updateEntry(
         return { message: `Failed to update entry: ${parse.error.message}` };
     }
 
-    console.log( 'parse', parse )
-
     const data = parse.data;
     const coverFrontFile = formData.get('coverfront') as File | null;
+    const existingCoverFrontBase64 = formData.get('existing_coverfront') as string | null;
 
     let coverFrontData: Buffer | null = null; // Explicitly define type
 
     try {
         // Check if cover image is being updated
-        if (coverFrontFile) {
+        if (coverFrontFile && coverFrontFile.size > 0) {
             const coverFrontBuffer = await coverFrontFile.arrayBuffer();
             coverFrontData = Buffer.from(coverFrontBuffer);
+        } else if (existingCoverFrontBase64) {
+            coverFrontData = Buffer.from(existingCoverFrontBase64, 'base64');
         }
 
         await sql.begin(async (sql) => {

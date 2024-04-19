@@ -18,7 +18,6 @@ export function EditForm({ tape }: any) {
         
         const formData = new FormData(event.currentTarget);
         const genres = formData.getAll( 'genres' )
-        console.log( 'genres', genres )
         
         try {
             const response = await updateEntry(initialState, formData);
@@ -79,7 +78,14 @@ export function EditForm({ tape }: any) {
                 <label htmlFor="coverfront">Front Cover</label>
                 <div>
                     { coverfront && coverfront.length > 0 ? (
-                        <img src={`data:image/jpeg;base64,${coverfront.toString('base64')}`} alt={`${title} front cover`} className="cover-front" />
+                        <>
+                            <img
+                                src={`data:image/jpeg;base64,${coverfront.toString('base64')}`}
+                                alt={`${title} front cover`}
+                                className="cover-front"
+                            />
+                            <input type="hidden" name="existing_coverfront" value={coverfront.toString('base64')} />
+                        </>
                     ) : null }
                     <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" />
                 </div>
