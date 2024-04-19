@@ -36,10 +36,13 @@ export function SearchForm() {
 
     return (
         <form onSubmit={handleSubmit} className="search-form form">
-            <label htmlFor="search-query">Search Query</label>
-            <input type="text" id="search-query" name="search-query" required />
-
-            <button type="submit">Search</button>
+            <div className="form-row">
+                <label htmlFor="search-query">Search Query</label>
+                <div>
+                    <input type="text" id="search-query" name="search-query" required />
+                    <button type="submit">Search</button>
+                </div>
+            </div>
             
             { searchResult ? (
                 <>

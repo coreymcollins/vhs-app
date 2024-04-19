@@ -13,6 +13,7 @@ export function SearchResultTable({tapes}: {tapes: any[]}) {
                     <td>Genre</td>
                     <td>Release Year</td>
                     <td>Front Cover</td>
+                    <td>Edit</td>
                 </tr>
             </thead>
             <tbody>

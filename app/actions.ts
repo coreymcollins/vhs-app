@@ -70,6 +70,80 @@ export async function createEntry(
     }
 }
 
+export async function updateEntry(
+    prevState: {
+        message: string;
+    },
+    formData: FormData,
+    ) {
+    const schema = z.object({
+        tape_id: z.number(),
+        barcode: z.string(),
+        title: z.string().min(1),
+        description: z.string().min(1),
+        genres: z.array(z.string().min(1)),
+        year: z.number().min(4),
+    });
+
+    const parse = schema.safeParse({
+        tape_id: parseInt(formData.get('tape_id') as string),
+        barcode: formData.get('barcode'),
+        title: formData.get('title'),
+        description: formData.get('description'),
+        genres: formData.getAll('genres'),
+        year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
+    });
+
+    if (!parse.success) {
+        console.error('Form data parsing failed:', parse.error);
+        return { message: `Failed to update entry: ${parse.error.message}` };
+    }
+
+    console.log( 'parse', parse )
+
+    const data = parse.data;
+    const coverFrontFile = formData.get('coverfront') as File | null;
+
+    let coverFrontData: Buffer | null = null; // Explicitly define type
+
+    try {
+        // Check if cover image is being updated
+        if (coverFrontFile) {
+            const coverFrontBuffer = await coverFrontFile.arrayBuffer();
+            coverFrontData = Buffer.from(coverFrontBuffer);
+        }
+
+        await sql.begin(async (sql) => {
+            await sql`
+                UPDATE tapes
+                SET barcode = ${data.barcode},
+                    title = ${data.title},
+                    description = ${data.description},
+                    year = ${data.year},
+                    ${coverFrontData ? sql`coverfront = ${coverFrontData}` : sql``}
+                WHERE tape_id = ${data.tape_id};
+            `;
+
+            // Delete existing genre associations
+            await sql`DELETE FROM tapes_genres WHERE tape_id = ${data.tape_id}`;
+
+            // Add the genres.
+            for (const genre of data.genres) {
+                await sql`
+                    INSERT INTO tapes_genres (tape_id, genre_id)
+                    VALUES (${data.tape_id}, (SELECT genre_id FROM genres WHERE genre_name = ${genre}));
+                `;
+            }
+        });
+
+        revalidatePath('/');
+        return { message: `Updated tape with ID ${data.tape_id}` };
+    } catch (e) {
+        console.error('Database update failed:', e);
+        return { message: 'Failed to update entry in the database' };
+    }
+}
+
 function serializeResult(result: any) {
     if (result.coverfront instanceof Uint8Array) {
         result.coverfront = Buffer.from(result.coverfront).toString('base64')

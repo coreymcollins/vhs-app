@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react';
-import { createEntry, searchGenres } from '@/app/actions';
+import { useState } from 'react';
+import { createEntry } from '@/app/actions';
+import FetchGenres from './fetch-genres';
 
 const initialState = {
     message: 'All fields are required.',
@@ -9,22 +10,7 @@ const initialState = {
 
 export function AddForm() {
     const [state, setState] = useState(initialState);
-    const [genres, setGenres ] = useState<string[]>([]);
-
-    useEffect(() => {
-        async function fetchGenres() {
-            try {
-                const genresData = await searchGenres()
-                if ( genresData ) {
-                    setGenres( genresData )
-                }
-            } catch ( error ) {
-                console.error( 'Failed to fetch genres', error )
-            }
-        }
-
-        fetchGenres()
-    }, [])
+    const { genres } = FetchGenres();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

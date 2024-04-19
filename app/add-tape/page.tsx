@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import { AddForm } from '../components/add-tape'
+import PageHeader from '../components/header'
 
 export default async function AddTapePage() {
     
     return (
         <main>
-            <h1><Link href="/">VHS Library</Link></h1>
+            <PageHeader />
 
             <h2>Add new tape</h2>
             <AddForm />

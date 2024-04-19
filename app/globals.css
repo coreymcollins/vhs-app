@@ -95,6 +95,10 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+main {
+    padding: 1rem;
+}
+
 a {
     color: inherit;
 }
@@ -155,7 +159,7 @@ tbody tr:not(last-child) {
 }
 
 td {
-    padding: .5rem 1rem;
+    padding: .5rem 0;
     vertical-align: top;
 }
 
@@ -170,38 +174,37 @@ tbody td::before {
     margin-bottom: 2rem;
 }
 
-.add-form-tape {
-    padding: 0 .5rem;
-}
-
-.add-form-tape .form-row {
+.form .form-row {
     align-items: center;
     display: grid;
-    grid-template-columns: 8rem 1fr;
-    gap: 2rem;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
 }
 
-.add-form-tape .form-row.single {
-    grid-template-columns: 8rem 1fr;
+.form .form-row.single {
+    grid-template-rows: auto 1fr;
 }
 
-.add-form-tape .form-row + .form-row {
+.form .form-row + .form-row {
     margin-top: 2rem;
 }
 
-.add-form-tape .form-row label {
+label {
     font-size: 1.25rem;
 }
 
-.add-form-tape .form-row input,
-.add-form-tape .form-row textarea,
-.add-form-tape .form-row select {
+input,
+textarea,
+select {
     font-size: 1rem;
 }
 
-.add-form-tape .form-row input:not([type="file"]),
-.add-form-tape .form-row textarea,
-.add-form-tape .form-row select {
+input:not([type="file"]),
+textarea,
+select {
+    background-color: #2b2a33;
+    border: none;
+    border-radius: 0;
     padding: .5rem;
 }
 
@@ -220,11 +223,22 @@ tbody td::before {
     margin-right: .5rem;
 }
 
-.add-form-tape button[type="submit"] {
+button[type="submit"],
+input[type="submit"],
+input[type="file"]::file-selector-button {
+    appearance: none;
+    background-color: #2b2a33;
+    border: none;
+    border-radius: 0;
+    color: #fff;
     font-size: 1rem;
-    grid-column: span 2;
-    margin: 1rem 0 1rem 10rem;
     padding: .5rem 1rem;
+    -webkit-appearance: none;
+}
+
+.search-form button[type="submit"],
+input[type="file"]::file-selector-button {
+    margin: 1rem 0 1rem 1rem;
 }
 
 .input-barcode {
@@ -240,6 +254,10 @@ tbody td::before {
 .input-year::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.readonly input {
+    opacity: 50%;
 }
 
 .cover-front {
@@ -284,6 +302,24 @@ tbody td::before {
 
     .genres-checkboxes {
         grid-template-columns: repeat(4, 1fr);
+    }
+
+    .form .form-row {
+        align-items: center;
+        display: grid;
+        grid-template-columns: 9rem 1fr;
+        grid-template-rows: unset;
+        gap: 2rem;
+    }
+    
+    .form .form-row.single {
+        grid-template-columns: 9rem 1fr;
+        grid-template-rows: unset;
+    }
+
+    .add-form-tape button[type="submit"] {
+        grid-column: span 2;
+        margin: 1rem 0 1rem 11rem;
     }
 }
 
