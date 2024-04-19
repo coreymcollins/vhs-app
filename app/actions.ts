@@ -156,8 +156,20 @@ function serializeResult(result: any) {
 export async function searchByBarcode(barcode: string) {
     try {
         const result = await sql`
-            SELECT * FROM tapes WHERE barcode = ${barcode}
-        `
+        SELECT tapes.tape_id,
+            tapes.barcode,
+            tapes.title,
+            tapes.description,
+            tapes.year,
+            tapes.coverfront,
+            STRING_AGG(genres.genre_name, ', ') AS genre_names
+        FROM tapes
+        LEFT JOIN tapes_genres ON tapes.tape_id = tapes_genres.tape_id
+        LEFT JOIN genres ON tapes_genres.genre_id = genres.genre_id
+        WHERE barcode = ${barcode}
+        GROUP BY tapes.tape_id, tapes.barcode, tapes.title, tapes.description, tapes.year, tapes.coverfront
+        ORDER BY tapes.tape_id;
+        `;
         
         return result.length > 0 ? serializeResult(result[0]) : null;
     } catch (error) {
