@@ -3,6 +3,9 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import sql from './components/database'
+import { options } from './api/auth/[...nextauth]/options'
+import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
 
 export async function createEntry(
     prevState: {
@@ -229,4 +232,13 @@ export async function searchGenres() {
         console.error( `Failed to fetch genres: ${error}`)
         throw new Error( 'Failed to fetch genres from the database' )
     }
+}
+
+export async function redirectIfNotLoggedIn( router: any ) {
+    console.log( router.asPath )
+    // const session = await getServerSession( options )
+
+    // if ( ! session ) {
+    //     redirect( '/api/auth/signin?callbackUrl=/add-tape' )
+    // }
 }

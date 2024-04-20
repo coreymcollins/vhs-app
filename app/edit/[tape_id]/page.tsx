@@ -1,5 +1,8 @@
 import sql from '@/app/components/database'
 import { EditForm } from '@/app/components/edit-tape';
+import { options } from '@/app/api/auth/[...nextauth]/options';
+import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
 
 interface Tape {
     tape_id: number;
@@ -21,6 +24,12 @@ function serializeResult(result: any) {
 
 export default async function EditTapePage( { params }: { params: { tape_id: number } } ) {
     const {tape_id} = params
+
+    const session = await getServerSession( options )
+
+    if ( ! session ) {
+        redirect( `/api/auth/signin?callbackUrl=/edit/${tape_id}` )
+    }
 
     try {
         const tapes = await sql`

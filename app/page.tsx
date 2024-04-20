@@ -6,11 +6,6 @@ export default async function Home() {
     return (
         <>
             <div className="page-section">
-                <h2>Current library</h2>
-                <Link href="/library">View Full Library</Link>
-            </div>
-
-            <div className="page-section">
                 <h2>Search for an existing tape by keyword</h2>
                 <SearchForm />
             </div>

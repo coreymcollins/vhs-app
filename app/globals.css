@@ -117,6 +117,15 @@ li:not(last-child) {
     margin-bottom: 1rem;
 }
 
+.menu ol {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, auto);
+    justify-content: center;
+    list-style-type: none;
+}
+
 .site-header {
     display: block;
     height: 300px;

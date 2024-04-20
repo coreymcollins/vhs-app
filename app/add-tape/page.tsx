@@ -4,7 +4,6 @@ import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 export default async function AddTapePage() {
-
     const session = await getServerSession( options )
 
     if ( ! session ) {

@@ -18,15 +18,29 @@ export default async function PageHeader() {
                     className="site-logo"
                 />
             </Link>
+            
             <h1>Revival Video VHS Library</h1>
+
+            <nav className="menu">
+                <ol>
+                    <li><Link href="/library">View Library</Link></li>
+                    { session && undefined !== session.user ? (
+                        <>
+                            <li><Link href="/add-tape">Add Tape</Link></li>
+                            <li><Link href="/api/auth/signout">Sign Out</Link></li>
+                        </>
+                        ) : (
+                            <>
+                            <li><Link href="/api/auth/signin">Sign In</Link></li>
+                        </>
+                    )}
+                </ol>
+            </nav>
 
             { session && undefined !== session.user ? (
                 `signed in as ${session?.user.name} `
-                ) : (
-                'not signed in '
-            )}
-
-            <Link href="/add-tape">Add Tape</Link>
+                ) : null
+            }
         </header>
     )
 }

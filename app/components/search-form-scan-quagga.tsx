@@ -6,7 +6,7 @@ import { SearchResultTable } from './table-search-result';
 import Quagga from '@ericblade/quagga2';
 
 const initialState = {
-    message: 'Enter a barcode number or upload an image to perform a search.',
+    message: 'Scan a barcode number or upload an image of a barcode to perform a search.',
 };
 
 export function BarcodeScanQuagga() {

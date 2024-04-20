@@ -1,11 +1,18 @@
-import LoginForm from '../components/login-form'
 import { AddUser } from '../components/add-user'
+import { options } from '../api/auth/[...nextauth]/options'
+import { getServerSession } from 'next-auth'
+import { redirect } from 'next/navigation'
 
 export default async function UserPage() {
+
+    const session = await getServerSession( options )
+
+    if ( ! session ) {
+        redirect( '/api/auth/signin?callbackUrl=/user' )
+    }
     
     return (
         <>
-            <LoginForm />
             <AddUser />
         </>
     )

@@ -1,6 +1,6 @@
 import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { CheckPassword, GetUserByUsername } from '@/app/actions/sign-in'
+import { checkPassword, getUserByUsername } from '@/app/actions/sign-in'
 
 export const options: NextAuthOptions = {
     providers: [
@@ -24,9 +24,9 @@ export const options: NextAuthOptions = {
                     return null
                 }
 
-                const user = await GetUserByUsername( credentials.username )
+                const user = await getUserByUsername( credentials.username )
 
-                if ( user && await CheckPassword( credentials.password, user.password_hash ) ) {
+                if ( user && await checkPassword( credentials.password, user.password_hash ) ) {
                     return { id: user.user_id, name: user.username }
                 } else {
                     return null
