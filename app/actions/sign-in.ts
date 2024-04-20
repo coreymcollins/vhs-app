@@ -64,3 +64,20 @@ export async function checkForAdmin(username: string) {
         throw error
     }
 }
+
+export async function getCurrentUserId(username: string) {
+    try {
+        const result = await sql`
+            SELECT user_id FROM users WHERE username = ${username}
+        `;
+
+        if( result.length > 0 ) {
+            return result[0].user_id
+        } else {
+            return false
+        }
+    } catch (error) {
+        console.error(`Error determining user role for user: ${username}`)
+        throw error
+    }
+}
