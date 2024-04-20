@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import AddRemoveTape from './add-remove-collection';
 
 export function SingleTapeRow({tape, context}: {tape: any, context: string}) {
     const genres = tape.genre_names ? tape.genre_names.split(', ').sort() : [];
@@ -14,7 +14,7 @@ export function SingleTapeRow({tape, context}: {tape: any, context: string}) {
             <td key={`${context}-${tape.barcode}-${tape.title}`} data-label="Title">
                 {tape.title}
             </td>
-            <td key={`${context}-${tape.barcode}-${tape.description}`} data-label="Description">
+            <td key={`${context}-${tape.barcode}-${tape.description}`} className="table-description" data-label="Description">
                 {tape.description}
             </td>
             <td key={`${context}-${tape.barcode}-genres`} data-label="Genres">
@@ -31,10 +31,7 @@ export function SingleTapeRow({tape, context}: {tape: any, context: string}) {
                 )}
             </td>
             <td>
-                –
-                {/* <Link href={`/edit/${tape.tape_id}`}>
-                    Edit Tape
-                </Link> */}
+                <AddRemoveTape tapeId={tape.tape_id} />
             </td>
         </tr>
     )

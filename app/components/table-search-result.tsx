@@ -9,11 +9,11 @@ export function SearchResultTable({tapes}: {tapes: any[]}) {
                     <td>ID</td>
                     <td>Barcode</td>
                     <td>Title</td>
-                    <td>Description</td>
+                    <td className="table-description">Description</td>
                     <td>Genre</td>
-                    <td>Release Year</td>
-                    <td>Front Cover</td>
-                    <td>Edit</td>
+                    <td>Year</td>
+                    <td>Cover</td>
+                    <td>Manage</td>
                 </tr>
             </thead>
             <tbody>

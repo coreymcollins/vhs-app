@@ -182,6 +182,11 @@ tbody td::before {
     margin-right: .5rem;
 }
 
+table img {
+    height: auto;
+    width: 100%;
+}
+
 .form {
     margin-bottom: 2rem;
 }
@@ -316,6 +321,10 @@ input[type="file"]::file-selector-button {
 
     td {
         padding: .5rem 1rem;
+    }
+
+    .table-description {
+        width: 450px;
     }
 }
 

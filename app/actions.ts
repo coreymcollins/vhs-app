@@ -3,9 +3,9 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import sql from './components/database'
-import { options } from './api/auth/[...nextauth]/options'
-import { getServerSession } from 'next-auth'
-import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth';
+import { options } from './api/auth/[...nextauth]/options';
+import { getCurrentUserId } from './actions/sign-in';
 
 export async function createEntry(
     prevState: {
@@ -234,11 +234,73 @@ export async function searchGenres() {
     }
 }
 
-export async function redirectIfNotLoggedIn( router: any ) {
-    console.log( router.asPath )
-    // const session = await getServerSession( options )
+export async function checkCollectionForTape(tapeId: string): Promise<boolean> {
+    let userId: number
+    
+    const session = await getServerSession( options )
 
-    // if ( ! session ) {
-    //     redirect( '/api/auth/signin?callbackUrl=/add-tape' )
-    // }
+    if ( session && session.user ) {
+        userId = await getCurrentUserId( session.user.name ?? '' )
+    } else {
+        userId = 0
+    }
+    
+    try {
+        const result = await sql`
+            SELECT user_id
+            FROM users_tapes
+            WHERE user_id = ${userId}
+            AND tape_ids = ${tapeId}
+        `;
+
+        return result.length > 0
+    } catch (error) {
+        console.error(`Error searching for tape by ID: ${tapeId}`)
+        throw error
+    }
+}
+
+export async function addToCollection( tapeId: string ) {
+    let userId: number
+    
+    const session = await getServerSession( options )
+
+    if ( session && session.user ) {
+        userId = await getCurrentUserId( session.user.name ?? '' )
+    } else {
+        userId = 0
+    }
+
+    try {
+        const result = await sql`
+            INSERT INTO users_tapes (user_id, tape_ids)
+            VALUES (${userId}, ${tapeId});
+        `;
+    } catch (error) {
+        console.error(`Error adding tape to collection:`, error)
+        throw error
+    }
+}
+
+export async function removeFromCollection( tapeId: string ) {
+    let userId: number
+    
+    const session = await getServerSession( options )
+
+    if ( session && session.user ) {
+        userId = await getCurrentUserId( session.user.name ?? '' )
+    } else {
+        userId = 0
+    }
+
+    try {
+        const result = await sql`
+            DELETE FROM users_tapes
+            WHERE user_id = ${userId}
+            AND tape_ids = ${tapeId};
+        `;
+    } catch (error) {
+        console.error(`Error searching for tape by ID:`, error)
+        throw error
+    }
 }
