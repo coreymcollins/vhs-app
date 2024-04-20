@@ -1,7 +1,5 @@
 import sql from '@/app/components/database'
 import { EditForm } from '@/app/components/edit-tape';
-import PageHeader from '@/app/components/header';
-import Link from 'next/link'
 
 interface Tape {
     tape_id: number;
@@ -45,12 +43,10 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
         const tape = tapes[0];
         
         return (
-            <main>
-                <PageHeader />
-    
+            <>
                 <h2>Edit existing tape</h2>
                 <EditForm tape={tape}/>
-            </main>
+            </>
         )
     } catch (error) {
         console.error(`Database search failed: ${error}`);

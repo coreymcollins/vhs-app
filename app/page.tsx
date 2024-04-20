@@ -1,13 +1,10 @@
 import { SearchForm } from './components/search-form'
 import { BarcodeScanQuagga } from './components/search-form-scan-quagga'
 import Link from 'next/link'
-import PageHeader from './components/header'
 
 export default async function Home() {   
     return (
-        <main>
-            <PageHeader />
-
+        <>
             <div className="page-section">
                 <h2>Current library</h2>
                 <Link href="/library">View Full Library</Link>
@@ -22,6 +19,6 @@ export default async function Home() {
                 <h2>Search for an existing tape by barcode</h2>
                 <BarcodeScanQuagga />
             </div>
-        </main>
+        </>
     )
 }

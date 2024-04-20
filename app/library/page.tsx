@@ -1,6 +1,5 @@
 import sql from '../components/database';
 import { SearchResultTable } from '../components/table-search-result'
-import PageHeader from '../components/header';
 
 interface Tape {
     tape_id: number;
@@ -35,11 +34,9 @@ export default async function LibraryPage() {
     }
     
     return (
-        <main>
-            <PageHeader />
-
+        <>
             <h2>Full Library</h2>
             <SearchResultTable tapes={tapes} />
-        </main>
+        </>
     )
 }
