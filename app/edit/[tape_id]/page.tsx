@@ -3,6 +3,7 @@ import { EditForm } from '@/app/components/edit-tape';
 import { options } from '@/app/api/auth/[...nextauth]/options';
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
+import { checkForAdmin } from '@/app/actions/sign-in';
 
 interface Tape {
     tape_id: number;
@@ -27,7 +28,7 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
 
     const session = await getServerSession( options )
 
-    if ( ! session ) {
+    if ( ! session || undefined !== session.user && !( await checkForAdmin( session.user.name ?? '' ) ) ) {
         redirect( `/api/auth/signin?callbackUrl=/edit/${tape_id}` )
     }
 

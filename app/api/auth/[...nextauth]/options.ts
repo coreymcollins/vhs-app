@@ -27,7 +27,11 @@ export const options: NextAuthOptions = {
                 const user = await getUserByUsername( credentials.username )
 
                 if ( user && await checkPassword( credentials.password, user.password_hash ) ) {
-                    return { id: user.user_id, name: user.username }
+                    return {
+                        id: user.user_id,
+                        name: user.username,
+                        user_role: user.user_role,
+                    }
                 } else {
                     return null
                 }

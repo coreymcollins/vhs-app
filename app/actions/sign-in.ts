@@ -46,3 +46,21 @@ export async function checkPassword(password: string, password_hash: string) {
         throw error
     }
 }
+
+export async function checkForAdmin(username: string) {
+    try {
+        const result = await sql`
+            SELECT * FROM users WHERE username = ${username}
+            AND user_role = 'admin'
+        `;
+
+        if( result.length > 0 ) {
+            return true
+        } else {
+            return false
+        }
+    } catch (error) {
+        console.error(`Error determining user role for user: ${username}`)
+        throw error
+    }
+}

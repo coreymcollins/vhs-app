@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { options } from '../api/auth/[...nextauth]/options'
 import { getServerSession } from 'next-auth'
+import { checkForAdmin } from '../actions/sign-in'
 
 export default async function PageHeader() {
     const session = await getServerSession( options )
@@ -26,7 +27,9 @@ export default async function PageHeader() {
                     <li><Link href="/library">View Library</Link></li>
                     { session && undefined !== session.user ? (
                         <>
-                            <li><Link href="/add-tape">Add Tape</Link></li>
+                            { await checkForAdmin( session.user.name ?? '' ) ? (
+                                <li><Link href="/add-tape">Add Tape</Link></li>
+                            ) : null }
                             <li><Link href="/api/auth/signout">Sign Out</Link></li>
                         </>
                         ) : (
@@ -38,7 +41,7 @@ export default async function PageHeader() {
             </nav>
 
             { session && undefined !== session.user ? (
-                `signed in as ${session?.user.name} `
+                <p>signed in as {session?.user.name}</p>
                 ) : null
             }
         </header>

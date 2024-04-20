@@ -118,12 +118,15 @@ li:not(last-child) {
 }
 
 .menu ol {
-    align-items: center;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(4, auto);
-    justify-content: center;
     list-style-type: none;
+}
+
+.menu li {
+    display: inline-block;
+}
+
+.menu li:not(:last-child) {
+    margin-right: 1rem;
 }
 
 .site-header {
