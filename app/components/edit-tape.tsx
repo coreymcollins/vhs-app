@@ -12,6 +12,7 @@ export function EditForm({ tape }: any) {
     const { tape_id, barcode, title, description, year, coverfront, genre_names } = tape;
     const [state, setState] = useState(initialState);
     const { genres } = FetchGenres();
+    const [selectedImage, setSelectedImage] = useState<string | ArrayBuffer | null>(null);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -26,6 +27,21 @@ export function EditForm({ tape }: any) {
             setState({ message: 'Error updating tape.' });
         }
     };
+
+    const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+
+        if ( ! file ) {
+            return;
+        }
+
+        const reader = new FileReader()
+        reader.onload = () => {
+            setSelectedImage( reader.result )
+        }
+
+        reader.readAsDataURL( file )
+    }
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
@@ -76,18 +92,21 @@ export function EditForm({ tape }: any) {
 
             <div className="form-row">
                 <label htmlFor="coverfront">Front Cover</label>
-                <div>
-                    { coverfront && coverfront.length > 0 ? (
+                <div className="image-container">
+                    <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" onChange={handleImageChange} />
+                    { selectedImage && (
+                        <img src={selectedImage.toString()} alt="Uploaded image" className="image-upload-preview" />
+                    )}
+                    { ! selectedImage && coverfront && coverfront.length > 0 ? (
                         <>
                             <img
                                 src={`data:image/jpeg;base64,${coverfront.toString('base64')}`}
                                 alt={`${title} front cover`}
-                                className="cover-front"
+                                className="image-upload-preview"
                             />
                             <input type="hidden" name="existing_coverfront" value={coverfront.toString('base64')} />
                         </>
                     ) : null }
-                    <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" />
                 </div>
             </div>
             

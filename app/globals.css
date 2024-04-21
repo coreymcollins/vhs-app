@@ -240,6 +240,22 @@ select {
 input[type="file"] {
     color: transparent;
     font-size: 0rem;
+    margin-left: -1rem;
+    margin-top: -1rem;
+}
+
+label[for="coverfront"] {
+    align-self: self-start;
+}
+
+.image-container {
+    display: grid;
+    grid-template-rows: 70px auto;
+}
+
+.image-upload-preview {
+    height: auto;
+    width: 250px;
 }
 
 .genres-checkboxes {
