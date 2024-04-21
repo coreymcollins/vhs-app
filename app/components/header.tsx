@@ -24,9 +24,10 @@ export default async function PageHeader() {
 
             <nav className="menu">
                 <ol>
-                    <li><Link href="/library">View Library</Link></li>
+                    <li><Link href="/library">Full Library</Link></li>
                     { session && undefined !== session.user ? (
                         <>
+                            <li><Link href="/collection">My Library</Link></li>
                             { await checkForAdmin( session.user.name ?? '' ) ? (
                                 <li><Link href="/add-tape">Add Tape</Link></li>
                             ) : null }

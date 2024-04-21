@@ -149,6 +149,10 @@ li:not(last-child) {
     margin-bottom: 2rem;
 }
 
+table {
+    width: 100%;
+}
+
 thead {
     background-color: #fff;
     color: #000;
@@ -247,7 +251,8 @@ input[type="file"] {
 
 button[type="submit"],
 input[type="submit"],
-input[type="file"]::file-selector-button {
+input[type="file"]::file-selector-button,
+.button-collection {
     appearance: none;
     background-color: #2b2a33;
     border: none;
@@ -256,6 +261,11 @@ input[type="file"]::file-selector-button {
     font-size: 1rem;
     padding: .5rem 1rem;
     -webkit-appearance: none;
+}
+
+.button-collection:hover,
+.button-collection:focus {
+    opacity: 0.7;
 }
 
 .search-form button[type="submit"],

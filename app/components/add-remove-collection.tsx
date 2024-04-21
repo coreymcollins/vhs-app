@@ -40,7 +40,7 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
     }
     
     return (
-        <button onClick={handleButtonClick}>
+        <button onClick={handleButtonClick} className="button-collection">
             {inCollection ? `Remove from Collection` : `Add to Collection`}
         </button>
     );
