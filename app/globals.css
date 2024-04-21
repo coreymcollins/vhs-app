@@ -252,7 +252,7 @@ input[type="file"] {
 button[type="submit"],
 input[type="submit"],
 input[type="file"]::file-selector-button,
-.button-collection {
+.button-library {
     appearance: none;
     background-color: #2b2a33;
     border: none;
@@ -263,12 +263,12 @@ input[type="file"]::file-selector-button,
     -webkit-appearance: none;
 }
 
-.button-collection {
+.button-library {
     cursor: pointer;
 }
 
-.button-collection:hover,
-.button-collection:focus {
+.button-library:hover,
+.button-library:focus {
     opacity: 0.7;
 }
 

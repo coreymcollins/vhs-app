@@ -14,7 +14,7 @@ interface Tape {
     coverfront: Buffer | null;
 }
 
-export default async function CollectionPage() {
+export default async function LibraryPage() {
     let tapes: Tape[] = []
     let userId: number
     

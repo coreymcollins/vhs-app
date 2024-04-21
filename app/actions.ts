@@ -234,7 +234,7 @@ export async function searchGenres() {
     }
 }
 
-export async function checkCollectionForTape(tapeId: string): Promise<boolean> {
+export async function checkLibraryForTape(tapeId: string): Promise<boolean> {
     let userId: number
     
     const session = await getServerSession( options )
@@ -260,7 +260,7 @@ export async function checkCollectionForTape(tapeId: string): Promise<boolean> {
     }
 }
 
-export async function addToCollection( tapeId: string ) {
+export async function addToLibrary( tapeId: string ) {
     let userId: number
     
     const session = await getServerSession( options )
@@ -277,12 +277,12 @@ export async function addToCollection( tapeId: string ) {
             VALUES (${userId}, ${tapeId});
         `;
     } catch (error) {
-        console.error(`Error adding tape to collection:`, error)
+        console.error(`Error adding tape to library:`, error)
         throw error
     }
 }
 
-export async function removeFromCollection( tapeId: string ) {
+export async function removeFromLibrary( tapeId: string ) {
     let userId: number
     
     const session = await getServerSession( options )
