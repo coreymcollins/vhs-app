@@ -13,7 +13,7 @@ export function SearchResultTable({tapes, session}: {tapes: any[], session: any}
                     <td>Year</td>
                     <td>Cover</td>
                     { undefined !== session && null !== session ? (
-                        <td>Manage</td>
+                        <td className="table-library">Manage</td>
                     ) : (
                         null
                     )}

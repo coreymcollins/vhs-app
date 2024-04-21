@@ -163,9 +163,17 @@ thead td {
     vertical-align: middle;
 }
 
-tbody tr,
-tbody td {
+tbody tr {
     display: block;
+}
+
+tbody td {
+    display: grid;
+    grid-template-columns: 30% 2fr;
+}
+
+.table-library {
+    align-items: center;
 }
 
 tbody tr:not(last-child) {
@@ -306,7 +314,7 @@ input[type="file"]::file-selector-button {
     }
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1000px) {
     
     thead {
         display: table-header-group;
@@ -342,7 +350,7 @@ input[type="file"]::file-selector-button {
     }
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 1200px) {
 
     .genres-checkboxes {
         grid-template-columns: repeat(4, 1fr);
