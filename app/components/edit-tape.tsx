@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { updateEntry } from '@/app/actions';
 import FetchGenres from './fetch-genres';
+import { imageUpload } from './forms/image-upload';
 
 const initialState = {
     message: 'All fields are required.',
@@ -12,7 +13,7 @@ export function EditForm({ tape }: any) {
     const { tape_id, barcode, title, description, year, coverfront, genre_names } = tape;
     const [state, setState] = useState(initialState);
     const { genres } = FetchGenres();
-    const [selectedImage, setSelectedImage] = useState<string | ArrayBuffer | null>(null);
+    const { selectedImage, handleImageChange } = imageUpload();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -27,21 +28,6 @@ export function EditForm({ tape }: any) {
             setState({ message: 'Error updating tape.' });
         }
     };
-
-    const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0]
-
-        if ( ! file ) {
-            return;
-        }
-
-        const reader = new FileReader()
-        reader.onload = () => {
-            setSelectedImage( reader.result )
-        }
-
-        reader.readAsDataURL( file )
-    }
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
