@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import { createEntry } from '@/app/actions';
 import FetchGenres from './fetch-genres';
 import { imageUpload } from './forms/image-upload';
