@@ -24,8 +24,6 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
     }, [tapeId])
 
     const handleButtonClick = async () => {
-        console.log( `doing something with ${tapeId}` )
-
         try {
             if ( inCollection ) {
                 await removeFromCollection( tapeId )

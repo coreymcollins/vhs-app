@@ -1,13 +1,13 @@
 import { SingleTapeRow } from './single-tape-row';
 
-export function MultiTapeRow({tapes, context}: {tapes: any[], context: string}) {
+export function MultiTapeRow({tapes, context, session}: {tapes: any[], context: string, session: any}) {
 
     const tapesArray = Array.isArray(tapes) ? tapes : [tapes]
 
     return (
         <>
             {tapesArray.map(( tape ) => (
-                <SingleTapeRow key={`listing-${tape.tape_id}`} tape={tape} context="search" />
+                <SingleTapeRow key={`listing-${tape.tape_id}`} tape={tape} context="search" session={session} />
             ))}
         </>
     )

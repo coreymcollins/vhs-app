@@ -1,6 +1,6 @@
 import AddRemoveTape from './add-remove-collection';
 
-export function SingleTapeRow({tape, context}: {tape: any, context: string}) {
+export function SingleTapeRow({tape, context, session}: {tape: any, context: string, session: any}) {
     const genres = tape.genre_names ? tape.genre_names.split(', ').sort() : [];
 
     return (
@@ -30,9 +30,13 @@ export function SingleTapeRow({tape, context}: {tape: any, context: string}) {
                     <>No image available</>
                 )}
             </td>
-            <td>
-                <AddRemoveTape tapeId={tape.tape_id} />
-            </td>
+            { undefined !== session && null !== session ? (
+                <td>
+                    <AddRemoveTape tapeId={tape.tape_id} />
+                </td>
+            ) : (
+                null
+            )}
         </tr>
     )
 }

@@ -1,7 +1,6 @@
 import { MultiTapeRow } from './multi-tape-row';
 
-export function SearchResultTable({tapes}: {tapes: any[]}) {
-
+export function SearchResultTable({tapes, session}: {tapes: any[], session: any}) {
     return (
         <table>
             <thead>
@@ -13,11 +12,15 @@ export function SearchResultTable({tapes}: {tapes: any[]}) {
                     <td>Genre</td>
                     <td>Year</td>
                     <td>Cover</td>
-                    <td>Manage</td>
+                    { undefined !== session && null !== session ? (
+                        <td>Manage</td>
+                    ) : (
+                        null
+                    )}
                 </tr>
             </thead>
             <tbody>
-                <MultiTapeRow key="searchResult"  tapes={tapes} context="search" />
+                <MultiTapeRow key="searchResult" tapes={tapes} context="search" session={session} />
             </tbody>
         </table>
     )

@@ -8,7 +8,7 @@ const initialState = {
     message: 'Enter a search query to perform a search.',
 };
 
-export function SearchForm() {
+export function SearchForm({session}: {session: any}) {
     const [state, setState] = useState(initialState);
     const [searchResult, setSearchResult] = useState<any | null>(null)
     
@@ -46,7 +46,7 @@ export function SearchForm() {
             
             { searchResult ? (
                 <>
-                    <SearchResultTable tapes={searchResult} />
+                    <SearchResultTable tapes={searchResult} session={session} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">

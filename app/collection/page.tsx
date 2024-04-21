@@ -50,7 +50,7 @@ export default async function CollectionPage() {
     return (
         <>
             <h2>My Library</h2>
-            <SearchResultTable tapes={tapes} />
+            <SearchResultTable tapes={tapes} session={session} />
         </>
     )
 }

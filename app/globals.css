@@ -263,6 +263,10 @@ input[type="file"]::file-selector-button,
     -webkit-appearance: none;
 }
 
+.button-collection {
+    cursor: pointer;
+}
+
 .button-collection:hover,
 .button-collection:focus {
     opacity: 0.7;

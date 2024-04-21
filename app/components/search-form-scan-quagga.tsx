@@ -9,7 +9,7 @@ const initialState = {
     message: 'Scan a barcode number or upload an image of a barcode to perform a search.',
 };
 
-export function BarcodeScanQuagga() {
+export function BarcodeScanQuagga({session}: {session: any}) {
     const [state, setState] = useState(initialState);
     const [searchResult, setSearchResult] = useState<any | null>(null)
     
@@ -102,7 +102,7 @@ export function BarcodeScanQuagga() {
                     
             { searchResult ? (
                 <>
-                    <SearchResultTable tapes={searchResult} />
+                    <SearchResultTable tapes={searchResult} session={session} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">

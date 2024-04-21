@@ -1,3 +1,5 @@
+import { getServerSession } from 'next-auth';
+import { options } from '../api/auth/[...nextauth]/options';
 import sql from '../components/database';
 import { SearchResultTable } from '../components/table-search-result'
 
@@ -13,6 +15,7 @@ interface Tape {
 
 export default async function LibraryPage() {
     let tapes: Tape[] = []
+    const session = await getServerSession( options )
 
     try {
         tapes = await sql`
@@ -36,7 +39,7 @@ export default async function LibraryPage() {
     return (
         <>
             <h2>Full Library</h2>
-            <SearchResultTable tapes={tapes} />
+            <SearchResultTable tapes={tapes} session={session} />
         </>
     )
 }
