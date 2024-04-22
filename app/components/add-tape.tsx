@@ -26,12 +26,24 @@ export function AddForm() {
         }
     };
 
+    const defaultValues = {
+        tape_id: '',
+        barcode: '',
+        title: '',
+        description: '',
+        year: '',
+        coverfront: null,
+        genre_names: [],
+    }
+
     return (
         <TapeForm
             handleSubmit={handleSubmit}
             selectedImage={selectedImage}
             handleImageChange={handleImageChange}
             stateMessage={state.message}
+            defaultValues={defaultValues}
+            submitText='Add Tape'
         />
     );
 }

@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { updateEntry } from '@/app/actions';
 import FetchGenres from './fetch-genres';
 import { imageUpload } from './forms/image-upload';
+import { TapeForm } from './forms/tape-form';
 
 const initialState = {
-    message: 'All fields are required.',
+    message: 'Edit any desired fields. To replace the cover, upload a new image.',
 };
 
 export function EditForm({ tape }: any) {
@@ -19,6 +20,7 @@ export function EditForm({ tape }: any) {
         event.preventDefault();
         
         const formData = new FormData(event.currentTarget);
+        console.log( 'formData', formData )
         const genres = formData.getAll( 'genres' )
         
         try {
@@ -29,80 +31,24 @@ export function EditForm({ tape }: any) {
         }
     };
 
-    return (
-        <form onSubmit={handleSubmit} className="add-form add-form-tape form">
-            <div className="form-row readonly">
-                <label htmlFor="barcode">ID</label>
-                <input type="text" id="tape_id" name="tape_id" className="input-tape_id" maxLength={30} readOnly defaultValue={tape_id} />
-            </div>
-            <div className="form-row">
-                <label htmlFor="barcode">Barcode</label>
-                <input type="text" id="barcode" name="barcode" className="input-barcode" maxLength={30} defaultValue={barcode} inputMode="numeric" />
-            </div>
-            
-            <div className="form-row">
-                <label htmlFor="title">Title</label>
-                <input type="text" id="title" name="title" className="input-title" required defaultValue={title} />
-            </div>
-            
-            <div className="form-row">
-                <label htmlFor="description">Description</label>
-                <textarea id="description" name="description" className="input-description" rows={5} required defaultValue={description} />
-            </div>
-            
-            <div className="form-row">
-                <label htmlFor="Genres">Genres</label>
-                <div className="genres-checkboxes">
-                    {genres.map(( genre, index ) => {
-                        const isChecked = !!(tape && genre_names && genre_names.includes(genre) && genre_names !== "");
-                        return (
-                            <label key={index} className="checkbox-label">
-                                <input
-                                    type="checkbox"
-                                    name="genres"
-                                    className="checkbox-genre"
-                                    value={genre}
-                                    defaultChecked={isChecked}
-                                />
-                                {genre}
-                            </label>
-                        )
-                    })}
-                </div>
-            </div>
-            
-            <div className="form-row">
-                <label htmlFor="year">Year</label>
-                <input type="number" id="year" name="year" className="input-year" required defaultValue={year} inputMode="numeric" />
-            </div>
+    const defaultValues = {
+        tape_id,
+        barcode,
+        title,
+        description,
+        year,
+        coverfront,
+        genre_names,
+    }
 
-            <div className="form-row">
-                <label htmlFor="coverfront">Front Cover</label>
-                <div className="image-container">
-                    <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" onChange={handleImageChange} />
-                    { selectedImage && (
-                        <img src={selectedImage.toString()} alt="Uploaded image" className="image-upload-preview" />
-                    )}
-                    { ! selectedImage && coverfront && coverfront.length > 0 ? (
-                        <>
-                            <img
-                                src={`data:image/jpeg;base64,${coverfront.toString('base64')}`}
-                                alt={`${title} front cover`}
-                                className="image-upload-preview"
-                            />
-                            <input type="hidden" name="existing_coverfront" value={coverfront.toString('base64')} />
-                        </>
-                    ) : null }
-                </div>
-            </div>
-            
-            <div className="form-row form-row-single">
-                <button type="submit">Update</button>
-            </div>
-            
-            <p aria-live="polite" role="status">
-                {state.message}
-            </p>
-        </form>
+    return (
+        <TapeForm
+            handleSubmit={handleSubmit}
+            selectedImage={selectedImage}
+            handleImageChange={handleImageChange}
+            stateMessage={state.message}
+            defaultValues={defaultValues}
+            submitText='Update Tape'
+        />
     );
 }

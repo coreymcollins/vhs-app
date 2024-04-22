@@ -380,14 +380,22 @@ input[type="file"]::file-selector-button {
         gap: 2rem;
     }
     
-    .form .form-row.single {
+    .form .form-row-single {
         grid-template-columns: 9rem 1fr;
         grid-template-rows: unset;
     }
 
-    .add-form-tape button[type="submit"] {
+    .add-form-tape button[type="submit"],
+    .form-message {
         grid-column: span 2;
+    }
+
+    .add-form-tape button[type="submit"] {
         margin: 1rem 0 1rem 11rem;
+    }
+
+    .form-message {
+        margin: 0 0 1rem 11rem;
     }
 }
 

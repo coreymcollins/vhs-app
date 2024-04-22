@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 
 export function imageUpload() {
-    const [selectedImage, setSelectedImage] = useState<string | ArrayBuffer | null>(null);
+    const [selectedImage, setSelectedImage] = useState<Buffer | null>(null);
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -11,8 +11,9 @@ export function imageUpload() {
         }
 
         const reader = new FileReader()
+        
         reader.onload = () => {
-            setSelectedImage( reader.result )
+            setSelectedImage( reader.result as Buffer | null )
         }
 
         reader.readAsDataURL( file )
