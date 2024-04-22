@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { updateEntry } from '@/app/actions';
 import FetchGenres from './fetch-genres';
-import { imageUpload } from './forms/image-upload';
+import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
 
 const initialState = {
@@ -14,7 +14,7 @@ export function EditForm({ tape }: any) {
     const { tape_id, barcode, title, description, year, coverfront, genre_names } = tape;
     const [state, setState] = useState(initialState);
     const { genres } = FetchGenres();
-    const { selectedImage, handleImageChange } = imageUpload();
+    const { selectedImage, handleImageChange } = ImageUpload();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

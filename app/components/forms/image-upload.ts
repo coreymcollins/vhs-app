@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
 
-export function imageUpload() {
+export function ImageUpload() {
     const [selectedImage, setSelectedImage] = useState<Buffer | null>(null);
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -11,7 +11,7 @@ export function imageUpload() {
         }
 
         const reader = new FileReader()
-        
+
         reader.onload = () => {
             setSelectedImage( reader.result as Buffer | null )
         }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { createEntry } from '@/app/actions';
-import { imageUpload } from './forms/image-upload';
+import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
 
 const initialState = {
@@ -11,7 +11,7 @@ const initialState = {
 
 export function AddForm() {
     const [state, setState] = useState(initialState);
-    const { selectedImage, handleImageChange } = imageUpload();
+    const { selectedImage, handleImageChange } = ImageUpload();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
