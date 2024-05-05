@@ -216,20 +216,6 @@ export async function searchGenres() {
     }
 
     return genres;
-
-    // try {
-    //     const result = await sql`
-    //         SELECT genre_name FROM genres
-    //         ORDER BY genre_name;
-    //     `;
-        
-    //     const genres = result.map(( row: any ) => row.genre_name )
-    //     console.log( 'result', result )
-    //     return genres
-    // } catch ( error ) {
-    //     console.error( `Failed to fetch genres: ${error}`)
-    //     throw new Error( 'Failed to fetch genres from the database' )
-    // }
 }
 
 export async function checkLibraryForTape(tapeId: number): Promise<boolean> {
