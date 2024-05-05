@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createEntry } from '@/app/actions';
 import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
+import { checkLoginStatus } from '../auth/signout/route';
 
 const initialState = {
     message: 'All fields are required.',
@@ -12,18 +13,18 @@ const initialState = {
 export function AddForm() {
     const [state, setState] = useState(initialState);
     const { selectedImage, handleImageChange } = ImageUpload();
-
+    
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
+
         const formData = new FormData(event.currentTarget);
-        
-        try {
-            const response = await createEntry(initialState, formData);
-            setState({ message: 'Tape added successfully.' });
-        } catch (error) {
-            setState({ message: 'Error adding tape.' });
-        }
+
+        const response = await createEntry(initialState, formData);
+        // if ( error ) {
+        //     setState({ message: 'Error adding tape.' });
+        // } else {
+        //     setState({ message: 'Tape added successfully.' });
+        // }
     };
 
     const defaultValues = {
@@ -34,6 +35,8 @@ export function AddForm() {
         year: '',
         coverfront: null,
         genre_names: [],
+        date_added: '',
+        date_updated: '',
     }
 
     return (
@@ -43,6 +46,7 @@ export function AddForm() {
             handleImageChange={handleImageChange}
             stateMessage={state.message}
             defaultValues={defaultValues}
+            context='add'
             submitText='Add Tape'
         />
     );

@@ -12,6 +12,8 @@ interface Tape {
     description: string;
     genre: string;
     year: number;
+    date_added: string;
+    date_updated: string;
     coverfront: Buffer | null;
 }
 
@@ -40,6 +42,8 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
             tapes.description,
             tapes.year,
             tapes.coverfront,
+            tapes.date_added,
+            tapes.date_updated,
             STRING_AGG(genres.genre_name, ', ') AS genre_names
         FROM tapes
         LEFT JOIN tapes_genres ON tapes.tape_id = tapes_genres.tape_id

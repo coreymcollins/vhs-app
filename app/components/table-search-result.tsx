@@ -1,6 +1,19 @@
 import { MultiTapeRow } from './multi-tape-row';
 
-export function SearchResultTable({tapes, session}: {tapes: any[], session: any}) {
+interface Tape {
+    tape_id: number;
+    barcode: string;
+    title: string;
+    description: string;
+    year: number;
+    coverfront: Buffer | null;
+    date_added: string;
+    date_updated: string;
+    genres: JSON;
+}
+
+export function SearchResultTable({tapes, session}: {tapes: any, session: any}) {
+
     return (
         <table>
             <thead>

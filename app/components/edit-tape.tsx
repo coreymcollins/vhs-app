@@ -11,7 +11,7 @@ const initialState = {
 };
 
 export function EditForm({ tape }: any) {
-    const { tape_id, barcode, title, description, year, coverfront, genre_names } = tape;
+    const { tape_id, barcode, title, description, year, coverfront, genre_names, date_added, date_updated } = tape;
     const [state, setState] = useState(initialState);
     const { genres } = FetchGenres();
     const { selectedImage, handleImageChange } = ImageUpload();
@@ -39,6 +39,8 @@ export function EditForm({ tape }: any) {
         year,
         coverfront,
         genre_names,
+        date_added,
+        date_updated,
     }
 
     return (
@@ -48,6 +50,7 @@ export function EditForm({ tape }: any) {
             handleImageChange={handleImageChange}
             stateMessage={state.message}
             defaultValues={defaultValues}
+            context='edit'
             submitText='Update Tape'
         />
     );

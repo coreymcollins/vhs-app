@@ -1,21 +1,20 @@
-import { getServerSession } from 'next-auth'
+import { getCurrentUserSupabaseAuth } from './actions'
 import { SearchForm } from './components/search-form'
 import { BarcodeScanQuagga } from './components/search-form-scan-quagga'
-import { options } from './api/auth/[...nextauth]/options'
 
 export default async function Home() {
-    const session = await getServerSession( options )
+    const userAuth = await getCurrentUserSupabaseAuth()
 
     return (
         <>
             <div className="page-section">
                 <h2>Search for an existing tape by keyword</h2>
-                <SearchForm session={session} />
+                <SearchForm session={userAuth} />
             </div>
 
             <div className="page-section">
                 <h2>Search for an existing tape by barcode</h2>
-                <BarcodeScanQuagga session={session} />
+                <BarcodeScanQuagga session={userAuth} />
             </div>
         </>
     )

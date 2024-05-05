@@ -3,9 +3,9 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import sql from './components/database'
-import { getServerSession } from 'next-auth';
-import { options } from './api/auth/[...nextauth]/options';
-import { getCurrentUserId } from './actions/sign-in';
+import { supabase } from './lib/supabase';
+import { createClient } from '../utils/supabase/server';
+import { checkLoginStatus } from './auth/signout/route';
 
 export async function createEntry(
     prevState: {
@@ -17,16 +17,16 @@ export async function createEntry(
         barcode: z.string(),
         title: z.string().min(1),
         description: z.string().min(1),
-        genres: z.array(z.string().min(1)),
         year: z.number().min(4),
+        date_added: z.string(),
     })
 
     const parse = schema.safeParse({
         barcode: formData.get( 'barcode' ),
         title: formData.get( 'title' ),
         description: formData.get( 'description' ),
-        genres: formData.getAll( 'genres' ),
         year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
+        date_added: formData.get( 'date_added' ),
     })
 
     if ( ! parse.success ) {
@@ -34,43 +34,24 @@ export async function createEntry(
         return { message: `Failed to add entry: ${parse.error.message}` }
     }
 
+    const genresSchema = z.object({
+        genres: z.array(z.string().min(1)),
+    })
+
+    const genres = genresSchema.safeParse({
+        genres: formData.getAll( 'genres' )
+    })
+
     const data = parse.data
     const coverFrontFile = formData.get('coverfront') as File | null
+    let coverFrontData = '';
 
-    if (!coverFrontFile) {
-        console.error( 'Cover front file is missing' )
-        return{ message: 'Cover front file is missing' }
-    }
-
-    try {
+    if ( coverFrontFile ) {
         const coverFrontBuffer = await coverFrontFile.arrayBuffer()
-        const coverFrontData = Buffer.from(coverFrontBuffer)
-
-        await sql.begin(async( sql ) => {
-            const result = await sql`
-                INSERT INTO tapes (barcode, title, description, year, coverfront)
-                VALUES (${data.barcode}, ${data.title}, ${data.description}, ${data.year}, ${coverFrontData})
-                RETURNING tape_id;
-            `;
-
-            const tape_id = result[0].tape_id;
-
-            // Add the genres.
-            for ( const genre of data.genres ) {
-                await sql`
-                    INSERT INTO tapes_genres (tape_id, genre_id)
-                    VALUES (${tape_id}, (SELECT genre_id FROM genres WHERE genre_name = ${genre}));
-                `
-            }
-
-        })
-
-        revalidatePath( '/' )
-        return { message: `Added title ${data.title}` }
-    } catch (e) {
-        console.error('Database insertion failed:', e)
-        return { message: 'Failed to add entry to the database' }
+        coverFrontData = Buffer.from(coverFrontBuffer).toString( 'base64' )
     }
+
+    await addNewTapeSupabase( data, genres, coverFrontData )
 }
 
 export async function updateEntry(
@@ -86,6 +67,7 @@ export async function updateEntry(
         description: z.string().min(1),
         genres: z.array(z.string().min(1)),
         year: z.number().min(4),
+        date_updated: z.string(),
     });
 
     const parse = schema.safeParse({
@@ -95,6 +77,7 @@ export async function updateEntry(
         description: formData.get('description'),
         genres: formData.getAll('genres'),
         year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
+        date_updated: formData.get('date_updated'),
     });
 
     if (!parse.success) {
@@ -124,7 +107,8 @@ export async function updateEntry(
                     title = ${data.title},
                     description = ${data.description},
                     year = ${data.year},
-                    ${coverFrontData ? sql`coverfront = ${coverFrontData}` : sql``}
+                    ${coverFrontData ? sql`coverfront = ${coverFrontData},` : sql``}
+                    date_updated = ${data.date_updated}
                 WHERE tape_id = ${data.tape_id};
             `;
 
@@ -234,73 +218,133 @@ export async function searchGenres() {
     }
 }
 
-export async function checkLibraryForTape(tapeId: string): Promise<boolean> {
-    let userId: number
-    
-    const session = await getServerSession( options )
+export async function checkLibraryForTape(tapeId: number): Promise<boolean> {
+    const userId = await getCurrentUserSupabaseId()
 
-    if ( session && session.user ) {
-        userId = await getCurrentUserId( session.user.name ?? '' )
-    } else {
-        userId = 0
-    }
-    
-    try {
-        const result = await sql`
-            SELECT user_id
-            FROM users_tapes
-            WHERE user_id = ${userId}
-            AND tape_ids = ${tapeId}
-        `;
+    const { data, error } = await supabase.rpc( 'check_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 
-        return result.length > 0
-    } catch (error) {
+    if (error) {
         console.error(`Error searching for tape by ID: ${tapeId}`)
         throw error
+    } else {
+        return data;
     }
 }
 
-export async function addToLibrary( tapeId: string ) {
-    let userId: number
-    
-    const session = await getServerSession( options )
+export async function addToLibrary( tapeId: number ) {
+    const client = createClient()
+    const userId = await getCurrentUserSupabaseId()
 
-    if ( session && session.user ) {
-        userId = await getCurrentUserId( session.user.name ?? '' )
-    } else {
-        userId = 0
-    }
+    await client.rpc( 'insert_user_tape', { user_id_query: userId, tape_id_query: tapeId });
+}
 
-    try {
-        const result = await sql`
-            INSERT INTO users_tapes (user_id, tape_ids)
-            VALUES (${userId}, ${tapeId});
-        `;
-    } catch (error) {
-        console.error(`Error adding tape to library:`, error)
+export async function removeFromLibrary( tapeId: number ) {
+    const client = createClient()
+    const userId = await getCurrentUserSupabaseId()
+
+    await client.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
+}
+
+export async function getCurrentUserSupabaseId() {
+    const client = createClient()
+    const { data, error } = await client.auth.getUser()
+    let userId: string
+    userId = null !== data && null !== data.user ? data.user.id : ''
+
+    if (error) {
+        console.error(`Error searching for user`)
         throw error
+    } else {
+        return userId
     }
 }
 
-export async function removeFromLibrary( tapeId: string ) {
-    let userId: number
-    
-    const session = await getServerSession( options )
+export async function getCurrentUserSupabaseAuth() {
+    const client = createClient()
+    const { data: { user } } = await client.auth.getUser()
 
-    if ( session && session.user ) {
-        userId = await getCurrentUserId( session.user.name ?? '' )
+    if ( null !== user ) {
+        return user
     } else {
-        userId = 0
+        return null
+    }
+}
+
+export async function addNewTapeSupabase( data: any, genres: any, coverfront: string ) {
+    const newTapeData = await addNewTape( data, coverfront )
+    const tapeId = null !== newTapeData && undefined !== newTapeData ? newTapeData[0].tape_id : ''
+
+    if ( ! newTapeData || ! tapeId ) {
+        return;
     }
 
-    try {
-        const result = await sql`
-            DELETE FROM users_tapes
-            WHERE user_id = ${userId}
-            AND tape_ids = ${tapeId};
-        `;
-    } catch (error) {
-        console.error(`Error searching for tape by ID:`, error)
-        throw error
+    await addNewTapeGenres( genres, tapeId )
+}
+
+export async function addNewTape( tapeData: any, coverfront: string ) {
+    const getLoggedInUser = await checkLoginStatus()
+    const userUuid: string = null !== getLoggedInUser ? getLoggedInUser.id : ''
+    const client = createClient()
+
+    if ( ! userUuid ) {
+        return;
     }
+    
+    tapeData['uuid'] = userUuid
+    tapeData['coverFrontData'] = coverfront
+    
+    const { data, error } = await client
+        .rpc('insert_new_tape', {
+            data: tapeData
+        })
+
+    if ( error ) {
+        console.error( 'error in adding a new tape:', error )
+        return null;
+    }
+
+    return data;
+}
+
+export async function addNewTapeGenres( genres: any, tapeId: number ) {
+    const getLoggedInUser = await checkLoginStatus()
+    const userUuid: string = null !== getLoggedInUser ? getLoggedInUser.id : ''
+    const client = createClient()
+
+    if ( ! userUuid ) {
+        return;
+    }
+
+    if ( genres.data && genres.data.genres ) {
+        const genreNames = genres.data.genres
+
+        for ( const genre of genreNames ) {
+    
+            const { data: genreData, error } = await client
+                .from( 'genres' )
+                .select( 'genre_id' )
+                .eq( 'genre_name', genre )
+    
+            if ( error ) {
+                console.error( error )
+                return null
+            }
+    
+            if ( genreData && genreData.length > 0 ) {
+                const genreId = genreData[0].genre_id
+    
+                const { data, error } = await client
+                    .rpc( 'insert_tape_genre2', {
+                        tape_id: tapeId,
+                        genre_id: genreId,
+                        uuid: userUuid
+                    })
+    
+                if ( error ) {
+                    console.error( error )
+                    return null
+                }
+            }
+        }
+    }    
 }

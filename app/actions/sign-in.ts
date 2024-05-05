@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import sql from '@/app/components/database'
+import { supabase } from '../lib/supabase';
 
 export interface UserData {
     username: string;
@@ -80,4 +81,15 @@ export async function getCurrentUserId(username: string) {
         console.error(`Error determining user role for user: ${username}`)
         throw error
     }
+}
+
+export async function getSupabaseUserId( username: string ) {
+    const { data, error } = await supabase.rpc('get_user_id', { usernamequery: username });
+
+    if (error) {
+        console.error('Error fetching user:', error.message);
+        return 0;
+    }
+
+    return data;
 }

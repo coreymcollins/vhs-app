@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent } from 'react';
 import FetchGenres from '../fetch-genres';
+import { format } from 'date-fns';
 
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -7,6 +8,7 @@ interface TapeFormProps {
     handleImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
     stateMessage: string;
     submitText: string;
+    context: string;
     defaultValues: {
         tape_id: string;
         barcode: string;
@@ -15,11 +17,19 @@ interface TapeFormProps {
         year: number | string;
         coverfront: Buffer | null;
         genre_names: string[];
+        date_added: string;
+        date_updated: string;
     }
 }
 
-export function TapeForm({ handleSubmit, selectedImage, handleImageChange, stateMessage, submitText, defaultValues }: TapeFormProps) {
+const getCurrentDate = (): string => {
+    const currentDate = new Date();
+    return format( currentDate, 'yyyy-MM-dd' )
+}
+
+export function TapeForm({ handleSubmit, selectedImage, handleImageChange, stateMessage, submitText, context, defaultValues }: TapeFormProps) {
     const { genres } = FetchGenres();
+    const currentDate = getCurrentDate();
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
@@ -93,6 +103,18 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
                     ) : null }
                 </div>
             </div>
+
+            { 'add' === context ? (
+                <div className="form-row">
+                    <label htmlFor="date-added">Date Added</label>
+                    <input type="text" id="date-added" name="date_added" required defaultValue={currentDate} />
+                </div>
+            ) : (
+                <div className="form-row">
+                    <label htmlFor="date-updated">Date Updated</label>
+                    <input type="text" id="date-updated" name="date_updated" required readOnly value={currentDate} />
+                </div>
+            )}
             
             <div className="form-row form-row-single">
                 <button type="submit">{submitText}</button>

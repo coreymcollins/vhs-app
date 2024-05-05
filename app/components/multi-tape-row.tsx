@@ -4,6 +4,10 @@ export function MultiTapeRow({tapes, context, session}: {tapes: any[], context: 
 
     const tapesArray = Array.isArray(tapes) ? tapes : [tapes]
 
+    if ( null === tapesArray ) {
+        return;
+    }
+
     return (
         <>
             {tapesArray.map(( tape ) => (

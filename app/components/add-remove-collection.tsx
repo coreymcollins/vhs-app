@@ -4,12 +4,12 @@ import { useState, useEffect } from 'react';
 import { addToLibrary, checkLibraryForTape, removeFromLibrary } from '../actions';
 
 interface AddRemoveTapeProps {
-    tapeId: string;
+    tapeId: number;
 }
 
 const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
     const [inLibrary, setInLibrary] = useState(false);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {

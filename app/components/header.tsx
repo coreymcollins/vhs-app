@@ -2,11 +2,28 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { options } from '../api/auth/[...nextauth]/options'
 import { getServerSession } from 'next-auth'
-import { checkForAdmin } from '../actions/sign-in'
+import { getCurrentUserSupabaseAuth } from '../actions'
+import { supabase } from '../lib/supabase'
+import { checkLoginStatus } from '../auth/signout/route'
+import AccountForm from '../account/account-form'
 
 export default async function PageHeader() {
     const session = await getServerSession( options )
+    const userAuth = await getCurrentUserSupabaseAuth()
+    const isLoggedIn = await checkLoginStatus()
+    let userRole: string | null
+    userRole = ''
 
+    if ( null !== isLoggedIn ) {
+
+        const { data, error } = await supabase
+            .from( 'users' )
+            .select( 'user_role' )
+            .eq( 'uuid', isLoggedIn.id )
+
+        userRole = null !== data && undefined !== data[0] ? data[0].user_role : ''
+    }
+    
     return (
         <header className="site-header">
             <Link href="/">
@@ -25,25 +42,38 @@ export default async function PageHeader() {
             <nav className="menu">
                 <ol>
                     <li><Link href="/library">Full Library</Link></li>
-                    { session && undefined !== session.user ? (
+                    { null !== isLoggedIn ? (
                         <>
                             <li><Link href="/collection">My Library</Link></li>
-                            { await checkForAdmin( session.user.name ?? '' ) ? (
+                            { 'admin' === userRole ? (
                                 <li><Link href="/add-tape">Add Tape</Link></li>
                             ) : null }
-                            <li><Link href="/api/auth/signout">Sign Out</Link></li>
+
+                            <li>
+                                {/* <button onClick={signout}>
+                                    Sign Out
+                                </button> */}
+                                {/* <Link href="#" onClick={handleSignOut}>Sign Out</Link> */}
+                            </li>
                         </>
                         ) : (
                             <>
-                            <li><Link href="/api/auth/signin">Sign In</Link></li>
+                            <li><Link href="/login">Sign In</Link></li>
                         </>
                     )}
                 </ol>
+                { null !== isLoggedIn ? (
+                    <AccountForm />
+                ) : (
+                    ''
+                )}
             </nav>
-
-            { session && undefined !== session.user ? (
-                <p>signed in as {session?.user.name}</p>
-                ) : null
+            
+            { null !== userAuth ? (
+                    <p>signed in as supabase user {userAuth.email}</p>
+                ) : (
+                    <p>not signed in as supabase user</p>
+                )
             }
         </header>
     )

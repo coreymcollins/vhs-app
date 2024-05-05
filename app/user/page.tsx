@@ -3,6 +3,7 @@ import { options } from '../api/auth/[...nextauth]/options'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 import { checkForAdmin } from '../actions/sign-in'
+import { AddUserSupabase } from '../components/add-user-supabase'
 
 export default async function UserPage() {
 
@@ -15,6 +16,7 @@ export default async function UserPage() {
     return (
         <>
             <AddUser />
+            <AddUserSupabase />
         </>
     )
 }
