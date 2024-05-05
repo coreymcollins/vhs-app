@@ -140,27 +140,15 @@ function serializeResult(result: any) {
 }
 
 export async function searchByBarcode(barcode: string) {
-    try {
-        const result = await sql`
-        SELECT tapes.tape_id,
-            tapes.barcode,
-            tapes.title,
-            tapes.description,
-            tapes.year,
-            tapes.coverfront,
-            STRING_AGG(genres.genre_name, ', ') AS genre_names
-        FROM tapes
-        LEFT JOIN tapes_genres ON tapes.tape_id = tapes_genres.tape_id
-        LEFT JOIN genres ON tapes_genres.genre_id = genres.genre_id
-        WHERE barcode = ${barcode}
-        GROUP BY tapes.tape_id, tapes.barcode, tapes.title, tapes.description, tapes.year, tapes.coverfront
-        ORDER BY tapes.tape_id;
-        `;
-        
-        return result.length > 0 ? serializeResult(result[0]) : null;
-    } catch (error) {
-        console.error(`Database search failed: ${error}`)
-        throw new Error('Failed to search for the item in the database')
+    const supabase = createClient()
+
+    const { data: tape, error } = await supabase.rpc( 'get_tape_by_barcode', { barcodequery: barcode });
+
+    if (error) {
+        console.error(`Error searching for tape by barcode: ${barcode}`)
+        throw error
+    } else {
+        return tape;
     }
 }
 
