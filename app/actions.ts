@@ -153,40 +153,15 @@ export async function searchByBarcode(barcode: string) {
 }
 
 export async function searchByQuery(queryString: string) {
-    try {
-        const isNumeric = /^\d+$/.test(queryString);
+    const supabase = createClient()
 
-        const result = await sql`
-        SELECT tapes.tape_id,
-            tapes.barcode,
-            tapes.title,
-            tapes.description,
-            tapes.year,
-            tapes.coverfront,
-            STRING_AGG(genres.genre_name, ', ') AS genre_names
-        FROM tapes
-        LEFT JOIN tapes_genres ON tapes.tape_id = tapes_genres.tape_id
-        LEFT JOIN genres ON tapes_genres.genre_id = genres.genre_id
-        WHERE ${
-            isNumeric && queryString.length < 5
-                ? sql`
-                    year = ${queryString}
-                `
-                : sql`
-                    LOWER(title) LIKE ${'%'+queryString.toLowerCase()+'%'}
-                    OR LOWER(description) LIKE ${'%'+queryString.toLowerCase()+'%'}
-                    OR LOWER(genres.genre_name) LIKE ${'%'+queryString.toLowerCase()+'%'}
-                    OR CAST(barcode AS TEXT) LIKE ${'%'+queryString+'%'}
-                `
-        }
-        GROUP BY tapes.tape_id, tapes.barcode, tapes.title, tapes.description, tapes.year, tapes.coverfront
-        ORDER BY tapes.tape_id;
-        `;
+    const { data: tapes, error } = await supabase.rpc( 'get_tape_by_search_query', { querystring: queryString });
 
-        return result.length > 0 ? result.map(row => serializeResult(row)) : null;
-    } catch (error) {
-        console.error(`Database search failed: ${error}`);
-        throw new Error('Failed to search for the item in the database');
+    if (error) {
+        console.error(`Error searching for tape by barcode: ${queryString}`)
+        throw error
+    } else {
+        return tapes;
     }
 }
 
