@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { createEntry } from '@/app/actions';
 import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
-import { checkLoginStatus } from '../auth/signout/route';
+import { checkLoginStatus } from '../actions/check-login-status';
 
 const initialState = {
     message: 'All fields are required.',

@@ -5,7 +5,7 @@ import { z } from 'zod'
 import sql from './components/database'
 import { supabase } from './lib/supabase';
 import { createClient } from '../utils/supabase/server';
-import { checkLoginStatus } from './auth/signout/route';
+import { checkLoginStatus } from './actions/check-login-status';
 
 export async function createEntry(
     prevState: {

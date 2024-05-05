@@ -4,7 +4,7 @@ import { options } from '../api/auth/[...nextauth]/options'
 import { getServerSession } from 'next-auth'
 import { getCurrentUserSupabaseAuth } from '../actions'
 import { supabase } from '../lib/supabase'
-import { checkLoginStatus } from '../auth/signout/route'
+import { checkLoginStatus } from '../actions/check-login-status';
 import AccountForm from '../account/account-form'
 
 export default async function PageHeader() {

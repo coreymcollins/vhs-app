@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/utils/supabase/middleware'
-import { checkLoginStatus } from './app/auth/signout/route'
+import { checkLoginStatus } from '@/app/actions/check-login-status'
 
 export async function middleware(request: NextRequest) {
     

@@ -1,18 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { type NextRequest, NextResponse } from 'next/server'
-
-export async function checkLoginStatus() {
-    
-    const supabase = createClient()
-    
-    // Check if a user's logged in
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
-
-    return user;
-}
+import { checkLoginStatus } from '../../actions/check-login-status'
 
 export async function POST(req: NextRequest) {
     const supabase = createClient()
