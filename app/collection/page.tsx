@@ -7,7 +7,7 @@ interface Tape {
     barcode: string;
     title: string;
     description: string;
-    genre: string;
+    genre_names: string[];
     year: number;
     coverfront: Buffer | null;
 }

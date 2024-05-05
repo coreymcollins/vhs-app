@@ -236,6 +236,22 @@ export type Database = {
           genres: Json
         }[]
       }
+      get_tape_by_tape_id: {
+        Args: {
+          tapeidquery: number
+        }
+        Returns: {
+          tape_id: number
+          barcode: string
+          title: string
+          description: string
+          year: number
+          coverfront: string
+          date_added: string
+          date_updated: string
+          genres: Json
+        }[]
+      }
       get_tapes_by_user_id: {
         Args: {
           useridquery: string

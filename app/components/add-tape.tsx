@@ -34,7 +34,7 @@ export function AddForm() {
         description: '',
         year: '',
         coverfront: null,
-        genre_names: [],
+        genres: [],
         date_added: '',
         date_updated: '',
     }

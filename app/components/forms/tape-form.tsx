@@ -16,7 +16,7 @@ interface TapeFormProps {
         description: string;
         year: number | string;
         coverfront: Buffer | null;
-        genre_names: string[];
+        genres: string[];
         date_added: string;
         date_updated: string;
     }
@@ -30,6 +30,8 @@ const getCurrentDate = (): string => {
 export function TapeForm({ handleSubmit, selectedImage, handleImageChange, stateMessage, submitText, context, defaultValues }: TapeFormProps) {
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
+
+    console.log( 'defaultValues', defaultValues )
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
@@ -58,7 +60,7 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
                 <label htmlFor="Genres">Genres</label>
                 <div className="genres-checkboxes">
                     {genres.map(( genre, index ) => {
-                        const isChecked = defaultValues.genre_names.includes( genre )
+                        const isChecked = defaultValues.genres.includes( genre )
                         return (
                             <label key={index} className="checkbox-label">
                                 <input
