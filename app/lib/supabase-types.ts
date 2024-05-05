@@ -190,15 +190,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      check_library_for_tape: {
-        Args: {
-          user_id_query: number
-          tape_id_query: number
-        }
-        Returns: {
-          user_id: number
-        }[]
-      }
       check_user_tape: {
         Args: {
           user_id_query: string
@@ -249,22 +240,6 @@ export type Database = {
         }
         Returns: number
       }
-      get_user_tapes: {
-        Args: {
-          useridquery: number
-        }
-        Returns: {
-          tape_id: number
-          barcode: string
-          title: string
-          description: string
-          year: number
-          coverfront: string
-          date_added: string
-          date_updated: string
-          genres: Json
-        }[]
-      }
       insert_new_tape: {
         Args: {
           data: Json
@@ -273,30 +248,7 @@ export type Database = {
           tape_id: number
         }[]
       }
-      insert_tape: {
-        Args: {
-          data: Json
-        }
-        Returns: {
-          barcode: string | null
-          coverfront: string | null
-          date_added: string | null
-          date_updated: string | null
-          description: string
-          tape_id: number
-          title: string
-          uuid: string | null
-          year: number
-        }[]
-      }
       insert_tape_genre: {
-        Args: {
-          tapeid: number
-          genreid: number
-        }
-        Returns: undefined
-      }
-      insert_tape_genre2: {
         Args: {
           tape_id: number
           genre_id: number

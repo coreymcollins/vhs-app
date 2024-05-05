@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import sql from '@/app/components/database'
-import { supabase } from '../lib/supabase';
+import { createClient } from '@/utils/supabase/server';
 
 export interface UserData {
     username: string;
@@ -84,6 +84,7 @@ export async function getCurrentUserId(username: string) {
 }
 
 export async function getSupabaseUserId( username: string ) {
+    const supabase = createClient()
     const { data, error } = await supabase.rpc('get_user_id', { usernamequery: username });
 
     if (error) {

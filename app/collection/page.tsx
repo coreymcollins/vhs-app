@@ -1,5 +1,5 @@
 import { SearchResultTable } from '../components/table-search-result'
-import { supabase } from '../lib/supabase';
+import { createClient } from '@/utils/supabase/server';
 import { getCurrentUserSupabaseAuth, getCurrentUserSupabaseId } from '../actions';
 
 interface Tape {
@@ -13,6 +13,7 @@ interface Tape {
 }
 
 async function getUsersTapes() {
+    const supabase = createClient()
     const userId = await getCurrentUserSupabaseId()
 
     const { data, error } = await supabase.rpc('get_tapes_by_user_id', { useridquery: userId });

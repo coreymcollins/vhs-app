@@ -10,8 +10,10 @@ export default function FetchGenres() {
         async function fetchGenres() {
             try {
                 const genresData = await searchGenres()
+
                 if ( genresData ) {
-                    setGenres( genresData )
+                    const genreNames = genresData.map( genre => genre.genre_name )
+                    setGenres( genreNames )
                 }
             } catch ( error ) {
                 console.error( 'Failed to fetch genres', error )

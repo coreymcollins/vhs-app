@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react';
-import { createUser } from '@/app/actions/create-user';
-import { supabase } from '../lib/supabase';
+import { createClient } from '@/utils/supabase/server';
+
+const supabase = createClient()
 
 const initialState = {
     message: 'All fields are required.',

@@ -1,8 +1,10 @@
 import { SearchResultTable } from '../components/table-search-result'
-import { supabase } from '../lib/supabase';
+import { createClient } from '@/utils/supabase/server';
 import { getCurrentUserSupabaseAuth } from '../actions';
 
+
 async function getTapesWithGenres() {
+    const supabase = createClient()
     const { data, error } = await supabase.rpc('get_tapes_with_genres');
     if (error) {
       console.error('Error fetching tapes in library:', error.message);

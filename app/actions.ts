@@ -3,8 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import sql from './components/database'
-import { supabase } from './lib/supabase';
-import { createClient } from '../utils/supabase/server';
+import { createClient } from '@/utils/supabase/server';
 import { checkLoginStatus } from './actions/check-login-status';
 
 export async function createEntry(
@@ -204,21 +203,37 @@ export async function searchByQuery(queryString: string) {
 }
 
 export async function searchGenres() {
-    try {
-        const result = await sql`
-            SELECT genre_name FROM genres
-            ORDER BY genre_name;
-        `;
-        
-        const genres = result.map(( row: any ) => row.genre_name )
-        return genres
-    } catch ( error ) {
-        console.error( `Failed to fetch genres: ${error}`)
-        throw new Error( 'Failed to fetch genres from the database' )
+    const supabase = createClient()
+
+    let { data: genres, error } = await supabase
+        .from( 'genres' )
+        .select( 'genre_name' )
+        .order( 'genre_name' )
+
+    if ( error ) {
+        console.error( 'error in adding a new tape:', error )
+        return null;
     }
+
+    return genres;
+
+    // try {
+    //     const result = await sql`
+    //         SELECT genre_name FROM genres
+    //         ORDER BY genre_name;
+    //     `;
+        
+    //     const genres = result.map(( row: any ) => row.genre_name )
+    //     console.log( 'result', result )
+    //     return genres
+    // } catch ( error ) {
+    //     console.error( `Failed to fetch genres: ${error}`)
+    //     throw new Error( 'Failed to fetch genres from the database' )
+    // }
 }
 
 export async function checkLibraryForTape(tapeId: number): Promise<boolean> {
+    const supabase = createClient()
     const userId = await getCurrentUserSupabaseId()
 
     const { data, error } = await supabase.rpc( 'check_user_tape', { user_id_query: userId, tape_id_query: tapeId });
@@ -232,36 +247,33 @@ export async function checkLibraryForTape(tapeId: number): Promise<boolean> {
 }
 
 export async function addToLibrary( tapeId: number ) {
-    const client = createClient()
+    const supabase = createClient()
     const userId = await getCurrentUserSupabaseId()
 
-    await client.rpc( 'insert_user_tape', { user_id_query: userId, tape_id_query: tapeId });
+    await supabase.rpc( 'insert_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
 
 export async function removeFromLibrary( tapeId: number ) {
-    const client = createClient()
+    const supabase = createClient()
     const userId = await getCurrentUserSupabaseId()
 
-    await client.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
+    await supabase.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
 
 export async function getCurrentUserSupabaseId() {
-    const client = createClient()
-    const { data, error } = await client.auth.getUser()
-    let userId: string
-    userId = null !== data && null !== data.user ? data.user.id : ''
+    const getLoggedInUser = await checkLoginStatus()
+    const userUuid: string = null !== getLoggedInUser ? getLoggedInUser.id : ''
 
-    if (error) {
-        console.error(`Error searching for user`)
-        throw error
-    } else {
-        return userId
+    if ( ! userUuid ) {
+        return;
     }
+
+    return userUuid;
 }
 
 export async function getCurrentUserSupabaseAuth() {
-    const client = createClient()
-    const { data: { user } } = await client.auth.getUser()
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
     if ( null !== user ) {
         return user
@@ -282,9 +294,8 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: st
 }
 
 export async function addNewTape( tapeData: any, coverfront: string ) {
-    const getLoggedInUser = await checkLoginStatus()
-    const userUuid: string = null !== getLoggedInUser ? getLoggedInUser.id : ''
-    const client = createClient()
+    const supabase = createClient()
+    const userUuid = await getCurrentUserSupabaseId()
 
     if ( ! userUuid ) {
         return;
@@ -293,7 +304,7 @@ export async function addNewTape( tapeData: any, coverfront: string ) {
     tapeData['uuid'] = userUuid
     tapeData['coverFrontData'] = coverfront
     
-    const { data, error } = await client
+    const { data, error } = await supabase
         .rpc('insert_new_tape', {
             data: tapeData
         })
@@ -307,9 +318,8 @@ export async function addNewTape( tapeData: any, coverfront: string ) {
 }
 
 export async function addNewTapeGenres( genres: any, tapeId: number ) {
-    const getLoggedInUser = await checkLoginStatus()
-    const userUuid: string = null !== getLoggedInUser ? getLoggedInUser.id : ''
-    const client = createClient()
+    const supabase = createClient()
+    const userUuid = await getCurrentUserSupabaseId()
 
     if ( ! userUuid ) {
         return;
@@ -320,7 +330,7 @@ export async function addNewTapeGenres( genres: any, tapeId: number ) {
 
         for ( const genre of genreNames ) {
     
-            const { data: genreData, error } = await client
+            const { data: genreData, error } = await supabase
                 .from( 'genres' )
                 .select( 'genre_id' )
                 .eq( 'genre_name', genre )
@@ -333,8 +343,8 @@ export async function addNewTapeGenres( genres: any, tapeId: number ) {
             if ( genreData && genreData.length > 0 ) {
                 const genreId = genreData[0].genre_id
     
-                const { data, error } = await client
-                    .rpc( 'insert_tape_genre2', {
+                const { data, error } = await supabase
+                    .rpc( 'insert_tape_genre', {
                         tape_id: tapeId,
                         genre_id: genreId,
                         uuid: userUuid

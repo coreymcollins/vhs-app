@@ -1,14 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { options } from '../api/auth/[...nextauth]/options'
-import { getServerSession } from 'next-auth'
 import { getCurrentUserSupabaseAuth } from '../actions'
-import { supabase } from '../lib/supabase'
+import { createClient } from '@/utils/supabase/server';
 import { checkLoginStatus } from '../actions/check-login-status';
 import AccountForm from '../account/account-form'
 
+
 export default async function PageHeader() {
-    const session = await getServerSession( options )
+    const supabase = createClient()
     const userAuth = await getCurrentUserSupabaseAuth()
     const isLoggedIn = await checkLoginStatus()
     let userRole: string | null
