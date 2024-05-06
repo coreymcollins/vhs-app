@@ -1,14 +1,13 @@
 import { SearchForm } from '@/app/components/search-form'
-import { getServerSession } from 'next-auth'
-import { options } from '../api/auth/[...nextauth]/options'
+import { getCurrentUserSupabaseAuth } from '../actions'
 
 export default async function SearchPage() {
-    const session = await getServerSession( options )
+    const userAuth = await getCurrentUserSupabaseAuth()
     
     return (
         <>
             <h2>Search for an existing tape</h2>
-            <SearchForm session={session} />
+            <SearchForm session={userAuth} />
         </>
     )
 }

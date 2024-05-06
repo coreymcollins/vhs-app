@@ -1,14 +1,13 @@
-import { getServerSession } from 'next-auth';
-import { BarcodeScanQuagga } from '../components/search-form-scan-quagga';
-import { options } from '../api/auth/[...nextauth]/options';
+import { getCurrentUserSupabaseAuth } from '../actions'
+import { BarcodeScanQuagga } from '../components/search-form-scan-quagga'
 
 export default async function QuaggaPage() {
-    const session = await getServerSession( options )
+    const userAuth = await getCurrentUserSupabaseAuth()
 
     return (
         <>
             <h2>Search for an existing tape with quagga</h2>
-            <BarcodeScanQuagga session={session} />
+            <BarcodeScanQuagga session={userAuth} />
         </>
     );
 }

@@ -47,13 +47,6 @@ export default async function PageHeader() {
                             { 'admin' === userRole ? (
                                 <li><Link href="/add-tape">Add Tape</Link></li>
                             ) : null }
-
-                            <li>
-                                {/* <button onClick={signout}>
-                                    Sign Out
-                                </button> */}
-                                {/* <Link href="#" onClick={handleSignOut}>Sign Out</Link> */}
-                            </li>
                         </>
                         ) : (
                             <>
@@ -69,9 +62,9 @@ export default async function PageHeader() {
             </nav>
             
             { null !== userAuth ? (
-                    <p>signed in as supabase user {userAuth.email}</p>
+                    <p>signed in as user {userAuth.email}</p>
                 ) : (
-                    <p>not signed in as supabase user</p>
+                    <p>not signed in as user</p>
                 )
             }
         </header>

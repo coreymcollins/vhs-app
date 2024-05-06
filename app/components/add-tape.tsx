@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { createEntry } from '@/app/actions';
 import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
-import { checkLoginStatus } from '../actions/check-login-status';
 
 const initialState = {
     message: 'Title, Description, and Year are required.',
@@ -20,11 +19,6 @@ export function AddForm() {
         const formData = new FormData(event.currentTarget);
 
         const response = await createEntry(initialState, formData);
-        // if ( error ) {
-        //     setState({ message: 'Error adding tape.' });
-        // } else {
-        //     setState({ message: 'Tape added successfully.' });
-        // }
     };
 
     const defaultValues = {
@@ -33,7 +27,7 @@ export function AddForm() {
         title: '',
         description: '',
         year: '',
-        coverfront: null,
+        coverfront: '',
         genres: [],
         date_added: '',
         date_updated: '',
