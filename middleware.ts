@@ -7,14 +7,18 @@ export async function middleware(request: NextRequest) {
     // update user's auth session
     await updateSession(request)
     
-    // const redirectUrls = ['/add-tape']
-    // const isLoggedIn = await checkLoginStatus()
+    const redirectUrls = [
+        '/add-tape',
+        '/edit'
+    ]
+
+    const isLoggedIn = await checkLoginStatus()
     
-    // if ( null === isLoggedIn ) {
-    //     if ( redirectUrls.some( url => request.nextUrl.pathname.startsWith( url ) ) ) {
-    //         return NextResponse.redirect( new URL('/login', request.url))
-    //     }
-    // }
+    if ( null === isLoggedIn ) {
+        if ( redirectUrls.some( url => request.nextUrl.pathname.startsWith( url ) ) ) {
+            return NextResponse.redirect( new URL('/login', request.url))
+        }
+    }
 }
 
 export const config = {

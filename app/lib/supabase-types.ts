@@ -311,6 +311,19 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_tape: {
+        Args: {
+          data: Json
+          coverfrontdata: string
+        }
+        Returns: undefined
+      }
+      update_tape2: {
+        Args: {
+          data: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

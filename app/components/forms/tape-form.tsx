@@ -15,7 +15,7 @@ interface TapeFormProps {
         title: string;
         description: string;
         year: number | string;
-        coverfront: Buffer | null;
+        coverfront: string;
         genres: string[];
         date_added: string;
         date_updated: string;
@@ -31,7 +31,7 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
 
-    console.log( 'defaultValues', defaultValues )
+    console.log( 'defaultValues', typeof defaultValues.coverfront )
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
@@ -96,11 +96,11 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
                     { ! selectedImage && defaultValues.coverfront && defaultValues.coverfront.length > 0 ? (
                         <>
                             <img
-                                src={`data:image/jpeg;base64,${defaultValues.coverfront.toString('base64')}`}
+                                src={`data:image/jpeg;base64,${Buffer.from(defaultValues.coverfront.substring(2), 'hex').toString('base64')}`}
                                 alt={`${defaultValues.title} front cover`}
                                 className="image-upload-preview"
                             />
-                            <input type="hidden" name="existing_coverfront" value={defaultValues.coverfront.toString('base64')} />
+                            <input type="hidden" name="existing_coverfront" value={`${Buffer.from(defaultValues.coverfront.substring(2), 'hex').toString('base64')}`} />
                         </>
                     ) : null }
                 </div>

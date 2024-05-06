@@ -1,7 +1,7 @@
 import AddRemoveTape from './add-remove-collection';
 
 export function SingleTapeRow({tape, context, session}: {tape: any, context: string, session: any}) {
-
+    
     return (
         <tr key={`${context}-${tape.barcode}-table-row-search`}>
             <td key={`${tape.barcode}-${tape.tape_id}`} data-label="ID">
@@ -25,7 +25,7 @@ export function SingleTapeRow({tape, context, session}: {tape: any, context: str
             <td key={`${context}-${tape.barcode}-coverfront`} data-label="Cover">
                 { tape.coverfront && '\\x' !== tape.coverfront && tape.coverfront.length > 0 ? (
                     <img
-                        src={`data:image/png;base64,${Buffer.from(tape.coverfront.substring(2), 'hex').toString('base64')}`}
+                        src={`data:image/jpeg;base64,${Buffer.from(tape.coverfront.substring(2), 'hex').toString('base64')}`}
                         alt={`${tape.title} front cover`}
                         className="cover-front"
                     />

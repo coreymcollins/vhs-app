@@ -1,8 +1,6 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
-import sql from './components/database'
 import { createClient } from '@/utils/supabase/server';
 import { checkLoginStatus } from './actions/check-login-status';
 
@@ -59,6 +57,9 @@ export async function updateEntry(
     },
     formData: FormData,
     ) {
+    const supabase = createClient()
+    const userId = await getCurrentUserSupabaseId()
+
     const schema = z.object({
         tape_id: z.number(),
         barcode: z.string(),
@@ -84,59 +85,32 @@ export async function updateEntry(
         return { message: `Failed to update entry: ${parse.error.message}` };
     }
 
-    const data = parse.data;
-    const coverFrontFile = formData.get('coverfront') as File | null;
+    const formUpdates: any = parse.data;
+    const coverFrontFile = formData.get('coverfront') as File | null
+    let coverFrontData = '';
+
+    if ( coverFrontFile ) {
+        const coverFrontBuffer = await coverFrontFile.arrayBuffer()
+        coverFrontData = Buffer.from(coverFrontBuffer).toString( 'base64' )
+    }
+
     const existingCoverFrontBase64 = formData.get('existing_coverfront') as string | null;
 
-    let coverFrontData: Buffer | null = null; // Explicitly define type
+    formUpdates['coverFrontData'] = '' !== coverFrontData ? coverFrontData : existingCoverFrontBase64
 
-    try {
-        // Check if cover image is being updated
-        if (coverFrontFile && coverFrontFile.size > 0) {
-            const coverFrontBuffer = await coverFrontFile.arrayBuffer();
-            coverFrontData = Buffer.from(coverFrontBuffer);
-        } else if (existingCoverFrontBase64) {
-            coverFrontData = Buffer.from(existingCoverFrontBase64, 'base64');
-        }
+    const { data, error } = await supabase
+        .rpc('update_tape2', {
+            data: formUpdates
+        })
 
-        await sql.begin(async (sql) => {
-            await sql`
-                UPDATE tapes
-                SET barcode = ${data.barcode},
-                    title = ${data.title},
-                    description = ${data.description},
-                    year = ${data.year},
-                    ${coverFrontData ? sql`coverfront = ${coverFrontData},` : sql``}
-                    date_updated = ${data.date_updated}
-                WHERE tape_id = ${data.tape_id};
-            `;
+    console.log( 'tape data on update', data )
 
-            // Delete existing genre associations
-            await sql`DELETE FROM tapes_genres WHERE tape_id = ${data.tape_id}`;
-
-            // Add the genres.
-            for (const genre of data.genres) {
-                await sql`
-                    INSERT INTO tapes_genres (tape_id, genre_id)
-                    VALUES (${data.tape_id}, (SELECT genre_id FROM genres WHERE genre_name = ${genre}));
-                `;
-            }
-        });
-
-        revalidatePath('/');
-        return { message: `Updated tape with ID ${data.tape_id}` };
-    } catch (e) {
-        console.error('Database update failed:', e);
-        return { message: 'Failed to update entry in the database' };
+    if ( error ) {
+        console.error( 'error in updating an existing tape:', error )
+        return null;
+    } else {
+        return data;
     }
-}
-
-function serializeResult(result: any) {
-    if (result.coverfront instanceof Uint8Array) {
-        result.coverfront = Buffer.from(result.coverfront).toString('base64')
-    }
-
-    return result;
 }
 
 export async function searchByBarcode(barcode: string) {

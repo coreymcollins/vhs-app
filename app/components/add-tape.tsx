@@ -7,7 +7,7 @@ import { TapeForm } from './forms/tape-form';
 import { checkLoginStatus } from '../actions/check-login-status';
 
 const initialState = {
-    message: 'All fields are required.',
+    message: 'Title, Description, and Year are required.',
 };
 
 export function AddForm() {

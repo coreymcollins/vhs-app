@@ -11,12 +11,10 @@ const initialState = {
 };
 
 export function EditForm({ tape }: any) {
-    // console.log( 'tape in edit form', tape)
     const { tape_id, barcode, title, description, year, coverfront, genres, date_added, date_updated } = tape;
     const [state, setState] = useState(initialState);
     const { genres: allGenres } = FetchGenres();
     const { selectedImage, handleImageChange } = ImageUpload();
-
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
