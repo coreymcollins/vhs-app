@@ -324,9 +324,42 @@ input[type="file"]::file-selector-button {
     max-width: 300px;
 }
 
+.container-single-tape {
+    max-width: 100%;
+    width: 960px;
+}
+
+.container-single-tape-cover {
+    margin-bottom: 2rem;
+}
+
+.container-single-tape-cover img {
+    height: auto;
+    max-width: 100%;
+    width: 100%;
+}
+
+.container-single-tape-row + .container-single-tape-row {
+    margin-top: 2rem;
+}
+
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;
+    }
+}
+
+@Media (min-width: 600px) {
+
+    .container-single-tape {
+        display: grid;
+        grid-template-columns: 40% calc(60% - 2rem);
+        grid-gap: 2rem;
+        margin: 0 auto;
+    }
+
+    .container-single-tape-cover {
+        margin-bottom: 0;
     }
 }
 

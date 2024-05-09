@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import AddRemoveTape from './add-remove-collection';
 
 export function SingleTapeRow({tape, context, session}: {tape: any, context: string, session: any}) {
@@ -11,7 +12,9 @@ export function SingleTapeRow({tape, context, session}: {tape: any, context: str
                 {tape.barcode}
             </td>
             <td key={`${context}-${tape.barcode}-${tape.title}`} data-label="Title">
-                {tape.title}
+                <Link href={`/tape/${tape.tape_id}`}>
+                    {tape.title}
+                </Link>
             </td>
             <td key={`${context}-${tape.barcode}-${tape.description}`} className="table-description" data-label="Description">
                 {tape.description}
