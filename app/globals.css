@@ -103,6 +103,14 @@ a {
     color: inherit;
 }
 
+h1 {
+    font-size: 1.5rem;
+}
+
+h2 {
+    font-size: 1rem;
+}
+
 h1,
 h2,
 h3 {
@@ -321,7 +329,7 @@ input[type="file"]::file-selector-button {
 }
 
 .cover-front {
-    max-width: 300px;
+    max-width: 100%;
 }
 
 .container-single-tape {
@@ -343,6 +351,13 @@ input[type="file"]::file-selector-button {
     margin-top: 2rem;
 }
 
+.tape-results.grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-gap: 2rem;
+    margin: 0 auto;
+}
+
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;
@@ -360,6 +375,10 @@ input[type="file"]::file-selector-button {
 
     .container-single-tape-cover {
         margin-bottom: 0;
+    }
+
+    .tape-results.grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -397,6 +416,18 @@ input[type="file"]::file-selector-button {
     .table-description {
         width: 450px;
     }
+
+    .tape-results.grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -430,11 +461,19 @@ input[type="file"]::file-selector-button {
     .form-message {
         margin: 0 0 1rem 11rem;
     }
+
+    .tape-results.grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
 }
 
 @media (min-width: 1400px) {
 
     .genres-checkboxes {
         grid-template-columns: repeat(7, 1fr);
+    }
+
+    .tape-results.grid {
+        grid-template-columns: repeat(8, minmax(0, 1fr));
     }
 }

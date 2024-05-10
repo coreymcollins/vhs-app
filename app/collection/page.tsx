@@ -1,6 +1,6 @@
-import { SearchResultTable } from '../components/table-search-result'
 import { createClient } from '@/utils/supabase/server';
 import { getCurrentUserSupabaseAuth, getCurrentUserSupabaseId } from '../actions';
+import { SearchResultGrid } from '../components/grid-search-result';
 
 interface Tape {
     tape_id: number;
@@ -32,7 +32,7 @@ export default async function LibraryPage() {
     return (
         <>
             <h2>My Library</h2>
-            { null !== tapes && <SearchResultTable tapes={tapes} session={userAuth} /> }            
+            { null !== tapes && <SearchResultGrid tapes={tapes} session={userAuth} /> }            
         </>
     )
 }

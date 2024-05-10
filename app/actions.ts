@@ -169,6 +169,25 @@ export async function checkLibraryForTape(tapeId: number): Promise<boolean> {
     }
 }
 
+export async function getUserTapeIds() {
+    const supabase = createClient()
+    const userId = await getCurrentUserSupabaseId()
+
+    const { data, error } = await supabase
+        .from( 'users_tapes' )
+        .select( 'tape_id' )
+        .eq( 'uuid', userId )
+        .order( 'tape_id' )
+
+    if (error) {
+        console.error(`Error getting tapes for user`)
+        throw error
+    } else {
+        const tapeIds = data.map(item => item.tape_id);
+        return tapeIds;
+    }
+}
+
 export async function addToLibrary( tapeId: number ) {
     const supabase = createClient()
     const userId = await getCurrentUserSupabaseId()

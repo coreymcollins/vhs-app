@@ -1,3 +1,5 @@
+import { getCurrentUserSupabaseAuth } from '@/app/actions';
+import AddRemoveTape from '@/app/components/add-remove-collection';
 import { supabase } from '@/app/lib/supabase'
 
 export default async function SingleTapePage( { params }: { params: { tape_id: number } } ) {
@@ -6,7 +8,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
 
     const { data: tapeResult, error: tapeError } = await supabase
         .from( 'tapes' )
-        .select( 'title, description, year, coverfront, barcode' )
+        .select( 'tape_id, title, description, year, coverfront, barcode' )
         .eq( 'tape_id', tapeId )
 
     if ( tapeError ) {
@@ -35,6 +37,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
     }
     
     const genreList: string[] = genres ? Object.values(genres) : [];
+    const userAuth = await getCurrentUserSupabaseAuth()
 
     return (
         <>
@@ -79,6 +82,12 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                         <div className="container-single-tape-row">
                             <h3>Barcode</h3>
                             <p>{tape.barcode}</p>
+                        </div>
+                    )}
+
+                    { undefined !== userAuth && null !== userAuth && (
+                        <div className="container-single-tape-row">
+                            <AddRemoveTape tapeId={tape.tape_id} />
                         </div>
                     )}
                 </div>

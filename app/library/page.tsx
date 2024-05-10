@@ -1,6 +1,6 @@
-import { SearchResultTable } from '../components/table-search-result'
 import { createClient } from '@/utils/supabase/server';
 import { getCurrentUserSupabaseAuth } from '../actions';
+import { SearchResultGrid } from '../components/grid-search-result';
 
 
 async function getTapesWithGenres() {
@@ -20,7 +20,7 @@ export default async function LibraryPage() {
     return (
         <>
             <h2>Full Library</h2>
-            <SearchResultTable tapes={data} session={userAuth} />
+            <SearchResultGrid tapes={data} session={userAuth} />
         </>
     )
 }

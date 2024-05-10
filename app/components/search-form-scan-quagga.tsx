@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { searchByBarcode } from '@/app/actions';
-import { SearchResultTable } from './table-search-result';
 import Quagga from '@ericblade/quagga2';
+import { SearchResultGrid } from './grid-search-result';
 
 const initialState = {
     message: 'Scan a barcode number or upload an image of a barcode to perform a search.',
@@ -102,7 +102,7 @@ export function BarcodeScanQuagga({session}: {session: any}) {
                     
             { searchResult ? (
                 <>
-                    <SearchResultTable tapes={searchResult} session={session} />
+                    <SearchResultGrid tapes={searchResult} session={session} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">

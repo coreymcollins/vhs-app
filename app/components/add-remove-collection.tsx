@@ -1,20 +1,23 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { addToLibrary, checkLibraryForTape, removeFromLibrary } from '../actions';
+import { addToLibrary, getUserTapeIds, removeFromLibrary } from '../actions';
 
 interface AddRemoveTapeProps {
     tapeId: number;
 }
 
 const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
-    const [inLibrary, setInLibrary] = useState(false);
-
+    const [inLibrary, setInLibrary] = useState(false)
+    const [userTapeIds, setUserTapeIds] = useState<number[]>([])
+    
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await checkLibraryForTape( tapeId )
-                setInLibrary( result )
+                const tapeIds = await getUserTapeIds()
+                
+                setUserTapeIds( tapeIds )
+                setInLibrary( tapeIds.includes( tapeId ) )
             } catch ( error ) {
                 console.error( 'Error checking library for tape:', error )
             }

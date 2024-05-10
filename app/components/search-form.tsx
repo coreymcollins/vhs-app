@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react';
-import { SearchResultTable } from './table-search-result';
 import { searchByQuery } from '@/app/actions';
+import { SearchResultGrid } from './grid-search-result';
 
 const initialState = {
     message: 'Enter a search query to perform a search.',
@@ -46,7 +46,7 @@ export function SearchForm({session}: {session: any}) {
             
             { searchResult ? (
                 <>
-                    <SearchResultTable tapes={searchResult} session={session} />
+                    <SearchResultGrid tapes={searchResult} session={session} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">
