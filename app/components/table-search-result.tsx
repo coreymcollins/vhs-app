@@ -1,18 +1,24 @@
-import { MultiTapeRow } from './multi-tape-row';
+'use client'
 
-interface Tape {
-    tape_id: number;
-    barcode: string;
-    title: string;
-    description: string;
-    year: number;
-    coverfront: Buffer | null;
-    date_added: string;
-    date_updated: string;
-    genres: JSON;
-}
+import { useEffect, useState } from 'react';
+import { MultiTapeRow } from './multi-tape-row';
+import { getUserTapeIds } from '../actions';
 
 export function SearchResultTable({tapes, session}: {tapes: any, session: any}) {
+    const [userTapeIds, setUserTapeIds] = useState<number[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const tapeIds = await getUserTapeIds();
+                setUserTapeIds(tapeIds);
+            } catch (error) {
+                console.error('Error checking library for tape:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <>
@@ -34,7 +40,7 @@ export function SearchResultTable({tapes, session}: {tapes: any, session: any}) 
                     </tr>
                 </thead>
                 <tbody>
-                    <MultiTapeRow key="searchResult" tapes={tapes} context="search" session={session} />
+                    <MultiTapeRow key="searchResult" tapes={tapes} context="search" session={session} userTapeIds={userTapeIds} />
                 </tbody>
             </table>
         </>

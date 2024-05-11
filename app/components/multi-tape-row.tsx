@@ -1,6 +1,6 @@
 import { SingleTapeRow } from './single-tape-row';
 
-export function MultiTapeRow({tapes, context, session}: {tapes: any[], context: string, session: any}) {
+export function MultiTapeRow({tapes, context, session, userTapeIds}: {tapes: any[], context: string, session: any, userTapeIds: any}) {
 
     const tapesArray = Array.isArray(tapes) ? tapes : [tapes]
 
@@ -11,7 +11,7 @@ export function MultiTapeRow({tapes, context, session}: {tapes: any[], context: 
     return (
         <>
             {tapesArray.map(( tape ) => (
-                <SingleTapeRow key={`listing-${tape.tape_id}`} tape={tape} context="search" session={session} />
+                <SingleTapeRow key={`listing-${tape.tape_id}`} tape={tape} context="search" session={session} userTapeIds={userTapeIds} />
             ))}
         </>
     )

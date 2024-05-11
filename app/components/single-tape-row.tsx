@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AddRemoveTape from './add-remove-collection';
 
-export function SingleTapeRow({tape, context, session}: {tape: any, context: string, session: any}) {
+export function SingleTapeRow({tape, context, session, userTapeIds}: {tape: any, context: string, session: any, userTapeIds: any}) {
     
     return (
         <tr key={`${context}-${tape.barcode}-table-row-search`}>
@@ -38,7 +38,7 @@ export function SingleTapeRow({tape, context, session}: {tape: any, context: str
             </td>
             { undefined !== session && null !== session ? (
                 <td className="table-library" data-label="Manage Library">
-                    <AddRemoveTape tapeId={tape.tape_id} />
+                    <AddRemoveTape tapeId={tape.tape_id} userTapeIds={userTapeIds} />
                 </td>
             ) : (
                 null

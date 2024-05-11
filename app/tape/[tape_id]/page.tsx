@@ -87,7 +87,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
 
                     { undefined !== userAuth && null !== userAuth && (
                         <div className="container-single-tape-row">
-                            <AddRemoveTape tapeId={tape.tape_id} />
+                            <AddRemoveTape tapeId={tape.tape_id} userTapeIds={[tape.tape_id]} />
                         </div>
                     )}
                 </div>
