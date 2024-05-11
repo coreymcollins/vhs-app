@@ -31,8 +31,6 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
 
-    console.log( 'defaultValues', typeof defaultValues.coverfront )
-
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form">
             { defaultValues.tape_id && (

@@ -8,9 +8,12 @@ export async function middleware(request: NextRequest) {
     await updateSession(request)
     
     const redirectUrls = [
+        '/account',
         '/add-tape',
+        '/collection',
         '/edit',
-        '/register'
+        '/register',
+        '/user',
     ]
 
     const isLoggedIn = await checkLoginStatus()
