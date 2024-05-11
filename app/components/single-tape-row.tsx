@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import AddRemoveTape from './add-remove-collection';
+import TapeImage from './tape-image';
 
 export function SingleTapeRow({tape, context, session, userTapeIds}: {tape: any, context: string, session: any, userTapeIds: any}) {
     
@@ -27,11 +28,7 @@ export function SingleTapeRow({tape, context, session, userTapeIds}: {tape: any,
             </td>
             <td key={`${context}-${tape.barcode}-coverfront`} data-label="Cover">
                 { tape.coverfront && '\\x' !== tape.coverfront && tape.coverfront.length > 0 ? (
-                    <img
-                        src={`data:image/jpeg;base64,${Buffer.from(tape.coverfront.substring(2), 'hex').toString('base64')}`}
-                        alt={`${tape.title} front cover`}
-                        className="cover-front"
-                    />
+                    <TapeImage tape={tape} />
                 ) : (
                     <>No image available</>
                 )}

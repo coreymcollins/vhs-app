@@ -1,5 +1,6 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import AddRemoveTape from '@/app/components/add-remove-collection';
+import TapeImage from '@/app/components/tape-image';
 import { supabase } from '@/app/lib/supabase'
 
 export default async function SingleTapePage( { params }: { params: { tape_id: number } } ) {
@@ -44,11 +45,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
             <div className="container-single-tape">
                 { tape.coverfront && '\\x' !== tape.coverfront && tape.coverfront.length > 0 ? (
                     <div className="container-single-tape-cover">
-                        <img
-                            src={`data:image/jpeg;base64,${Buffer.from(tape.coverfront.substring(2), 'hex').toString('base64')}`}
-                            alt={`${tape.title} front cover`}
-                            className="cover-front"
-                        />
+                        <TapeImage tape={tape} />
                     </div>
                 ) : (
                     <>
