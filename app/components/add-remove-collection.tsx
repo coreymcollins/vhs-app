@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { addToLibrary, getUserTapeIds, removeFromLibrary } from '../actions';
+import { addToLibrary, removeFromLibrary } from '../actions';
 
 interface AddRemoveTapeProps {
     tapeId: number;

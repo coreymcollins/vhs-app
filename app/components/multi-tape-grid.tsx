@@ -1,5 +1,4 @@
 import { SingleTapeGrid } from './single-tape-grid';
-import { SingleTapeRow } from './single-tape-row';
 
 export function MultiTapeGrid({tapes, context, session, userTapeIds}: {tapes: any[], context: string, session: any, userTapeIds: any}) {
 
