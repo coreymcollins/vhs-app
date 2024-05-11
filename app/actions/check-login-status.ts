@@ -5,7 +5,6 @@ let cachedUser: any = null
 export async function checkLoginStatus() {
 
     if ( cachedUser ) {
-        console.log( 'the user is cached!', cachedUser )
         return cachedUser;
     }
     
@@ -21,8 +20,6 @@ export async function checkLoginStatus() {
     }
 
     cachedUser = user || null
-
-    console.log( 'the user is not yet cached', cachedUser )
 
     return cachedUser;
 }
