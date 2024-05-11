@@ -20,7 +20,7 @@ export function SingleTapeGrid({tape, context, session, userTapeIds}: {tape: any
             </Link>
 
             { undefined !== session && null !== session && (
-                <AddRemoveTape tapeId={tape.tape_id} userTapeIds={userTapeIds} />
+                <AddRemoveTape tapeId={tape.tape_id} userTapeIds={userTapeIds} user={session} />
             )}
         </div>
     )

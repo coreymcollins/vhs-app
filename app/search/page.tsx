@@ -1,8 +1,8 @@
 import { SearchForm } from '@/app/components/search-form'
-import { getCurrentUserSupabaseAuth } from '../actions'
+import { checkLoginStatus } from '../actions/check-login-status'
 
 export default async function SearchPage() {
-    const userAuth = await getCurrentUserSupabaseAuth()
+    const userAuth = await checkLoginStatus()
     
     return (
         <>

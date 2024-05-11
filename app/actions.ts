@@ -155,20 +155,6 @@ export async function searchGenres() {
     return genres;
 }
 
-export async function checkLibraryForTape(tapeId: number): Promise<boolean> {
-    const supabase = createClient()
-    const userId = await getCurrentUserSupabaseId()
-
-    const { data, error } = await supabase.rpc( 'check_user_tape', { user_id_query: userId, tape_id_query: tapeId });
-
-    if (error) {
-        console.error(`Error searching for tape by ID: ${tapeId}`)
-        throw error
-    } else {
-        return data;
-    }
-}
-
 export async function getUserTapeIds() {
     const supabase = createClient()
     const userId = await getCurrentUserSupabaseId()
@@ -188,16 +174,14 @@ export async function getUserTapeIds() {
     }
 }
 
-export async function addToLibrary( tapeId: number ) {
+export async function addToLibrary( tapeId: number, userId: string ) {
     const supabase = createClient()
-    const userId = await getCurrentUserSupabaseId()
 
     await supabase.rpc( 'insert_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
 
-export async function removeFromLibrary( tapeId: number ) {
+export async function removeFromLibrary( tapeId: number, userId: string ) {
     const supabase = createClient()
-    const userId = await getCurrentUserSupabaseId()
 
     await supabase.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
@@ -211,17 +195,6 @@ export async function getCurrentUserSupabaseId() {
     }
 
     return userUuid;
-}
-
-export async function getCurrentUserSupabaseAuth() {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if ( null !== user ) {
-        return user
-    } else {
-        return null
-    }
 }
 
 export async function addNewTapeSupabase( data: any, genres: any, coverfront: string ) {

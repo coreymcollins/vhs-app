@@ -6,9 +6,10 @@ import { addToLibrary, removeFromLibrary } from '../actions';
 interface AddRemoveTapeProps {
     tapeId: number;
     userTapeIds: number[];
+    user: any;
 }
 
-const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId, userTapeIds }: { tapeId: any, userTapeIds: any}) => {
+const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId, userTapeIds, user }: { tapeId: any, userTapeIds: any, user: any}) => {
     const [loading, setloading] = useState( true )
     const [inLibrary, setInLibrary] = useState(false)
     
@@ -29,9 +30,9 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId, userTapeIds }: { 
     const handleButtonClick = async () => {
         try {
             if ( inLibrary ) {
-                await removeFromLibrary( tapeId )
+                await removeFromLibrary( tapeId, user.id )
             } else {
-                await addToLibrary( tapeId )
+                await addToLibrary( tapeId, user.id )
             }
             
             setInLibrary( prevState => !prevState )

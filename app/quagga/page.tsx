@@ -1,8 +1,8 @@
-import { getCurrentUserSupabaseAuth } from '../actions'
+import { checkLoginStatus } from '../actions/check-login-status';
 import { BarcodeScanQuagga } from '../components/search-form-scan-quagga'
 
 export default async function QuaggaPage() {
-    const userAuth = await getCurrentUserSupabaseAuth()
+    const userAuth = await checkLoginStatus()
 
     return (
         <>

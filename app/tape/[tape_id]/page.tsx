@@ -1,4 +1,4 @@
-import { getCurrentUserSupabaseAuth } from '@/app/actions';
+import { checkLoginStatus } from '@/app/actions/check-login-status';
 import AddRemoveTape from '@/app/components/add-remove-collection';
 import { supabase } from '@/app/lib/supabase'
 
@@ -37,7 +37,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
     }
     
     const genreList: string[] = genres ? Object.values(genres) : [];
-    const userAuth = await getCurrentUserSupabaseAuth()
+    const userAuth = await checkLoginStatus()
 
     return (
         <>
@@ -87,7 +87,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
 
                     { undefined !== userAuth && null !== userAuth && (
                         <div className="container-single-tape-row">
-                            <AddRemoveTape tapeId={tape.tape_id} userTapeIds={[tape.tape_id]} />
+                            <AddRemoveTape tapeId={tape.tape_id} userTapeIds={[tape.tape_id]} user={userAuth} />
                         </div>
                     )}
                 </div>

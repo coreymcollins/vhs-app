@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
-import { getCurrentUserSupabaseAuth, getCurrentUserSupabaseId } from '../actions';
+import { getCurrentUserSupabaseId } from '../actions';
 import { SearchResultGrid } from '../components/grid-search-result';
+import { checkLoginStatus } from '../actions/check-login-status';
 
 interface Tape {
     tape_id: number;
@@ -27,7 +28,7 @@ async function getUsersTapes() {
 
 export default async function LibraryPage() {
     const tapes = await getUsersTapes()
-    const userAuth = await getCurrentUserSupabaseAuth()
+    const userAuth = await checkLoginStatus()
     
     return (
         <>

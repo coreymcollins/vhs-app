@@ -1,9 +1,9 @@
-import { getCurrentUserSupabaseAuth } from './actions'
+import { checkLoginStatus } from './actions/check-login-status'
 import { SearchForm } from './components/search-form'
 import { BarcodeScanQuagga } from './components/search-form-scan-quagga'
 
 export default async function Home() {
-    const userAuth = await getCurrentUserSupabaseAuth()
+    const userAuth = await checkLoginStatus()
 
     return (
         <>

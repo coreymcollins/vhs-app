@@ -9,5 +9,9 @@ export async function checkLoginStatus() {
         data: { user },
     } = await supabase.auth.getUser()
 
+    if ( ! user ) {
+        return null
+    }
+
     return user;
 }
