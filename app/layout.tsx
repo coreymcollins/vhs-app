@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import PageHeader from './components/header';
+import { checkLoginStatus } from './actions/check-login-status';
+import { createClient } from '@/utils/supabase/server';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,11 +12,30 @@ export const metadata: Metadata = {
     description: "Be kind. Revive.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    let user = await checkLoginStatus()
+    let userRole: string
+    userRole = ''
+    
+    if ( null !== user ) {
+        const supabase = createClient()
+        const { data, error } = await supabase
+            .from( 'users' )
+            .select( 'user_role' )
+            .eq( 'uuid', user.id )
+
+        if ( error ) {
+            console.error( 'Error getting user:', error )
+            return null;
+        }
+        
+        userRole = data && data[0] ? data[0].user_role : ''
+    }
+
     return (
         <html lang="en">
             <link
@@ -31,7 +52,7 @@ export default function RootLayout({
             />
             <body className={inter.className}>
                 <main>
-                    <PageHeader />
+                    <PageHeader user={user} userRole={userRole} />
                     {children}
                 </main>
             </body>

@@ -1,28 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { getCurrentUserSupabaseAuth } from '../actions'
-import { createClient } from '@/utils/supabase/server';
-import { checkLoginStatus } from '../actions/check-login-status';
 import AccountForm from '../account/account-form'
 
-
-export default async function PageHeader() {
-    const supabase = createClient()
-    const userAuth = await getCurrentUserSupabaseAuth()
-    const isLoggedIn = await checkLoginStatus()
-    let userRole: string | null
-    userRole = ''
-
-    if ( null !== isLoggedIn ) {
-
-        const { data, error } = await supabase
-            .from( 'users' )
-            .select( 'user_role' )
-            .eq( 'uuid', isLoggedIn.id )
-
-        userRole = null !== data && undefined !== data[0] ? data[0].user_role : ''
-    }
-    
+export default async function PageHeader({user, userRole}: {user: any, userRole: string}) {
     return (
         <header className="site-header">
             <Link href="/">
@@ -41,7 +21,7 @@ export default async function PageHeader() {
             <nav className="menu">
                 <ol>
                     <li><Link href="/library">Full Library</Link></li>
-                    { null !== isLoggedIn ? (
+                    { null !== user ? (
                         <>
                             <li><Link href="/collection">My Library</Link></li>
                             { 'admin' === userRole ? (
@@ -54,15 +34,15 @@ export default async function PageHeader() {
                         </>
                     )}
                 </ol>
-                { null !== isLoggedIn ? (
+                { null !== user ? (
                     <AccountForm />
                 ) : (
                     ''
                 )}
             </nav>
             
-            { null !== userAuth ? (
-                    <p>signed in as user {userAuth.email}</p>
+            { null !== user ? (
+                    <p>signed in as user {user.email}</p>
                 ) : (
                     <p>not signed in as user</p>
                 )
