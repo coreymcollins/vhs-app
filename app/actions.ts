@@ -58,7 +58,6 @@ export async function updateEntry(
     formData: FormData,
     ) {
     const supabase = createClient()
-    const userId = await getCurrentUserSupabaseId()
 
     const schema = z.object({
         tape_id: z.number(),
@@ -99,11 +98,9 @@ export async function updateEntry(
     formUpdates['coverFrontData'] = '' !== coverFrontData ? coverFrontData : existingCoverFrontBase64
 
     const { data, error } = await supabase
-        .rpc('update_tape2', {
+        .rpc('update_tape', {
             data: formUpdates
         })
-
-    console.log( 'tape data on update', data )
 
     if ( error ) {
         console.error( 'error in updating an existing tape:', error )
@@ -155,9 +152,13 @@ export async function searchGenres() {
     return genres;
 }
 
-export async function getUserTapeIds() {
+export async function getUserTapeIds( userId: string ) {
+
+    if ( ! userId ) {
+        return [];
+    }
+
     const supabase = createClient()
-    const userId = await getCurrentUserSupabaseId()
 
     const { data, error } = await supabase
         .from( 'users_tapes' )
@@ -186,17 +187,6 @@ export async function removeFromLibrary( tapeId: number, userId: string ) {
     await supabase.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
 
-export async function getCurrentUserSupabaseId() {
-    const getLoggedInUser = await checkLoginStatus()
-    const userUuid: string = null !== getLoggedInUser ? getLoggedInUser.id : ''
-
-    if ( ! userUuid ) {
-        return;
-    }
-
-    return userUuid;
-}
-
 export async function addNewTapeSupabase( data: any, genres: any, coverfront: string ) {
     const newTapeData = await addNewTape( data, coverfront )
     const tapeId = null !== newTapeData && undefined !== newTapeData ? newTapeData[0].tape_id : ''
@@ -210,7 +200,13 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: st
 
 export async function addNewTape( tapeData: any, coverfront: string ) {
     const supabase = createClient()
-    const userUuid = await getCurrentUserSupabaseId()
+    const user = await checkLoginStatus()
+
+    if ( ! user ) {
+        return;
+    }
+
+    const userUuid = user.id
 
     if ( ! userUuid ) {
         return;
@@ -234,7 +230,13 @@ export async function addNewTape( tapeData: any, coverfront: string ) {
 
 export async function addNewTapeGenres( genres: any, tapeId: number ) {
     const supabase = createClient()
-    const userUuid = await getCurrentUserSupabaseId()
+    const user = await checkLoginStatus()
+
+    if ( ! user ) {
+        return;
+    }
+
+    const userUuid = user.id
 
     if ( ! userUuid ) {
         return;

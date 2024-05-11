@@ -1,5 +1,4 @@
 import { createClient } from '@/utils/supabase/server';
-import { getCurrentUserSupabaseId } from '../actions';
 import { SearchResultGrid } from '../components/grid-search-result';
 import { checkLoginStatus } from '../actions/check-login-status';
 
@@ -15,9 +14,13 @@ interface Tape {
 
 async function getUsersTapes() {
     const supabase = createClient()
-    const userId = await getCurrentUserSupabaseId()
+    const user = await checkLoginStatus()
 
-    const { data, error } = await supabase.rpc('get_tapes_by_user_id', { useridquery: userId });
+    if ( null === user ) {
+        return []
+    }
+
+    const { data, error } = await supabase.rpc('get_tapes_by_user_id', { useridquery: user.id });
     
     if (error) {
       console.error('Error fetching tapes in collection:', error.message);

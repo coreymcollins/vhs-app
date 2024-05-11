@@ -10,7 +10,8 @@ export function SearchResultTable({tapes, session}: {tapes: any, session: any}) 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const tapeIds = await getUserTapeIds();
+                const userId = null !== session ? session.id : ''
+                const tapeIds = await getUserTapeIds( userId );
                 setUserTapeIds(tapeIds);
             } catch (error) {
                 console.error('Error checking library for tape:', error);

@@ -111,24 +111,6 @@ export type Database = {
           },
         ]
       }
-      testing: {
-        Row: {
-          created_at: string | null
-          id: number
-          title: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id: number
-          title?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          title?: string | null
-        }
-        Relationships: []
-      }
       users: {
         Row: {
           email: string
@@ -167,23 +149,28 @@ export type Database = {
       users_tapes: {
         Row: {
           tape_id: number | null
-          user_id: number | null
           user_tape_id: number
           uuid: string | null
         }
         Insert: {
           tape_id?: number | null
-          user_id?: number | null
           user_tape_id?: number
           uuid?: string | null
         }
         Update: {
           tape_id?: number | null
-          user_id?: number | null
           user_tape_id?: number
           uuid?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "users_tapes_tape_id_fkey"
+            columns: ["tape_id"]
+            isOneToOne: false
+            referencedRelation: "tapes"
+            referencedColumns: ["tape_id"]
+          },
+        ]
       }
     }
     Views: {
@@ -318,13 +305,6 @@ export type Database = {
         Returns: undefined
       }
       update_tape: {
-        Args: {
-          data: Json
-          coverfrontdata: string
-        }
-        Returns: undefined
-      }
-      update_tape2: {
         Args: {
           data: Json
         }
