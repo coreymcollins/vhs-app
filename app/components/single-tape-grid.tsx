@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import AddRemoveTape from './add-remove-collection';
 
-export function SingleTapeGrid({tape, context, session}: {tape: any, context: string, session: any}) {
+export function SingleTapeGrid({tape, context, session, userTapeIds}: {tape: any, context: string, session: any, userTapeIds: any}) {
 
     return (
         <div className="tape-item">
@@ -20,7 +20,7 @@ export function SingleTapeGrid({tape, context, session}: {tape: any, context: st
             </Link>
 
             { undefined !== session && null !== session && (
-                <AddRemoveTape tapeId={tape.tape_id} />
+                <AddRemoveTape tapeId={tape.tape_id} userTapeIds={userTapeIds} />
             )}
         </div>
     )

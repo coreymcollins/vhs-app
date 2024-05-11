@@ -1,20 +1,26 @@
+'use client'
+
+import { useEffect, useState } from 'react';
 import { MultiTapeGrid } from './multi-tape-grid';
+import { getUserTapeIds } from '../actions';
 
-interface Tape {
-    tape_id: number;
-    barcode: string;
-    title: string;
-    description: string;
-    year: number;
-    coverfront: Buffer | null;
-    date_added: string;
-    date_updated: string;
-    genres: JSON;
-}
+export function SearchResultGrid({ tapes, session }: { tapes: any, session: any }) {
+    const [userTapeIds, setUserTapeIds] = useState<number[]>([]);
 
-export function SearchResultGrid({tapes, session}: {tapes: any, session: any}) {
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const tapeIds = await getUserTapeIds();
+                setUserTapeIds(tapeIds);
+            } catch (error) {
+                console.error('Error checking library for tape:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
-        <MultiTapeGrid key="searchResult" tapes={tapes} context="search" session={session} />
-    )
+        <MultiTapeGrid key="searchResult" tapes={tapes} context="search" session={session} userTapeIds={userTapeIds}/>
+    );
 }

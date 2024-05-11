@@ -5,28 +5,26 @@ import { addToLibrary, getUserTapeIds, removeFromLibrary } from '../actions';
 
 interface AddRemoveTapeProps {
     tapeId: number;
+    userTapeIds: number[];
 }
 
-const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
+const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId, userTapeIds }: { tapeId: any, userTapeIds: any}) => {
     const [loading, setloading] = useState( true )
     const [inLibrary, setInLibrary] = useState(false)
-    const [userTapeIds, setUserTapeIds] = useState<number[]>([])
     
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const tapeIds = await getUserTapeIds()
-                setUserTapeIds( tapeIds )
-                setInLibrary( tapeIds.includes( tapeId ) )
+                setInLibrary( userTapeIds.includes( tapeId ) )
                 setloading( false )
             } catch ( error ) {
                 console.error( 'Error checking library for tape:', error )
                 setloading( false )
             }
         }
-
+        
         fetchData()
-    }, [tapeId])
+    }, [tapeId, userTapeIds])
 
     const handleButtonClick = async () => {
         try {
