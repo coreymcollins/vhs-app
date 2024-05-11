@@ -1,6 +1,13 @@
 import { createClient } from '@/utils/supabase/server'
 
+let cachedUser: any = null
+
 export async function checkLoginStatus() {
+
+    if ( cachedUser ) {
+        console.log( 'the user is cached!', cachedUser )
+        return cachedUser;
+    }
     
     const supabase = createClient()
     
@@ -13,5 +20,9 @@ export async function checkLoginStatus() {
         return null
     }
 
-    return user;
+    cachedUser = user || null
+
+    console.log( 'the user is not yet cached', cachedUser )
+
+    return cachedUser;
 }

@@ -2,7 +2,6 @@ import { createClient } from '@/utils/supabase/server';
 import { SearchResultGrid } from '../components/grid-search-result';
 import { checkLoginStatus } from '../actions/check-login-status';
 
-
 async function getTapesWithGenres() {
     const supabase = createClient()
     const { data, error } = await supabase.rpc('get_tapes_with_genres');
