@@ -43,7 +43,7 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
     }
 
     if ( loading ) {
-        return <></>
+        return
     }
 
     return (
