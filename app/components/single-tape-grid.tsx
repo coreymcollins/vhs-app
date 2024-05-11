@@ -2,7 +2,7 @@ import Link from 'next/link';
 import AddRemoveTape from './add-remove-collection';
 
 export function SingleTapeGrid({tape, context, session}: {tape: any, context: string, session: any}) {
-    
+
     return (
         <div className="tape-item">
             { tape.coverfront && '\\x' !== tape.coverfront && tape.coverfront.length > 0 && (

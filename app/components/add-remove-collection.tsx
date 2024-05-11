@@ -8,6 +8,7 @@ interface AddRemoveTapeProps {
 }
 
 const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
+    const [loading, setloading] = useState( true )
     const [inLibrary, setInLibrary] = useState(false)
     const [userTapeIds, setUserTapeIds] = useState<number[]>([])
     
@@ -15,11 +16,12 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
         const fetchData = async () => {
             try {
                 const tapeIds = await getUserTapeIds()
-                
                 setUserTapeIds( tapeIds )
                 setInLibrary( tapeIds.includes( tapeId ) )
+                setloading( false )
             } catch ( error ) {
                 console.error( 'Error checking library for tape:', error )
+                setloading( false )
             }
         }
 
@@ -33,13 +35,17 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId }) => {
             } else {
                 await addToLibrary( tapeId )
             }
-
+            
             setInLibrary( prevState => !prevState )
         } catch ( error ) {
             console.error( 'Error performing action:', error )
         }
     }
-    
+
+    if ( loading ) {
+        return <></>
+    }
+
     return (
         <button onClick={handleButtonClick} className="button-library">
             {inLibrary ? `Remove from Library` : `Add to Library`}
