@@ -22,12 +22,12 @@ export async function createEntry(
         barcode: formData.get( 'barcode' ),
         title: formData.get( 'title' ),
         description: formData.get( 'description' ),
-        year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
+        year: parseInt(formData.get( 'year' ) as string || '0'), // Convert to number or default to 0
         date_added: formData.get( 'date_added' ),
     })
 
     if ( ! parse.success ) {
-        console.error('Form data parsing failed:', parse.error)
+        console.error( 'Form data parsing failed:', parse.error )
         return { message: `Failed to add entry: ${parse.error.message}` }
     }
 
@@ -40,7 +40,7 @@ export async function createEntry(
     })
 
     const data = parse.data
-    const coverFrontFile = formData.get('coverfront') as File | null
+    const coverFrontFile = formData.get( 'coverfront' ) as File | null
     let coverFrontData = '';
 
     if ( coverFrontFile ) {
@@ -79,13 +79,13 @@ export async function updateEntry(
         date_updated: formData.get('date_updated'),
     });
 
-    if (!parse.success) {
-        console.error('Form data parsing failed:', parse.error);
+    if ( ! parse.success ) {
+        console.error( 'Form data parsing failed:', parse.error );
         return { message: `Failed to update entry: ${parse.error.message}` };
     }
 
     const formUpdates: any = parse.data;
-    const coverFrontFile = formData.get('coverfront') as File | null
+    const coverFrontFile = formData.get( 'coverfront' ) as File | null
     let coverFrontData = '';
 
     if ( coverFrontFile ) {
@@ -93,7 +93,7 @@ export async function updateEntry(
         coverFrontData = Buffer.from(coverFrontBuffer).toString( 'base64' )
     }
 
-    const existingCoverFrontBase64 = formData.get('existing_coverfront') as string | null;
+    const existingCoverFrontBase64 = formData.get( 'existing_coverfront' ) as string | null;
 
     formUpdates['coverFrontData'] = '' !== coverFrontData ? coverFrontData : existingCoverFrontBase64
 
@@ -103,7 +103,7 @@ export async function updateEntry(
         })
 
     if ( error ) {
-        console.error( 'error in updating an existing tape:', error )
+        console.error( 'Error in updating an existing tape:', error )
         return null;
     } else {
         return data;

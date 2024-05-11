@@ -18,7 +18,12 @@ export function AddForm() {
 
         const formData = new FormData(event.currentTarget);
 
-        const response = await createEntry(initialState, formData);
+        try {
+            await createEntry(initialState, formData);
+            setState({message: `Added "${formData.get( 'title' )}" successfully`})
+        } catch ( error ) {
+            setState({message: `Failed to add "${formData.get( 'title' )}"`})
+        }
     };
 
     const defaultValues = {
