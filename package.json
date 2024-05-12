@@ -17,6 +17,7 @@
     "date-fns": "^3.6.0",
     "next": "^14",
     "next-auth": "^4.24.7",
+    "nextjs-toploader": "^1.6.12",
     "postgres": "^3.4.3",
     "react": "^18",
     "react-dom": "^18",

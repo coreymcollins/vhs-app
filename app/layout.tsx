@@ -4,6 +4,7 @@ import './globals.css'
 import PageHeader from './components/header';
 import { checkLoginStatus } from './actions/check-login-status';
 import { createClient } from '@/utils/supabase/server';
+import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -51,6 +52,9 @@ export default async function RootLayout({
                 sizes="<generated>"
             />
             <body className={inter.className}>
+                <NextTopLoader
+                    color="#ffffff"
+                />
                 <main>
                     <PageHeader user={user} userRole={userRole} />
                     {children}
