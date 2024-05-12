@@ -9,7 +9,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
 
     const { data: tapeResult, error: tapeError } = await supabase
         .from( 'tapes' )
-        .select( 'tape_id, title, description, year, coverfront, barcode' )
+        .select( 'tape_id, title, description, year, cover_front_url, barcode' )
         .eq( 'tape_id', tapeId )
 
     if ( tapeError ) {
@@ -43,9 +43,9 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
     return (
         <>
             <div className="container-single-tape">
-                { tape.coverfront && '\\x' !== tape.coverfront && tape.coverfront.length > 0 ? (
+                { tape.cover_front_url && '\\x' !== tape.cover_front_url && tape.cover_front_url.length > 0 ? (
                     <div className="container-single-tape-cover">
-                        <TapeImage tape={tape} />
+                        <TapeImage tape={tape} layout="single" />
                     </div>
                 ) : (
                     <>

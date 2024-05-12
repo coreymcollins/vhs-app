@@ -1,10 +1,11 @@
 import { ChangeEvent, FormEvent } from 'react';
 import FetchGenres from '../fetch-genres';
 import { format } from 'date-fns';
+import Image from 'next/image'
 
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
-    selectedImage: Buffer | null;
+    selectedImage: File | null;
     handleImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
     stateMessage: string;
     submitText: string;
@@ -15,7 +16,7 @@ interface TapeFormProps {
         title: string;
         description: string;
         year: number | string;
-        coverfront: string;
+        cover_front_url: string;
         genres: string[];
         date_added: string;
         date_updated: string;
@@ -85,20 +86,38 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
                 <div className="image-container">
                     <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" onChange={handleImageChange} />
                     { selectedImage && (
-                        <img
-                            src={selectedImage.toString()}
-                            alt="Uploaded image"
-                            className="image-upload-preview"
-                        />
-                    )}
-                    { ! selectedImage && defaultValues.coverfront && defaultValues.coverfront.length > 0 ? (
                         <>
-                            <img
-                                src={`data:image/jpeg;base64,${Buffer.from(defaultValues.coverfront.substring(2), 'hex').toString('base64')}`}
-                                alt={`${defaultValues.title} front cover`}
+                            <Image
+                                src={selectedImage.toString()}
+                                alt="front cover"
+                                sizes="(min-width: 1024px) 768px, 180px"
+                                quality={90}
+                                priority={true}
+                                style={{
+                                    height: 'auto'
+                                }}
+                                width={178}
+                                height={267}
                                 className="image-upload-preview"
                             />
-                            <input type="hidden" name="existing_coverfront" value={`${Buffer.from(defaultValues.coverfront.substring(2), 'hex').toString('base64')}`} />
+                        </>
+                    )}
+                    { ! selectedImage && defaultValues.cover_front_url ? (
+                        <>
+                            <Image
+                                src={defaultValues.cover_front_url}
+                                alt={`${defaultValues.title} front cover`}
+                                sizes="(min-width: 1024px) 768px, 180px"
+                                quality={90}
+                                priority={true}
+                                style={{
+                                    height: 'auto'
+                                }}
+                                width={178}
+                                height={267}
+                                className="image-upload-preview"
+                            />
+                            <input type="hidden" name="existing_coverfront" value={defaultValues.cover_front_url} />
                         </>
                     ) : null }
                 </div>

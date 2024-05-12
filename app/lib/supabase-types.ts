@@ -27,6 +27,7 @@ export type Database = {
       tapes: {
         Row: {
           barcode: string | null
+          cover_front_url: string | null
           coverfront: string | null
           date_added: string | null
           date_updated: string | null
@@ -38,6 +39,7 @@ export type Database = {
         }
         Insert: {
           barcode?: string | null
+          cover_front_url?: string | null
           coverfront?: string | null
           date_added?: string | null
           date_updated?: string | null
@@ -49,6 +51,7 @@ export type Database = {
         }
         Update: {
           barcode?: string | null
+          cover_front_url?: string | null
           coverfront?: string | null
           date_added?: string | null
           date_updated?: string | null
@@ -234,6 +237,23 @@ export type Database = {
           description: string
           year: number
           coverfront: string
+          date_added: string
+          date_updated: string
+          genres: Json
+        }[]
+      }
+      get_tape_by_tape_id2: {
+        Args: {
+          tapeidquery: number
+        }
+        Returns: {
+          tape_id: number
+          barcode: string
+          title: string
+          description: string
+          year: number
+          coverfront: string
+          cover_front_url: string
           date_added: string
           date_updated: string
           genres: Json

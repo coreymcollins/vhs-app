@@ -103,6 +103,10 @@ h1 {
 }
 
 h2 {
+    font-size: 1.25rem;
+}
+
+h3 {
     font-size: 1rem;
 }
 
@@ -146,6 +150,18 @@ li:not(last-child) {
 .site-logo {
     height: auto;
     max-width: 100%;
+}
+
+@supports (content-visibility: auto) {
+    .site-logo {
+        content-visibility: auto;
+        contain-intrinsic-size: 640px 85px;
+    }
+
+    .tape-coverfront {
+        content-visibility: auto;
+        contain-intrinsic-size: 178px 267px;
+    }
 }
 
 .page-section {
@@ -353,9 +369,18 @@ input[type="file"]::file-selector-button {
 
 .tape-results.grid {
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-gap: 2rem;
     margin: 0 auto;
+}
+
+.image-container {
+    height: 100%;
+    position: relative;
+}
+
+.image-container img {
+    /* object-fit: contain; */
 }
 
 @media (prefers-color-scheme: dark) {

@@ -32,7 +32,7 @@ export function AddForm() {
         title: '',
         description: '',
         year: '',
-        coverfront: '',
+        cover_front_url: '',
         genres: [],
         date_added: '',
         date_updated: '',

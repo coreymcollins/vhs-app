@@ -9,7 +9,7 @@ interface Tape {
     description: string;
     genre_names: string[];
     year: number;
-    coverfront: Buffer | null;
+    cover_front_url: string;
 }
 
 async function getUsersTapes() {

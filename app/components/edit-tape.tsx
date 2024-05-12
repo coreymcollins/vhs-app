@@ -10,7 +10,7 @@ const initialState = {
 };
 
 export function EditForm({ tape }: any) {
-    const { tape_id, barcode, title, description, year, coverfront, genres, date_added, date_updated } = tape;
+    const { tape_id, barcode, title, description, year, cover_front_url, genres, date_added, date_updated } = tape;
     const [state, setState] = useState(initialState);
     const { selectedImage, handleImageChange } = ImageUpload();
 
@@ -33,7 +33,7 @@ export function EditForm({ tape }: any) {
         title,
         description,
         year,
-        coverfront,
+        cover_front_url,
         genres,
         date_added,
         date_updated,

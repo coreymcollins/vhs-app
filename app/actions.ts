@@ -43,14 +43,8 @@ export async function createEntry(
 
     const data = parse.data
     const coverFrontFile = formData.get( 'coverfront' ) as File | null
-    let coverFrontData = '';
 
-    if ( coverFrontFile ) {
-        const coverFrontBuffer = await coverFrontFile.arrayBuffer()
-        coverFrontData = Buffer.from(coverFrontBuffer).toString( 'base64' )
-    }
-
-    await addNewTapeSupabase( data, genres, coverFrontData )
+    await addNewTapeSupabase( data, genres, coverFrontFile )
 }
 
 export async function updateEntry(
@@ -87,17 +81,11 @@ export async function updateEntry(
     }
 
     const formUpdates: any = parse.data;
-    const coverFrontFile = formData.get( 'coverfront' ) as File | null
-    let coverFrontData = '';
-
-    if ( coverFrontFile ) {
-        const coverFrontBuffer = await coverFrontFile.arrayBuffer()
-        coverFrontData = Buffer.from(coverFrontBuffer).toString( 'base64' )
+    const newCoverImage = formData.get( 'coverfront' ) as File | null
+    
+    if ( null !== newCoverImage && newCoverImage.size > 0 ) {
+        uploadImageToStorage( formUpdates.tape_id, newCoverImage )
     }
-
-    const existingCoverFrontBase64 = formData.get( 'existing_coverfront' ) as string | null;
-
-    formUpdates['coverFrontData'] = '' !== coverFrontData ? coverFrontData : existingCoverFrontBase64
 
     const { data, error } = await supabase
         .rpc('update_tape', {
@@ -189,8 +177,8 @@ export async function removeFromLibrary( tapeId: number, userId: string ) {
     await supabase.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
 
-export async function addNewTapeSupabase( data: any, genres: any, coverfront: string ) {
-    const newTapeData = await addNewTape( data, coverfront )
+export async function addNewTapeSupabase( data: any, genres: any, coverfront: File | null ) {
+    const newTapeData = await addNewTape( data )
     const tapeId = null !== newTapeData && undefined !== newTapeData ? newTapeData[0].tape_id : ''
 
     if ( ! newTapeData || ! tapeId ) {
@@ -198,6 +186,7 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: st
     }
 
     await addNewTapeGenres( genres, tapeId )
+    await uploadImageToStorage( tapeId, coverfront )
 
     const user = await checkLoginStatus()
 
@@ -212,7 +201,7 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: st
     }
 }
 
-export async function addNewTape( tapeData: any, coverfront: string ) {
+export async function addNewTape( tapeData: any ) {
     const supabase = createClient()
     const user = await checkLoginStatus()
 
@@ -227,7 +216,6 @@ export async function addNewTape( tapeData: any, coverfront: string ) {
     }
     
     tapeData['uuid'] = userUuid
-    tapeData['coverFrontData'] = coverfront
     
     const { data, error } = await supabase
         .rpc('insert_new_tape', {
@@ -288,4 +276,44 @@ export async function addNewTapeGenres( genres: any, tapeId: number ) {
             }
         }
     }    
+}
+
+export async function uploadImageToStorage(tapeId: number, image: File | null) {
+
+    if ( null === image ) {
+        return;
+    }
+
+    const supabase = await createClient()
+    const imageFileName = `cover_${Date.now()}`
+
+    try {
+        const {data: imageUpload, error} = await supabase.storage
+            .from( 'covers' )
+            .upload( imageFileName, image )
+
+        if ( error ) {
+            throw error
+        }
+
+    } catch ( error ) {
+        console.error( 'Error uploading image to storage:', error )
+    }
+
+    // Add the URL to the tapes table.
+    const {data: imageUrl} = await supabase.storage
+        .from( 'covers' )
+        .getPublicUrl( imageFileName )
+
+    try {
+        const {error: imageUrlError } = await supabase.from( 'tapes' )
+            .update({cover_front_url: imageUrl.publicUrl})
+            .eq( 'tape_id', tapeId )
+
+        if ( imageUrlError ) {
+            throw imageUrlError
+        }
+    } catch ( imageUrlError ) {
+        console.error( 'Error adding image to tapes table:', imageUrlError )
+    }
 }
