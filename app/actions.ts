@@ -16,6 +16,7 @@ export async function createEntry(
         description: z.string().min(1),
         year: z.number().min(4),
         date_added: z.string(),
+        add_to_library: z.string().nullable(),
     })
 
     const parse = schema.safeParse({
@@ -24,6 +25,7 @@ export async function createEntry(
         description: formData.get( 'description' ),
         year: parseInt(formData.get( 'year' ) as string || '0'), // Convert to number or default to 0
         date_added: formData.get( 'date_added' ),
+        add_to_library: formData.get( 'add_to_library' ),
     })
 
     if ( ! parse.success ) {
@@ -196,6 +198,18 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: st
     }
 
     await addNewTapeGenres( genres, tapeId )
+
+    const user = await checkLoginStatus()
+
+    if ( ! user ) {
+        return;
+    }
+
+    const userUuid = user.id
+
+    if ( 'true' === data.add_to_library ) {
+        await addToLibrary( tapeId, userUuid )
+    }
 }
 
 export async function addNewTape( tapeData: any, coverfront: string ) {

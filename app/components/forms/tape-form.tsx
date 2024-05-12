@@ -105,10 +105,17 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
             </div>
 
             { 'add' === context ? (
-                <div className="form-row">
-                    <label htmlFor="date-added">Date Added</label>
-                    <input type="text" id="date-added" name="date_added" required defaultValue={currentDate} />
-                </div>
+                <>
+                    <div className="form-row">
+                        <label htmlFor="date-added">Date Added</label>
+                        <input type="text" id="date-added" name="date_added" required defaultValue={currentDate} />
+                    </div>
+
+                    <div className="form-row">
+                        <label htmlFor="add-to-library">Add To Library</label>
+                        <input type="checkbox" id="add-to-library" name="add_to_library" value="true" />
+                    </div>
+                </>
             ) : (
                 <div className="form-row">
                     <label htmlFor="date-updated">Date Updated</label>
