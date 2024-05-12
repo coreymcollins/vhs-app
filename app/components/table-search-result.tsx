@@ -19,7 +19,7 @@ export function SearchResultTable({tapes, session}: {tapes: any, session: any}) 
         };
 
         fetchData();
-    }, []);
+    }, [session]);
 
     return (
         <>

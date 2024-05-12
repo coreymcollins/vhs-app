@@ -19,7 +19,7 @@ export function SearchResultGrid({ tapes, session }: { tapes: any, session: any 
         };
 
         fetchData();
-    }, []);
+    }, [session]);
 
     return (
         <MultiTapeGrid key="searchResult" tapes={tapes} context="search" session={session} userTapeIds={userTapeIds}/>
