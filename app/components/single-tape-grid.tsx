@@ -13,7 +13,7 @@ export function SingleTapeGrid({tape, context, session, userTapeIds}: {tape: any
             )}
 
             <Link href={`/tape/${tape.tape_id}`}>
-                <h2>{tape.title}</h2>
+                <h3>{tape.title}</h3>
             </Link>
 
             { undefined !== session && null !== session && (
