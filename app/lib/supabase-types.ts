@@ -204,7 +204,7 @@ export type Database = {
           title: string
           description: string
           year: number
-          coverfront: string
+          cover_front_url: string
           date_added: string
           date_updated: string
           genres: Json
@@ -220,7 +220,7 @@ export type Database = {
           title: string
           description: string
           year: number
-          coverfront: string
+          cover_front_url: string
           date_added: string
           date_updated: string
           genres: Json
@@ -236,23 +236,6 @@ export type Database = {
           title: string
           description: string
           year: number
-          coverfront: string
-          date_added: string
-          date_updated: string
-          genres: Json
-        }[]
-      }
-      get_tape_by_tape_id2: {
-        Args: {
-          tapeidquery: number
-        }
-        Returns: {
-          tape_id: number
-          barcode: string
-          title: string
-          description: string
-          year: number
-          coverfront: string
           cover_front_url: string
           date_added: string
           date_updated: string
@@ -275,7 +258,7 @@ export type Database = {
           title: string
           description: string
           year: number
-          coverfront: string
+          cover_front_url: string
           date_added: string
           date_updated: string
           genres: Json
@@ -289,7 +272,7 @@ export type Database = {
           title: string
           description: string
           year: number
-          coverfront: string
+          cover_front_url: string
           date_added: string
           date_updated: string
           genres: Json
