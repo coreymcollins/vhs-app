@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
-import { SearchResultGrid } from '../components/grid-search-result';
 import { checkLoginStatus } from '../actions/check-login-status';
+import { WithPagination } from '../components/with-pagination';
 
 interface Tape {
     tape_id: number;
@@ -29,14 +29,16 @@ async function getUsersTapes() {
     return data;
 }
 
-export default async function LibraryPage() {
+export default async function LibraryPage( req: any ) {
     const tapes = await getUsersTapes()
     const userAuth = await checkLoginStatus()
-    
+    let { page } = req.searchParams
+    page = undefined === page ? 1 : page
+
     return (
         <>
             <h2>My Library</h2>
-            { null !== tapes && <SearchResultGrid tapes={tapes} session={userAuth} /> }            
+            { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }
         </>
     )
 }

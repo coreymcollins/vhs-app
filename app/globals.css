@@ -91,6 +91,8 @@ body {
 }
 
 main {
+    margin: 0 auto;
+    max-width: 1600px;
     padding: 1rem;
 }
 
@@ -381,6 +383,23 @@ input[type="file"]::file-selector-button {
 
 .image-container img {
     /* object-fit: contain; */
+}
+
+.pagination {
+    display: grid;
+    grid-template-areas: "prev . next";
+    grid-template-columns: auto 1fr auto;
+    justify-items: start;
+    padding: 2rem 0;
+}
+
+.previous-link {
+    justify-self: start;
+}
+
+.next-link {
+    grid-area: next;
+    justify-self: end;
 }
 
 @media (prefers-color-scheme: dark) {

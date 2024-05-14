@@ -34,19 +34,16 @@ export default async function PageHeader({user, userRole}: {user: any, userRole:
                         </>
                     )}
                 </ol>
-                { null !== user ? (
-                    <AccountForm />
-                ) : (
-                    ''
-                )}
             </nav>
             
             { null !== user ? (
-                    <p>signed in as user {user.email}</p>
+                <>
+                    <p>signed in as {user.email}</p>
+                    <AccountForm />
+                </>
                 ) : (
-                    <p>not signed in as user</p>
-                )
-            }
+                <p>not signed in</p>
+            )}
         </header>
     )
 }

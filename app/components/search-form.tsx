@@ -8,9 +8,11 @@ const initialState = {
     message: 'Enter a search query to perform a search.',
 };
 
-export function SearchForm({session}: {session: any}) {
+export function SearchForm({session, req}: {session: any, req: any}) {
     const [state, setState] = useState(initialState);
     const [searchResult, setSearchResult] = useState<any | null>(null)
+    let { page } = req.searchParams
+    page = undefined === page ? 1 : page
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -46,7 +48,7 @@ export function SearchForm({session}: {session: any}) {
             
             { searchResult ? (
                 <>
-                    <SearchResultGrid tapes={searchResult} session={session} />
+                    <SearchResultGrid tapes={searchResult} session={session} pageNumber={page} />
                 </>
             ) : (
                 <p aria-live="polite" role="status">
