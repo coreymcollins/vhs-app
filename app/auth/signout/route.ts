@@ -7,13 +7,17 @@ export async function POST(req: NextRequest) {
     const supabase = createClient()
     const user = await checkLoginStatus()
     
-    if ( user ) {
+    if ( user && null !== user ) {
         await supabase.auth.signOut()
         resetCachedUser()
     }
     
     revalidatePath( '/', 'layout' )
-    return NextResponse.redirect(new URL( '/login', req.url ), {
+    const response = NextResponse.redirect(new URL( '/login', req.url ), {
         status: 302,
     })
+
+    response.headers.set( 'Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate' )
+
+    return response
 }
