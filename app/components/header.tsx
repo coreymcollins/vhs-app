@@ -8,7 +8,7 @@ export default async function PageHeader() {
     let user = await checkLoginStatus()
     let userRole: string
     userRole = ''
-    
+
     if ( null !== user ) {
         const supabase = createClient()
         const { data, error } = await supabase
