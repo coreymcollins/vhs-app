@@ -1,29 +1,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import AccountForm from '../account/account-form'
-import { checkLoginStatus } from '@/app/actions/check-login-status';
-import { createClient } from '@/utils/supabase/server';
 
-export default async function PageHeader() {
-    let user = await checkLoginStatus()
-    let userRole: string
-    userRole = ''
+interface PageHeaderProps {
+    user: any;
+    userRole: string;
+}
 
-    if ( null !== user ) {
-        const supabase = createClient()
-        const { data, error } = await supabase
-            .from( 'users' )
-            .select( 'user_role' )
-            .eq( 'uuid', user.id )
-
-        if ( error ) {
-            console.error( 'Error getting user:', error )
-            return null;
-        }
-        
-        userRole = data && data[0] ? data[0].user_role : ''
-    }
-
+export default async function PageHeader({user, userRole}: PageHeaderProps) {
     return (
         <header className="site-header">
             <Link href="/">

@@ -23,3 +23,7 @@ export async function checkLoginStatus() {
 
     return cachedUser;
 }
+
+export function resetCachedUser() {
+    cachedUser = null
+}
