@@ -10,8 +10,8 @@ export default function TapeImage({tape, layout}: {tape: any, layout: string}) {
             <Image
                 src={tape.cover_front_url}
                 alt={`${tape.title} front cover`}
-                sizes="(min-width: 1024px) 768px, 180px"
-                quality={90}
+                sizes="(min-width: 1024px) 768px, 155px"
+                quality={85}
                 priority={true}
                 style={{
                     width: '100%',
