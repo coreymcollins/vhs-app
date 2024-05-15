@@ -2,8 +2,8 @@ import Image from 'next/image'
 
 export default function TapeImage({tape, layout}: {tape: any, layout: string}) {
 
-    let imageWidth = "archive" === layout ? 178 : 402
-    let imageHeight = "archive" === layout ? 267 : 726      
+    let imageWidth = "archive" === layout ? 168 : 402
+    let imageHeight = "archive" === layout ? 304 : 726      
     
     return (
         <>
