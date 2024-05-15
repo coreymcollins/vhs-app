@@ -285,7 +285,7 @@ export async function uploadImageToStorage(tapeId: number, image: File | null) {
     }
 
     const supabase = await createClient()
-    const imageFileName = `cover_${Date.now()}`
+    const imageFileName = `cover_tape_id_${tapeId}_${Date.now()}`
 
     try {
         const {data: imageUpload, error} = await supabase.storage
