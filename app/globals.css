@@ -381,8 +381,14 @@ input[type="file"]::file-selector-button {
     position: relative;
 }
 
-.image-container img {
-    /* object-fit: contain; */
+.cover-grid-container {
+    height: 304px;
+    margin-bottom: 1rem;
+    width: 168px;
+}
+
+.cover-grid-container img {
+    object-fit: contain;
 }
 
 .pagination {

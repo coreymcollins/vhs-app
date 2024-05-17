@@ -8,7 +8,9 @@ export function SingleTapeGrid({tape, context, session, userTapeIds}: {tape: any
         <div className="tape-item">
             { tape.cover_front_url && (
                 <Link href={`/tape/${tape.tape_id}`}>
-                    <TapeImage tape={tape} layout="archive" />
+                    <div className="cover-grid-container">
+                        <TapeImage tape={tape} layout="archive" />
+                    </div>
                 </Link>
             )}
 

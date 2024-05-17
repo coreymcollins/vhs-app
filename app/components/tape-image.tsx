@@ -13,10 +13,10 @@ export default function TapeImage({tape, layout}: {tape: any, layout: string}) {
                 sizes="(min-width: 1024px) 768px, 155px"
                 quality={85}
                 priority={true}
-                style={{
-                    width: '100%',
-                    height: 'auto'
-                }}
+                // style={{
+                //     width: '100%',
+                //     height: 'auto'
+                // }}
                 width={imageWidth}
                 height={imageHeight}
                 className="tape-coverfront"
