@@ -11,7 +11,7 @@ export function MultiTapeGrid({tapes, context, session, userTapeIds, pageNumber}
     }
 
     const totalPosts = tapesArray.length
-    const postsPerPage = 8
+    const postsPerPage = 32
     const from = 1 === pageNumber ? 0 : ( pageNumber - 1 ) * postsPerPage
     const to = 1 === pageNumber ? postsPerPage : from + postsPerPage
 
