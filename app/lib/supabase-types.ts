@@ -28,7 +28,6 @@ export type Database = {
         Row: {
           barcode: string | null
           cover_front_url: string | null
-          coverfront: string | null
           date_added: string | null
           date_updated: string | null
           description: string
@@ -40,7 +39,6 @@ export type Database = {
         Insert: {
           barcode?: string | null
           cover_front_url?: string | null
-          coverfront?: string | null
           date_added?: string | null
           date_updated?: string | null
           description: string
@@ -52,7 +50,6 @@ export type Database = {
         Update: {
           barcode?: string | null
           cover_front_url?: string | null
-          coverfront?: string | null
           date_added?: string | null
           date_updated?: string | null
           description?: string
