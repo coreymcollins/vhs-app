@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import PageHeader from './components/header';
 import { checkLoginStatus } from './actions/check-login-status';
-import { createClient } from '@/utils/supabase/server';
 import NextTopLoader from 'nextjs-toploader'
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,23 +18,6 @@ export default async function RootLayout({
     children: React.ReactNode;
 }>) {
     let user = await checkLoginStatus()
-    let userRole: string
-    userRole = ''
-    
-    if ( null !== user ) {
-        const supabase = createClient()
-        const { data, error } = await supabase
-            .from( 'users' )
-            .select( 'user_role' )
-            .eq( 'uuid', user.id )
-
-        if ( error ) {
-            console.error( 'Error getting user:', error )
-            return null;
-        }
-        
-        userRole = data && data[0] ? data[0].user_role : ''
-    }
 
     return (
         <html lang="en">
@@ -56,7 +38,7 @@ export default async function RootLayout({
                     color="#ffffff"
                 />
                 <main>
-                    <PageHeader user={user} userRole={userRole} />
+                    <PageHeader user={user} />
                     {children}
                 </main>
             </body>

@@ -32,12 +32,13 @@ async function getUsersTapes() {
 export default async function LibraryPage( req: any ) {
     const tapes = await getUsersTapes()
     const userAuth = await checkLoginStatus()
+    const totalTapes = tapes.length
     let { page } = req.searchParams
     page = undefined === page ? 1 : page
 
     return (
         <>
-            <h2>My Library</h2>
+            <h2>My Library ({totalTapes})</h2>
             { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }
         </>
     )

@@ -4,10 +4,9 @@ import AccountForm from '../account/account-form'
 
 interface PageHeaderProps {
     user: any;
-    userRole: string;
 }
 
-export default async function PageHeader({user, userRole}: PageHeaderProps) {
+export default async function PageHeader({user}: PageHeaderProps) {
     return (
         <header className="site-header">
             <Link href="/">
@@ -30,7 +29,7 @@ export default async function PageHeader({user, userRole}: PageHeaderProps) {
                     { null !== user ? (
                         <>
                             <li><Link href="/collection">My Library</Link></li>
-                            { 'admin' === userRole ? (
+                            { 'admin' === user.userRole ? (
                                 <li><Link href="/add-tape">Add Tape</Link></li>
                             ) : null }
                         </>
