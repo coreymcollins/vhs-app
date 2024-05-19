@@ -7,6 +7,8 @@ interface PageHeaderProps {
 }
 
 export default async function PageHeader({user}: PageHeaderProps) {
+    let metadata = null !== user ? user.user_metadata : {}
+
     return (
         <header className="site-header">
             <Link href="/">
@@ -29,7 +31,7 @@ export default async function PageHeader({user}: PageHeaderProps) {
                     { null !== user ? (
                         <>
                             <li><Link href="/collection">My Library</Link></li>
-                            { 'admin' === user.userRole ? (
+                            { 'admin' === metadata.user_role ? (
                                 <li><Link href="/add-tape">Add Tape</Link></li>
                             ) : null }
                         </>
