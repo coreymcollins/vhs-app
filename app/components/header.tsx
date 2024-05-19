@@ -26,6 +26,7 @@ export default async function PageHeader({user, userRole}: PageHeaderProps) {
             <nav className="menu">
                 <ol>
                     <li><Link href="/library">Full Library</Link></li>
+                    <li><Link href="/search">Search</Link></li>
                     { null !== user ? (
                         <>
                             <li><Link href="/collection">My Library</Link></li>

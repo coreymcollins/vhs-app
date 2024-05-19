@@ -96,6 +96,21 @@ main {
     padding: 1rem;
 }
 
+.container-narrow {
+    margin: 0 auto;
+    max-width: 100%;
+    width: 960px;
+}
+
+p {
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.page-section p {
+    font-size: 1.25rem;
+}
+
 a {
     color: inherit;
 }
