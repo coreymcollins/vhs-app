@@ -3,8 +3,10 @@
 import { useEffect, useState } from 'react';
 import { MultiTapeGrid } from './multi-tape-grid';
 import { getUserTapeIds } from '../actions';
+import { PaginationProps } from './types';
 
-export function SearchResultGrid({ tapes, session, pageNumber }: { tapes: any, session: any, pageNumber: number }) {
+export function SearchResultGrid( props: PaginationProps) {
+    let {session} = props
     const [userTapeIds, setUserTapeIds] = useState<number[]>([]);
 
     useEffect(() => {
@@ -21,9 +23,15 @@ export function SearchResultGrid({ tapes, session, pageNumber }: { tapes: any, s
         fetchData();
     }, [session]);
 
+    const updatedProps = {
+        ...props,
+        context: 'search',
+        userTapeIds
+    }
+
     return (
         <>
-            <MultiTapeGrid key="searchResult" tapes={tapes} context="search" session={session} userTapeIds={userTapeIds} pageNumber={pageNumber} />
+            <MultiTapeGrid key="searchResult" {...updatedProps} />
         </>
     );
 }

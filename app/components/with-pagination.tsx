@@ -1,10 +1,11 @@
 import { SearchResultGrid } from './grid-search-result';
+import { PaginationProps } from './types';
 
-export async function WithPagination({ tapes, session, pageNumber }: { tapes: any, session: any, pageNumber: number }) {
+export async function WithPagination(props: PaginationProps) {
     
     return (
         <>
-            <SearchResultGrid tapes={tapes} session={session} pageNumber={pageNumber} />
+            <SearchResultGrid {...props} />
         </>
     )
 }

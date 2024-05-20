@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/client';
 import { checkLoginStatus } from '../actions/check-login-status';
 import { WithPagination } from '../components/with-pagination';
+import { PaginationProps } from '../components/types';
 
 async function getTapesWithGenres() {
     const supabase = createClient()    
@@ -16,15 +17,21 @@ async function getTapesWithGenres() {
 
 export default async function LibraryPage( req: any ) {
     const tapes = await getTapesWithGenres()
-    const userAuth = await checkLoginStatus()
+    const session = await checkLoginStatus()
     const totalTapes = tapes.length
     let { page } = req.searchParams
     page = undefined === page ? 1 : page
+
+    const paginationProps: PaginationProps = {
+        tapes,
+        session,
+        pageNumber: page
+    }
     
     return (
         <>
             <h2>Full Library ({ totalTapes })</h2>
-            <WithPagination tapes={tapes} session={userAuth} pageNumber={page} />
+            <WithPagination {...paginationProps} />
         </>
     )
 }

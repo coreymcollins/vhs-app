@@ -1,8 +1,15 @@
 import Link from 'next/link';
 import { SingleTapeGrid } from './single-tape-grid';
 import { useRouter } from 'next/navigation';
+import { PaginationProps } from './types';
 
-export function MultiTapeGrid({tapes, context, session, userTapeIds, pageNumber}: {tapes: any[], context: string, session: any, userTapeIds: any, pageNumber: number}) {
+export interface MultiTapeGridProps extends PaginationProps {
+    context: string;
+    userTapeIds: number[];
+}
+
+export function MultiTapeGrid( props: MultiTapeGridProps ) {
+    let {tapes, session, pageNumber, context, userTapeIds} = props
     const tapesArray = Array.isArray(tapes) ? tapes : [tapes]
     const router = useRouter()
 
@@ -28,9 +35,15 @@ export function MultiTapeGrid({tapes, context, session, userTapeIds, pageNumber}
     return (
         <>
             <div className="tape-results grid">
-                {tapesArray.slice( from, to ).map(( tape ) => (
-                    <SingleTapeGrid key={`listing-${tape.tape_id}`} tape={tape} context="search" session={session} userTapeIds={userTapeIds} />
-                ))}
+                {tapesArray.slice( from, to ).map(( tape ) => {
+                    const updatedProps = {
+                        ...props,
+                        tape
+                    };
+                    return (
+                        <SingleTapeGrid key={`listing-${tape.tape_id}`} {...updatedProps} />
+                    )
+                })}
             </div>
             <div className="pagination">
                 { pageNumber > 1 && (

@@ -1,8 +1,14 @@
 import Link from 'next/link';
 import AddRemoveTape from './add-remove-collection';
 import TapeImage from './tape-image';
+import { MultiTapeGridProps } from './multi-tape-grid';
 
-export function SingleTapeGrid({tape, context, session, userTapeIds}: {tape: any, context: string, session: any, userTapeIds: any}) {
+interface SingleTapeGridProps extends MultiTapeGridProps {
+    tape: any;
+}
+
+export function SingleTapeGrid(props: SingleTapeGridProps) {
+    let {tape, userTapeIds, session} = props
 
     return (
         <div className="tape-item">

@@ -9,7 +9,8 @@ interface AddRemoveTapeProps {
     user: any;
 }
 
-const AddRemoveTape: React.FC<AddRemoveTapeProps> = ({ tapeId, userTapeIds, user }: { tapeId: any, userTapeIds: any, user: any}) => {
+const AddRemoveTape: React.FC<AddRemoveTapeProps> = (props: AddRemoveTapeProps) => {
+    let {tapeId, userTapeIds, user} = props
     const [loading, setloading] = useState( true )
     const [inLibrary, setInLibrary] = useState(false)
     
