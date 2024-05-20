@@ -10,6 +10,12 @@ interface SingleTapeGridProps extends MultiTapeGridProps {
 export function SingleTapeGrid(props: SingleTapeGridProps) {
     let {tape, userTapeIds, session} = props
 
+    const addRemoveProps = {
+        tapeId: tape.tape_id,
+        userTapeIds,
+        user: session
+    }
+
     return (
         <div className="tape-item">
             { tape.cover_front_url && (
@@ -25,7 +31,7 @@ export function SingleTapeGrid(props: SingleTapeGridProps) {
             </Link>
 
             { undefined !== session && null !== session && (
-                <AddRemoveTape tapeId={tape.tape_id} userTapeIds={userTapeIds} user={session} />
+                <AddRemoveTape {...addRemoveProps} />
             )}
         </div>
     )
