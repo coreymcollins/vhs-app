@@ -2,6 +2,7 @@ import { checkLoginStatus } from '@/app/actions/check-login-status';
 import AddRemoveTape from '@/app/components/add-remove-collection';
 import TapeImage from '@/app/components/tape-image';
 import { supabase } from '@/app/lib/supabase'
+import Link from 'next/link';
 
 export default async function SingleTapePage( { params }: { params: { tape_id: number } } ) {
 
@@ -38,7 +39,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
     }
     
     const genreList: string[] = genres ? Object.values(genres) : [];
-    const userAuth = await checkLoginStatus()
+    const user = await checkLoginStatus()
 
     return (
         <>
@@ -82,10 +83,19 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                         </div>
                     )}
 
-                    { undefined !== userAuth && null !== userAuth && (
-                        <div className="container-single-tape-row">
-                            <AddRemoveTape tapeId={tape.tape_id} userTapeIds={[tape.tape_id]} user={userAuth} />
-                        </div>
+                    { undefined !== user && null !== user && (
+                        <>
+                            <div className="container-single-tape-row">
+                                <AddRemoveTape tapeId={tape.tape_id} userTapeIds={[tape.tape_id]} user={user} />
+                            </div>
+
+                            { 'admin' === user.user_metadata.user_role && (
+                                <div className="container-single-tape-row">
+                                    <Link href={`/edit/${tape.tape_id}`}>Edit Tape</Link>
+                                </div>
+                            )}
+                        </>
+
                     )}
                 </div>
             </div>
