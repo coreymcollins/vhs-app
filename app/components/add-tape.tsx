@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { createEntry } from '@/app/actions';
 import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
@@ -11,7 +11,8 @@ const initialState = {
 
 export function AddForm() {
     const [state, setState] = useState(initialState);
-    const { selectedImage, handleImageChange } = ImageUpload();
+    const { selectedImage, handleImageChange, clearImage } = ImageUpload();
+    const formRef = useRef<HTMLFormElement>(null);
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -21,6 +22,12 @@ export function AddForm() {
         try {
             await createEntry(initialState, formData);
             setState({message: `Added "${formData.get( 'title' )}" successfully`})
+
+            if ( formRef.current ) {
+                formRef.current.reset()
+            }
+
+            clearImage()
         } catch ( error ) {
             setState({message: `Failed to add "${formData.get( 'title' )}"`})
         }
@@ -47,6 +54,7 @@ export function AddForm() {
             defaultValues={defaultValues}
             context='add'
             submitText='Add Tape'
+            formRef={formRef}
         />
     );
 }

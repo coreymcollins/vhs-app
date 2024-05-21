@@ -10,6 +10,7 @@ interface TapeFormProps {
     stateMessage: string;
     submitText: string;
     context: string;
+    formRef: React.RefObject<HTMLFormElement>;
     defaultValues: {
         tape_id: string;
         barcode: string;
@@ -28,12 +29,12 @@ const getCurrentDate = (): string => {
     return format( currentDate, 'yyyy-MM-dd' )
 }
 
-export function TapeForm({ handleSubmit, selectedImage, handleImageChange, stateMessage, submitText, context, defaultValues }: TapeFormProps) {
+export function TapeForm({ handleSubmit, selectedImage, handleImageChange, stateMessage, submitText, context, formRef, defaultValues }: TapeFormProps) {
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
 
     return (
-        <form onSubmit={handleSubmit} className="add-form add-form-tape form">
+        <form onSubmit={handleSubmit} className="add-form add-form-tape form" ref={formRef}>
             { defaultValues.tape_id && (
                 <div className="form-row readonly">
                     <label htmlFor="barcode">ID</label>

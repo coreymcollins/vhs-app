@@ -10,14 +10,12 @@ export function ImageUpload() {
             return;
         }
 
-        const reader = new FileReader()
-
-        reader.onload = () => {
-            setSelectedImage( reader.result as File | null )
-        }
-
-        reader.readAsDataURL( file )
+        setSelectedImage(file);
     }
 
-    return { selectedImage, handleImageChange }
+    const clearImage = () => {
+        setSelectedImage(null);
+    };
+
+    return { selectedImage, handleImageChange, clearImage }
 }
