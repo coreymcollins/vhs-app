@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { updateEntry } from '@/app/actions';
 import { ImageUpload } from './forms/image-upload';
 import { TapeForm } from './forms/tape-form';
@@ -13,6 +13,7 @@ export function EditForm({ tape }: any) {
     const { tape_id, barcode, title, description, year, cover_front_url, genres, date_added, date_updated } = tape;
     const [state, setState] = useState(initialState);
     const { selectedImage, handleImageChange } = ImageUpload();
+    const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -48,6 +49,7 @@ export function EditForm({ tape }: any) {
             defaultValues={defaultValues}
             context='edit'
             submitText='Update Tape'
+            formRef={formRef}
         />
     );
 }
