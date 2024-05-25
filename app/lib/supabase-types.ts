@@ -281,6 +281,13 @@ export type Database = {
         }
         Returns: number
       }
+      get_users_by_meta_value: {
+        Args: {
+          meta_key: string
+          meta_value: string
+        }
+        Returns: unknown[]
+      }
       insert_new_tape: {
         Args: {
           data: Json

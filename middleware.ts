@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
         '/add-tape',
         '/collection',
         '/edit',
-        '/register',
+        // '/register',
         '/user',
     ]
 
