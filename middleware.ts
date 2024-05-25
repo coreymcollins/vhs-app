@@ -19,8 +19,15 @@ export async function middleware(request: NextRequest) {
     const isLoggedIn = await checkLoginStatus()
     
     if ( null === isLoggedIn ) {
-        if ( redirectUrls.some( url => request.nextUrl.pathname.startsWith( url ) ) ) {
-            return NextResponse.redirect( new URL('/login', request.url))
+        const { pathname } = request.nextUrl;
+
+        // Check if the pathname is exactly '/collection' or any other restricted paths
+        if (
+            redirectUrls.some(url => pathname === url) ||
+            // Check for all other paths that should start with the given prefix
+            redirectUrls.filter(url => url !== '/collection').some(url => pathname.startsWith(url))
+        ) {
+            return NextResponse.redirect(new URL('/login', request.url));
         }
     }
 }
