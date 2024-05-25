@@ -7,12 +7,16 @@ export default async function SearchPage( req: any ) {
     
     return (
         <>
+            <div className="page-content-header">
+                <h2>Search for a tape</h2>
+            </div>
+
             <div className="page-section">
-                <h2>Search for an existing tape</h2>
+                <h3>Search for an existing tape</h3>
                 <SearchForm session={userAuth} req={req} />
             </div>
             <div className="page-section">
-                <h2>Search for an existing tape by barcode</h2>
+                <h3>Search for an existing tape by barcode</h3>
                 <BarcodeScanQuagga session={userAuth} req={req} />
             </div>
         </>

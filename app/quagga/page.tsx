@@ -6,7 +6,9 @@ export default async function QuaggaPage( req: any ) {
 
     return (
         <>
-            <h2>Search for an existing tape with quagga</h2>
+            <div className="page-content-header">
+                <h2>Search for an existing tape with quagga</h2>
+            </div>
             <BarcodeScanQuagga session={userAuth} req={req} />
         </>
     );

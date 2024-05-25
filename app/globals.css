@@ -423,6 +423,10 @@ input[type="file"]::file-selector-button {
     justify-self: end;
 }
 
+.page-content-header {
+    margin-bottom: 2rem;
+}
+
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;

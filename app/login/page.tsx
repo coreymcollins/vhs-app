@@ -19,7 +19,9 @@ export default function LoginPage() {
 
     return (
         <>
-            <h2>Log in to your account</h2>
+            <div className="page-content-header">
+                <h2>Log in to your account</h2>
+            </div>
             <form onSubmit={handleLogin}>
                 <label htmlFor="email">Email:</label>
                 <input id="email" name="email" type="email" required />

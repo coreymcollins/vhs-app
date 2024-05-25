@@ -317,3 +317,38 @@ export async function uploadImageToStorage(tapeId: number, image: File | null) {
         console.error( 'Error adding image to tapes table:', imageUrlError )
     }
 }
+
+export async function getUsernameByUuid( uuid: string ) {
+
+    if ( ! uuid ) {
+        return;
+    }
+
+    const supabase = createClient()
+
+    const { data: user, error } = await supabase
+        .from( 'users' )
+        .select( 'username' )
+        .eq( 'uuid', uuid )
+        .maybeSingle()
+    
+    if ( error ) {
+        console.error( 'Error fetching user:', error.message );
+
+        return null;
+    }
+
+    if ( null === user ) {
+        return null
+    }
+
+    if ( null === user.username ) {
+        return null
+    }
+
+    return user.username
+}
+
+export const getSiteUrl = (): string => {
+    return process.env.NEXT_PUBLIC_SITE_URL || '';
+};

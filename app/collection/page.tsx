@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { checkLoginStatus } from '../actions/check-login-status';
 import { WithPagination } from '../components/with-pagination';
+import { getUsernameByUuid } from '../actions';
+import CopyCollectionUrl from '@/app/components/button-copy-collection-url';
 
 async function getUsersTapes() {
     const supabase = createClient()
@@ -23,13 +25,19 @@ async function getUsersTapes() {
 export default async function LibraryPage( req: any ) {
     const tapes = await getUsersTapes()
     const userAuth = await checkLoginStatus()
+    const username = await getUsernameByUuid( userAuth.id )
+    
     const totalTapes = tapes.length
     let { page } = req.searchParams
     page = undefined === page ? 1 : page
 
     return (
         <>
-            <h2>My Library ({totalTapes})</h2>
+            <div className="page-content-header">
+                <h2>My Library ({totalTapes})</h2>
+                <CopyCollectionUrl username={username} />
+            </div>
+            
             { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }
         </>
     )

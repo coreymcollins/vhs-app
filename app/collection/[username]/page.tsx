@@ -54,7 +54,9 @@ export default async function LibraryPage( req: any ) {
 
     return (
         <>
-            <h2>Viewing Library of {username} ({totalTapes})</h2>
+            <div className="page-content-header">
+                <h2>Viewing Library of {username} ({totalTapes})</h2>
+            </div>
             { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }
         </>
     )

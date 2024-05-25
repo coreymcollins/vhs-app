@@ -30,7 +30,9 @@ export default async function LibraryPage( req: any ) {
     
     return (
         <>
-            <h2>Full Library ({ totalTapes })</h2>
+            <div className="page-content-header">
+                <h2>Full Library ({ totalTapes })</h2>
+            </div>
             <WithPagination {...paginationProps} />
         </>
     )

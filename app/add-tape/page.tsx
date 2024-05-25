@@ -4,7 +4,9 @@ export default async function AddTapePage() {
 
     return (
         <>
-            <h2>Add new tape</h2>
+            <div className="page-content-header">
+                <h2>Add new tape</h2>
+            </div>
             <AddForm />
         </>
     )
