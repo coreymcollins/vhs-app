@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { signup } from '@/app/login/actions'
+import { checkForUserByUsername } from '../actions';
 
 export default function LoginPage() {
     const [signupErrorMessage, setSignupErrorMessage] = useState<string>('');
@@ -9,11 +10,17 @@ export default function LoginPage() {
     const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const formData = new FormData( event.currentTarget )
+        const usernameExists = await checkForUserByUsername( formData.get( 'username' ) )
 
-        const error = await signup( formData )
-
-        if ( error ) {
-            setSignupErrorMessage( error.message )
+        if ( true === usernameExists ) {
+            setSignupErrorMessage( `Username ${formData.get( 'username' )} already exists` )
+        } else {
+            const error = await signup( formData )
+    
+            if ( error ) {
+                console.log( 'error', error )
+                setSignupErrorMessage( error.message )
+            }
         }
     }
 
