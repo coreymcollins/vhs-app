@@ -317,7 +317,8 @@ label[for="coverfront"] {
 button[type="submit"],
 input[type="submit"],
 input[type="file"]::file-selector-button,
-.button-library {
+.button-library,
+.button-padding {
     appearance: none;
     background-color: #2b2a33;
     border: none;
@@ -425,6 +426,28 @@ input[type="file"]::file-selector-button {
 
 .page-content-header {
     margin-bottom: 2rem;
+}
+
+.form-row-editable {
+    margin-bottom: 2rem;
+}
+
+.editable-fields-row,
+.editable-fields-row form {
+    align-content: center;
+    display: grid;
+    gap: 10px;
+    grid-auto-columns: min-content;
+    grid-auto-flow: column;
+    justify-content: start;
+}
+
+.editable-fields-row form {
+    margin-bottom: 0;
+}
+
+.editable-fields-value {
+    align-self: center;
 }
 
 @media (prefers-color-scheme: dark) {
