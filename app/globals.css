@@ -518,12 +518,12 @@ input[type="file"]::file-selector-button {
         grid-template-rows: unset;
     }
 
-    .add-form-tape button[type="submit"],
+    .add-form button[type="submit"],
     .form-message {
         grid-column: span 2;
     }
 
-    .add-form-tape button[type="submit"] {
+    .add-form button[type="submit"] {
         margin: 1rem 0 1rem 11rem;
     }
 
