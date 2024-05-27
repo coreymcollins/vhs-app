@@ -34,6 +34,7 @@ export default async function PageHeader({user}: PageHeaderProps) {
                             { 'admin' === metadata.user_role ? (
                                 <li><Link href="/add-tape">Add Tape</Link></li>
                             ) : null }
+                            <li><Link href="/account">Account</Link></li>
                         </>
                         ) : (
                             <>
