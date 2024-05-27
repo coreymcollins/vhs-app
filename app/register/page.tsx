@@ -6,10 +6,12 @@ export default function LoginPage() {
     
     return (
         <>
-            <div className="page-content-header">
-                <h2>Register a new account</h2>
+            <div className="page-section container-narrow">
+                <div className="page-content-header">
+                    <h2>Register a new account</h2>
+                </div>
+                <RegisterUserForm />
             </div>
-            <RegisterUserForm />
         </>
     )
 }
