@@ -1,7 +1,8 @@
 'use client'
 
 import { createClient } from '@/utils/supabase/client';
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { checkForUserByUsername } from '../actions';
 
 interface EditableFieldProps {
     label: string;
@@ -16,7 +17,18 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
     const [inputValue, setInputValue] = useState( initialValue )
     const [value, setValue] = useState( initialValue )
     const [error, setError] = useState<string>( '' )
+    const [success, setSuccess] = useState<string>( '' )
+    const successTimeoutRef = useRef<NodeJS.Timeout | null>( null )
+    let fieldType = 'password' === name ? 'password' : 'text'
     const supabase = createClient()
+
+    useEffect(() => {
+        return () => {
+            if ( successTimeoutRef.current ) {
+                clearTimeout( successTimeoutRef.current )
+            }
+        }
+    }, [])
 
     const handleSave = async () => {
         let error = null
@@ -27,14 +39,20 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
             })
             error = emailError
         } else if ( 'username' === name ) {
+            const usernameExists = await checkForUserByUsername( inputValue )
+
+            if ( usernameExists ) {
+                setError( 'Username already exists' )
+                return
+            }
+
             const { data, error: usernameError } = await supabase.auth.updateUser({
                 data: {username: inputValue}
             })
             error = usernameError
         } else if ( 'password' === name ) {
             const { data, error: passwordError } = await supabase.auth.updateUser({
-                password: inputValue,
-                nonce: '123456'
+                password: inputValue
             })
             error = passwordError
         } 
@@ -45,12 +63,20 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
         } else {
             setValue( inputValue )
             setIsEditing( false )
+            setSuccess( `Successfully updated ${name}` )
+
+            if ( successTimeoutRef.current ) {
+                clearTimeout( successTimeoutRef.current )
+            }
+
+            successTimeoutRef.current = setTimeout(() => {
+                setSuccess( '' )
+            }, 2000 )
         }
     }
 
     return (
         <div className="form">
-
             <div className="form-row form-row-editable">
                 <label htmlFor={name}>{label}</label>
                 <div className="editable-fields-row">
@@ -68,10 +94,10 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
                         </form>
                     ) : (
                         <>
-                            { value && (
-                                <>
-                                    <div className="editable-fields-value">{value}</div>
-                                </>
+                            { 'password' === fieldType ? (
+                                <input type="password" id={name} name={name} className="readonly" maxLength={30} readOnly value="••••••••••••" />
+                            ) : (
+                                <input type={fieldType} id={name} name={name} className="readonly" maxLength={30} readOnly defaultValue={value} />
                             )}
                             <button type="button" onClick={() => setIsEditing( true )} className="button-edit button-padding">Edit</button>
                         </>
@@ -80,7 +106,13 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
             </div>
             { isEditing && error && (
                 <div className="form-row-error-message">
-                    <p aria-live="polite" role="status" className="error-message">{error}</p>
+                    <p aria-live="polite" role="status" className="message-response message-error">{error}</p>
+                </div>
+            )}
+
+            { success && (
+                <div className="form-row-error-message">
+                    <p aria-live="polite" role="status" className="message-response message-success">{success}</p>
                 </div>
             )}
         </div>

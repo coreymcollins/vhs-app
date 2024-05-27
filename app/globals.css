@@ -358,7 +358,8 @@ input[type="file"]::file-selector-button {
   margin: 0;
 }
 
-.readonly input {
+.readonly input,
+input.readonly {
     opacity: 50%;
 }
 
@@ -450,10 +451,18 @@ input[type="file"]::file-selector-button {
     align-self: center;
 }
 
-.error-message {
+.message-response {
+    padding: 0.5rem 0.75rem;
+}
+
+.message-error {
     background-color: rgba(237, 237, 237, 0.25);
     border: 1px solid rgb(227, 167, 167);
-    padding: 0.5rem;
+}
+
+.message-success {
+    background-color: rgba(237, 237, 237, 0.25);
+    border: 1px solid rgb(167, 227, 189);
 }
 
 @media (prefers-color-scheme: dark) {
