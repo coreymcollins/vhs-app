@@ -33,6 +33,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({ user }) => {
 
     return (
         <header id="site-header" className={`site-header${scrolled ? ' scrolled' : ''}`}>
+            <h1 className="screen-reader-only">Revival Video VHS Library</h1>
             <div className="menu-containers">
                 <div className="home">
                     <Link href="/">
