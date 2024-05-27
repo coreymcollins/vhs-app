@@ -37,8 +37,8 @@ export default async function RootLayout({
                 <NextTopLoader
                     color="#ffffff"
                 />
+                <PageHeader user={user} />
                 <main>
-                    <PageHeader user={user} />
                     {children}
                 </main>
             </body>
