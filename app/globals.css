@@ -158,16 +158,10 @@ li:not(last-child) {
     margin: 0 auto;
     max-width: 100%;
     padding: 1rem 0;
-    position: sticky;
     text-align: center;
-    top: 0;
     transition: background-color 250ms linear;
     width: 100%;
     z-index: 10;
-}
-
-.site-header.scrolled {
-    background-color: rgba(72, 25, 66, 1);
 }
 
 .site-header .home {
@@ -591,6 +585,15 @@ input.readonly {
     
     .site-header .menu + .menu {
         margin: 0;
+    }
+
+    .site-header {
+        position: sticky;
+        top: 0;
+    }
+
+    .site-header.scrolled {
+        background-color: rgba(72, 25, 66, 1);
     }
 }
 
