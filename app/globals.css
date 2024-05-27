@@ -206,12 +206,12 @@ li:not(last-child) {
 @supports (content-visibility: auto) {
     .site-logo {
         content-visibility: auto;
-        contain-intrinsic-size: 640px 85px;
+        contain-intrinsic-size: 282px 37px;
     }
 
     .tape-coverfront {
         content-visibility: auto;
-        contain-intrinsic-size: 178px 267px;
+        contain-intrinsic-size: 168px 304px;
     }
 }
 

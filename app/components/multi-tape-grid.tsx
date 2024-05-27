@@ -35,10 +35,11 @@ export function MultiTapeGrid( props: MultiTapeGridProps ) {
     return (
         <>
             <div className="tape-results grid">
-                {tapesArray.slice( from, to ).map(( tape ) => {
+                {tapesArray.slice( from, to ).map(( tape, index ) => {
                     const updatedProps = {
                         ...props,
-                        tape
+                        tape,
+                        index
                     };
                     return (
                         <SingleTapeGrid key={`listing-${tape.tape_id}`} {...updatedProps} />

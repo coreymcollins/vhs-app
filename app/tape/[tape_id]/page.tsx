@@ -46,7 +46,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
             <div className="container-single-tape">
                 { tape.cover_front_url && '\\x' !== tape.cover_front_url && tape.cover_front_url.length > 0 ? (
                     <div className="container-single-tape-cover">
-                        <TapeImage tape={tape} layout="single" />
+                        <TapeImage tape={tape} layout="single" priority={true} />
                     </div>
                 ) : (
                     <>

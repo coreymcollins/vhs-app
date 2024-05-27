@@ -5,23 +5,26 @@ import { MultiTapeGridProps } from './multi-tape-grid';
 
 interface SingleTapeGridProps extends MultiTapeGridProps {
     tape: any;
+    index: number;
 }
 
 export function SingleTapeGrid(props: SingleTapeGridProps) {
-    let {tape, userTapeIds, session} = props
+    let {tape, userTapeIds, session, index} = props
 
     const addRemoveProps = {
         tapeId: tape.tape_id,
         userTapeIds,
         user: session
     }
+    
+    let priority = index > 7 ? false : true
 
     return (
         <div className="tape-item">
             { tape.cover_front_url && (
                 <Link href={`/tape/${tape.tape_id}`}>
                     <div className="cover-grid-container">
-                        <TapeImage tape={tape} layout="archive" />
+                        <TapeImage tape={tape} layout="archive" priority={priority} />
                     </div>
                 </Link>
             )}
