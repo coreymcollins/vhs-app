@@ -90,6 +90,17 @@ body {
     background-color: rgb(32, 18, 30);
 }
 
+.screen-reader-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
 main {
     margin: 0 auto;
     max-width: 1600px;
