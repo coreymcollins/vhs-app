@@ -2,12 +2,12 @@ import { createClient } from '@/utils/supabase/server';
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 
-async function getUsersTapes( username: string ) {
+async function getUserCollection( username: string ) {
 
     if ( null === username ) {
-        return
+        return { error: 'Username cannot be null' }
     }
-    
+
     const supabase = createClient()
 
     const { data: user, error: userError } = await supabase
@@ -18,35 +18,44 @@ async function getUsersTapes( username: string ) {
     
     if ( userError ) {
         console.error( 'Error fetching user:', userError.message );
-
-        return null;
+        return { error: `Error fetching user: ${userError.message}`} 
     }
 
     if ( null === user ) {
-        console.error( 'Error fetching user.' );
-
-        return null;
+        console.error( 'Username does not exist.' );
+        return { error: 'Username does not exist'} 
     }
 
     const { data: tapes, error: tapesError } = await supabase.rpc('get_tapes_by_user_id', { useridquery: user.uuid });
 
     if ( tapesError ) {
         console.error('Error fetching tapes in collection:', tapesError.message);
-        
-        return null;
+        return { error: `Error fetching tapes in collection: ${tapesError.message}`} 
     }
 
-    return tapes;
+    return {tapes};
 }
 
 export default async function LibraryPage( req: any ) {
     const username = req.params.username
+    const {tapes, error} = await getUserCollection( username )
 
-    if ( null === username ) {
-        return
+    if ( error ) {
+        return (
+            <div className="page-content-header">
+                <h2>{`${error}`}</h2>
+            </div>
+        )
     }
 
-    const tapes = await getUsersTapes( username )
+    if ( ! tapes ) {
+        return (
+            <div className="page-content-header">
+                <h2>{`Viewing Library for ${username} failed: no tapes found`}</h2>
+            </div>
+        )
+    }
+
     const userAuth = await checkLoginStatus()
     const totalTapes = tapes.length
     let { page } = req.searchParams
@@ -55,7 +64,9 @@ export default async function LibraryPage( req: any ) {
     return (
         <>
             <div className="page-content-header">
-                <h2>Viewing Library of {username} ({totalTapes})</h2>
+                <h2>
+                    {error ? `Error: ${error}` : `Viewing Library of ${username} (${totalTapes})`}
+                </h2>
             </div>
             { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }
         </>

@@ -382,3 +382,21 @@ export async function checkForUserByUsername( username: any ) {
 
     return true
 }
+
+export async function getUsersTapesByUuid( uuid: string ) {
+    const supabase = createClient()
+    const user = await checkLoginStatus()
+
+    if ( null === user ) {
+        return []
+    }
+
+    const { data, error } = await supabase.rpc('get_tapes_by_user_id', { useridquery: user.id });
+    
+    if (error) {
+        console.error('Error fetching tapes in collection:', error.message);
+        return null;
+    }
+
+    return data;
+}
