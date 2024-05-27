@@ -16,7 +16,7 @@ export default function RegisterUserForm() {
             const error = await signup( formData )
     
             if ( error ) {
-                console.log( 'error', error )
+                console.error( 'Error in registering:', error )
                 setSignupErrorMessage( error.message )
             }
         }
