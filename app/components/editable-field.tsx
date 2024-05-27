@@ -11,9 +11,11 @@ interface EditableFieldProps {
     userId: string;
 }
 
-const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value, userId }) => {
+const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value: initialValue, userId }) => {
     const [isEditing, setIsEditing] = useState( false )
-    const [inputValue, setInputValue] = useState( value )
+    const [inputValue, setInputValue] = useState( initialValue )
+    const [value, setValue] = useState( initialValue )
+    const [error, setError] = useState<string>( '' )
     const supabase = createClient()
 
     const handleSave = async () => {
@@ -38,8 +40,10 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value,
         } 
 
         if ( error ) {
+            setError( error.message )
             console.error( `Error updating ${name}`, error.message )
         } else {
+            setValue( inputValue )
             setIsEditing( false )
         }
     }
@@ -60,18 +64,25 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value,
                                 required
                             />
                             <button type="submit" className="button-save button-padding">Save</button>
-                            <button type="button" onClick={() => setIsEditing( false )} className="button-cancel button-padding">Cancel</button>
+                            <button type="button" onClick={() => { setIsEditing( false ); setInputValue( initialValue ); setError( '' ) }} className="button-cancel button-padding">Cancel</button>
                         </form>
                     ) : (
                         <>
                             { value && (
-                                <div className="editable-fields-value">{value}</div>
+                                <>
+                                    <div className="editable-fields-value">{value}</div>
+                                </>
                             )}
                             <button type="button" onClick={() => setIsEditing( true )} className="button-edit button-padding">Edit</button>
                         </>
                     )}
                 </div>
             </div>
+            { isEditing && error && (
+                <div className="form-row-error-message">
+                    <p aria-live="polite" role="status" className="error-message">{error}</p>
+                </div>
+            )}
         </div>
     )
 }

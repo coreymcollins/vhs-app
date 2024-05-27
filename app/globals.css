@@ -450,6 +450,12 @@ input[type="file"]::file-selector-button {
     align-self: center;
 }
 
+.error-message {
+    background-color: rgba(237, 237, 237, 0.25);
+    border: 1px solid rgb(227, 167, 167);
+    padding: 0.5rem;
+}
+
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;
