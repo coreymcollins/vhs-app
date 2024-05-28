@@ -42,15 +42,13 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
 
     const { data: tape, error } = await supabase.rpc( 'get_tape_by_tape_id', { tapeidquery: tape_id });
 
-
-        await supabase
-            .storage
-            .updateBucket('covers', {
-                public: false,
-                allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
-                fileSizeLimit: 1024
-        })
-
+    await supabase
+        .storage
+        .updateBucket('covers', {
+            public: false,
+            allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
+            fileSizeLimit: 1024
+    })
 
     if (error) {
         console.error(`Error searching for tape by tape ID: ${tape_id}`)
