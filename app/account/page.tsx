@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Revival Video: My Account',
-    description: 'Be kind. Revive.',
+    description: 'Edit your Revival Video account details.',
 };
 
 export default async function Account() {

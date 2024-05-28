@@ -10,11 +10,11 @@ export default function LoginPage() {
         
         const metaDescription = document.querySelector( 'meta[name="description"]' );
         if ( metaDescription ) {
-            metaDescription.setAttribute( 'content', 'Be kind. Revive.' );
+            metaDescription.setAttribute( 'content', 'Log in to your Revival Video account.' );
         } else {
             const meta = document.createElement( 'meta' );
             meta.name = 'description';
-            meta.content = 'Be kind. Revive.';
+            meta.content = 'Log in to your Revival Video account.';
             document.head.appendChild(meta);
         }
     }, []);

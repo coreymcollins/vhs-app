@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Revival Video: Library',
-    description: 'Be kind. Revive.',
+    description: 'View the full Revival Video Library.',
 };
 
 async function getTapesWithGenres() {

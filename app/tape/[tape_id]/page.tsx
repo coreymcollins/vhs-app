@@ -24,7 +24,7 @@ export async function generateMetadata( { params }: { params: { tape_id: number 
 
     return {
         title: `Revival Video: ${tape.title}`,
-        description: 'Be kind. Revive.',
+        description: `View the details of "${tape.title}".`,
     }
 }
 

@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Revival Video: Search',
-    description: 'Be kind. Revive.',
+    description: 'Search for a tape in the Revival Video Library.',
 };
 
 export default async function SearchPage( req: any ) {

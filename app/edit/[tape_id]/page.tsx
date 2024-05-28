@@ -33,7 +33,7 @@ export async function generateMetadata( { params }: { params: { tape_id: number 
 
     return {
         title: `Revival Video: Edit "${tape.title}"`,
-        description: 'Be kind. Revive.',
+        description: `Edit the entry for "${tape.title}".`,
     }
 }
 

@@ -14,7 +14,7 @@ export async function generateMetadata( req: any) {
 
     return {
         title: `Revival Video: Collection of ${username}`,
-        description: 'Be kind. Revive.',
+        description: `View the Revival Video Collection of ${username}`,
     }
 }
 

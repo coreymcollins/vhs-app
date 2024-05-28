@@ -6,7 +6,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     title: 'Revival Video: My Collection',
-    description: 'Be kind. Revive.',
+    description: 'View your Revival Video Collection.',
 };
 
 export default async function LibraryPage( req: any ) {
