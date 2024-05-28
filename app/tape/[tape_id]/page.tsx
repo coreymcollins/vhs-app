@@ -29,40 +29,33 @@ export async function generateMetadata( { params }: { params: { tape_id: number 
 }
 
 export default async function SingleTapePage( { params }: { params: { tape_id: number } } ) {
-
     const tapeId = params.tape_id
 
-    const { data: tapeResult, error: tapeError } = await supabase
-        .from( 'tapes' )
-        .select( 'tape_id, title, description, year, cover_front_url, barcode' )
-        .eq( 'tape_id', tapeId )
+    const { data: tape, error } = await supabase
+    .from( 'tapes' )
+    .select( `
+        *,
+        tapes_genres:tapes_genres!inner (
+            genre_id,
+            genres:genre_id (
+                genre_name
+            )
+        )
+    ` )
+    .eq( 'tape_id', tapeId )
+    .single()
 
-    if ( tapeError ) {
-        console.error( 'error fetching tape:', tapeError )
+    if ( error ) {
+        console.error( 'error fetching tape:', error.message )
+        
         return null;
     }
-
-    if ( null === tapeResult ) {
-        return;
-    }
-    
-    let { data: genres, error: genresError } = await supabase
-        .rpc( 'get_tape_genres', {
-            tape_id_query: tapeId
-    })
-    
-    if ( genresError ) {
-        console.error( 'error fetching genres:', genresError )
-        return null;
-    }
-
-    const tape = tapeResult[0];
 
     if ( null === tape ) {
         return;
     }
-    
-    const genreList: string[] = genres ? Object.values(genres) : [];
+
+    const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres.genre_name);
     const user = await checkLoginStatus()
 
     return (
@@ -82,14 +75,16 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                     { tape.description && (
                         <div className="container-single-tape-row">
                             <h3>Description</h3>
-                            <p>{tape.description}</p>
+                            {tape.description.split(/\r?\n/).map((paragraph, index) => (
+                                <p key={index}>{paragraph}</p>
+                            ))}
                         </div>
                     )}
 
-                    { genreList && (
+                    { genres && (
                         <div className="container-single-tape-row">
                             <h3>Genres</h3>
-                            {genreList.join(', ')}
+                            {genres.join(', ')}
                         </div>
                     )}
 
