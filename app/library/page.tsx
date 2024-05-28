@@ -11,18 +11,27 @@ export const metadata: Metadata = {
 
 async function getTapesWithGenres() {
     const supabase = createClient()    
-    
-    const { data, error } = await supabase.rpc('get_tapes_with_genres');
+
+    const { data, error } = await supabase
+        .from('tapes')
+        .select('*')
+        .order('title', { ascending: true })
 
     if ( error ) {
         console.error( 'Error fetching tapes in library:', error.message );
         return null;
     }
+
     return data;
 }
 
 export default async function LibraryPage( req: any ) {
     const tapes = await getTapesWithGenres()
+
+    if ( null === tapes ) {
+        return
+    }
+    
     const session = await checkLoginStatus()
     const totalTapes = tapes.length
     let { page } = req.searchParams
