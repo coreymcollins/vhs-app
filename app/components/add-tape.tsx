@@ -11,7 +11,7 @@ const initialState = {
 
 export function AddForm() {
     const [state, setState] = useState(initialState);
-    const { selectedImage, handleImageChange, clearImage } = ImageUpload();
+    const { selectedImage, handleImageChange, imagePreviewUrl, clearImage } = ImageUpload();
     const formRef = useRef<HTMLFormElement>(null);
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -49,6 +49,7 @@ export function AddForm() {
         <TapeForm
             handleSubmit={handleSubmit}
             selectedImage={selectedImage}
+            imagePreviewUrl={imagePreviewUrl}
             handleImageChange={handleImageChange}
             stateMessage={state.message}
             defaultValues={defaultValues}

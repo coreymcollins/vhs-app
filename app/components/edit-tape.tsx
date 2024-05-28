@@ -12,7 +12,7 @@ const initialState = {
 export function EditForm({ tape }: any) {
     const { tape_id, barcode, title, description, year, cover_front_url, genres, date_added, date_updated } = tape;
     const [state, setState] = useState(initialState);
-    const { selectedImage, handleImageChange } = ImageUpload();
+    const { selectedImage, imagePreviewUrl, handleImageChange } = ImageUpload();
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -44,6 +44,7 @@ export function EditForm({ tape }: any) {
         <TapeForm
             handleSubmit={handleSubmit}
             selectedImage={selectedImage}
+            imagePreviewUrl={imagePreviewUrl}
             handleImageChange={handleImageChange}
             stateMessage={state.message}
             defaultValues={defaultValues}

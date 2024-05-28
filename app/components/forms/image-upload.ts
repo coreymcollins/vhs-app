@@ -1,7 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 export function ImageUpload() {
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null)
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
 
     const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0]
@@ -11,11 +12,26 @@ export function ImageUpload() {
         }
 
         setSelectedImage(file);
+        setImagePreviewUrl( URL.createObjectURL( file ) )
     }
 
     const clearImage = () => {
-        setSelectedImage(null);
+
+        if ( imagePreviewUrl ) {
+            URL.revokeObjectURL( imagePreviewUrl )
+        }
+
+        setSelectedImage( null )
+        setImagePreviewUrl( null )
     };
 
-    return { selectedImage, handleImageChange, clearImage }
+    useEffect(() => {
+        return () => {
+            if ( imagePreviewUrl ) {
+                URL.revokeObjectURL( imagePreviewUrl )
+            }
+        }
+    }, [imagePreviewUrl])
+
+    return { selectedImage, imagePreviewUrl, handleImageChange, clearImage }
 }

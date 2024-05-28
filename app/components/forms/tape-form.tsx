@@ -6,6 +6,7 @@ import Image from 'next/image'
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
     selectedImage: File | null;
+    imagePreviewUrl: string | null;
     handleImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
     stateMessage: string;
     submitText: string;
@@ -29,7 +30,7 @@ const getCurrentDate = (): string => {
     return format( currentDate, 'yyyy-MM-dd' )
 }
 
-export function TapeForm({ handleSubmit, selectedImage, handleImageChange, stateMessage, submitText, context, formRef, defaultValues }: TapeFormProps) {
+export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleImageChange, stateMessage, submitText, context, formRef, defaultValues }: TapeFormProps) {
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
 
@@ -86,10 +87,10 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
                 <label htmlFor="coverfront">Front Cover</label>
                 <div className="image-container">
                     <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" onChange={handleImageChange} />
-                    { selectedImage && (
+                    { imagePreviewUrl && (
                         <>
                             <Image
-                                src={selectedImage.toString()}
+                                src={imagePreviewUrl}
                                 alt="front cover"
                                 sizes="(min-width: 1024px) 768px, 180px"
                                 quality={90}
@@ -103,7 +104,7 @@ export function TapeForm({ handleSubmit, selectedImage, handleImageChange, state
                             />
                         </>
                     )}
-                    { ! selectedImage && defaultValues.cover_front_url ? (
+                    { ! imagePreviewUrl && defaultValues.cover_front_url ? (
                         <>
                             <Image
                                 src={defaultValues.cover_front_url}
