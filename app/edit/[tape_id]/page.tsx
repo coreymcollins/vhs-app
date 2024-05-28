@@ -1,4 +1,4 @@
-import { EditForm } from '@/app/components/edit-tape';
+import RealtimeTape from '@/app/components/realtime-tape';
 import { supabase } from '@/app/lib/supabase'
 
 interface Tape {
@@ -40,7 +40,19 @@ export async function generateMetadata( { params }: { params: { tape_id: number 
 export default async function EditTapePage( { params }: { params: { tape_id: number } } ) {
     const {tape_id} = params
 
-    const { data: tape, error } = await supabase.rpc( 'get_tape_by_tape_id', { tapeidquery: tape_id });
+    const { data: tape, error } = await supabase
+        .from( 'tapes' )
+        .select( `
+            *,
+            tapes_genres:tapes_genres!inner (
+                genre_id,
+                genres:genre_id (
+                    genre_name
+                )
+            )
+        ` )
+        .eq( 'tape_id', tape_id )
+        .single()
 
     await supabase
         .storage
@@ -60,7 +72,7 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
             <div className="page-content-header">
                 <h2>Edit existing tape</h2>
             </div>
-            <EditForm tape={tape[0]}/>
+            <RealtimeTape {...tape} />
         </>
     )
 }
