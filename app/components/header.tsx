@@ -76,8 +76,8 @@ const PageHeader: React.FC<PageHeaderProps> = ({ user }) => {
                     <ul className="menu-user-list">
                         { null !== user ? (
                             <>
-                                <li><Link href="/account">Account</Link></li>
                                 <li>{metadata.username}</li>
+                                <li><Link href="/account">Account</Link></li>
                                 <li><AccountForm /></li>
                             </>
                             ) : (
