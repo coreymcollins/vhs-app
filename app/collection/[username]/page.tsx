@@ -2,6 +2,22 @@ import { createClient } from '@/utils/supabase/server';
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 
+export async function generateMetadata( req: any) {
+    const username = req.params.username
+
+    if ( ! username ) {
+        return {
+            title: 'Revival Video',
+            description: 'Be kind. Revive.',
+        }
+    }
+
+    return {
+        title: `Revival Video: Collection of ${username}`,
+        description: 'Be kind. Revive.',
+    }
+}
+
 async function getUserCollection( username: string ) {
 
     if ( null === username ) {

@@ -1,5 +1,11 @@
 import { createClient } from '@/utils/supabase/server'
 import EditableField from '../components/editable-field'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Revival Video: My Account',
+    description: 'Be kind. Revive.',
+};
 
 export default async function Account() {
     const supabase = createClient()

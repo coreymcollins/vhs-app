@@ -2,6 +2,12 @@ import { createClient } from '@/utils/supabase/client';
 import { checkLoginStatus } from '../actions/check-login-status';
 import { WithPagination } from '../components/with-pagination';
 import { PaginationProps } from '../components/types';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Revival Video: Library',
+    description: 'Be kind. Revive.',
+};
 
 async function getTapesWithGenres() {
     const supabase = createClient()    

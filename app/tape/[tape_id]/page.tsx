@@ -4,6 +4,30 @@ import TapeImage from '@/app/components/tape-image';
 import { supabase } from '@/app/lib/supabase'
 import Link from 'next/link';
 
+export async function generateMetadata( { params }: { params: { tape_id: number } } ) {
+    const tapeId = params.tape_id
+
+    const { data: tape, error: tapeError } = await supabase
+        .from( 'tapes' )
+        .select( 'title' )
+        .eq( 'tape_id', tapeId )
+        .single()
+
+    if ( tapeError ) {
+        console.error( 'Error fetching tape:', tapeError )
+        
+        return {
+            title: 'Revival Video',
+            description: 'Be kind. Revive.',
+        }
+    }
+
+    return {
+        title: `Revival Video: ${tape.title}`,
+        description: 'Be kind. Revive.',
+    }
+}
+
 export default async function SingleTapePage( { params }: { params: { tape_id: number } } ) {
 
     const tapeId = params.tape_id

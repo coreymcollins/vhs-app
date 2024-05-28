@@ -10,8 +10,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Revival Video",
-    description: "Be kind. Revive.",
+    title: 'Revival Video',
+    description: 'Be kind. Revive.',
 };
 
 export default async function RootLayout({

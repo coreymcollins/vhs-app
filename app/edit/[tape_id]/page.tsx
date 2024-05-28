@@ -1,5 +1,5 @@
 import { EditForm } from '@/app/components/edit-tape';
-import { createClient } from '@/utils/supabase/server';
+import { supabase } from '@/app/lib/supabase'
 
 interface Tape {
     tape_id: number;
@@ -13,9 +13,32 @@ interface Tape {
     cover_front_url: string;
 }
 
+export async function generateMetadata( { params }: { params: { tape_id: number } } ) {
+    const tapeId = params.tape_id
+
+    const { data: tape, error: tapeError } = await supabase
+        .from( 'tapes' )
+        .select( 'title' )
+        .eq( 'tape_id', tapeId )
+        .single()
+
+    if ( tapeError ) {
+        console.error( 'Error fetching tape:', tapeError )
+        
+        return {
+            title: 'Revival Video',
+            description: 'Be kind. Revive.',
+        }
+    }
+
+    return {
+        title: `Revival Video: Edit "${tape.title}"`,
+        description: 'Be kind. Revive.',
+    }
+}
+
 export default async function EditTapePage( { params }: { params: { tape_id: number } } ) {
     const {tape_id} = params
-    const supabase = createClient()
 
     const { data: tape, error } = await supabase.rpc( 'get_tape_by_tape_id', { tapeidquery: tape_id });
 

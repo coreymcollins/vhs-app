@@ -2,6 +2,12 @@ import { checkLoginStatus } from '../actions/check-login-status';
 import { WithPagination } from '../components/with-pagination';
 import { getUsernameByUuid, getUsersTapesByUuid } from '../actions';
 import CopyCollectionUrl from '@/app/components/button-copy-collection-url';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Revival Video: My Collection',
+    description: 'Be kind. Revive.',
+};
 
 export default async function LibraryPage( req: any ) {
     const userAuth = await checkLoginStatus()

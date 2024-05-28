@@ -1,6 +1,12 @@
 import { SearchForm } from '@/app/components/search-form'
 import { checkLoginStatus } from '../actions/check-login-status'
 import { BarcodeScanQuagga } from '../components/search-form-scan-quagga'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Revival Video: Search',
+    description: 'Be kind. Revive.',
+};
 
 export default async function SearchPage( req: any ) {
     const userAuth = await checkLoginStatus()
