@@ -10,14 +10,13 @@ export interface MultiTapeGridProps extends PaginationProps {
 
 export function MultiTapeGrid( props: MultiTapeGridProps ) {
     let {tapes, pageNumber} = props
-    const tapesArray = Array.isArray(tapes) ? tapes : [tapes]
     const router = useRouter()
 
-    if ( null === tapesArray ) {
+    if ( null === tapes ) {
         return;
     }
 
-    const totalPosts = tapesArray.length
+    const totalPosts = tapes.length
     const postsPerPage = 32
     const from = 1 === pageNumber ? 0 : ( pageNumber - 1 ) * postsPerPage
     const to = 1 === pageNumber ? postsPerPage : from + postsPerPage

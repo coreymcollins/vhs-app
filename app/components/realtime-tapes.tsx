@@ -25,17 +25,15 @@ export default function RealtimeTapes({tapes, from, to, props}: {tapes: any, fro
         }
     }, [supabase, router])
 
-    const tapesArray = Array.isArray(tapes) ? tapes : [tapes]
-
     return (
-        tapesArray.slice( from, to ).map(( tape, index ) => {
+        tapes.slice( from, to ).map(( tape: object, index: number ) => {
             const updatedProps = {
                 ...props,
                 tape,
                 index
             };
             return (
-                <SingleTapeGrid key={`listing-${tape.tape_id}`} {...updatedProps} />
+                <SingleTapeGrid {...updatedProps} />
             )
         })
     )
