@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import PageHeader from './components/header';
-import { checkLoginStatus } from './actions/check-login-status';
+import PageHeader from './components/header'
+import { checkLoginStatus } from './actions/check-login-status'
 import NextTopLoader from 'nextjs-toploader'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,6 +43,8 @@ export default async function RootLayout({
                 <main>
                     {children}
                 </main>
+                <SpeedInsights />
+                <Analytics />
             </body>
         </html>
     );
