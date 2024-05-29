@@ -15,10 +15,17 @@ export default function RealtimeTapes({tapes, from, to, props}: {tapes: any, fro
                 event: '*',
                 schema: 'public',
                 table: 'tapes',
-        }, () => {
-            console.log( 'change received' )
-            router.refresh()
-        }).subscribe()
+            }, () => {
+                router.refresh()
+            })
+            .on( 'postgres_changes', {
+                event: '*',
+                schema: 'public',
+                table: 'users_tapes',
+            }, () => {
+                router.refresh()
+            })
+            .subscribe()
 
         return () => {
             supabase.removeChannel( channel )

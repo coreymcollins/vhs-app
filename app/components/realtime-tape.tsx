@@ -16,7 +16,6 @@ export default function RealtimeTape(tape: any) {
                 schema: 'public',
                 table: 'tapes',
         }, () => {
-            console.log( 'change received' )
             router.refresh()
         }).subscribe()
 
