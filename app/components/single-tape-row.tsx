@@ -34,7 +34,7 @@ export function SingleTapeRow({tape, context, session, userTapeIds}: {tape: any,
                 )}
             </td>
             { undefined !== session && null !== session ? (
-                <td className="table-library" data-label="Manage Library">
+                <td className="table-library" data-label="Manage Collection">
                     <AddRemoveTape tapeId={tape.tape_id} userTapeIds={userTapeIds} user={session} />
                 </td>
             ) : (

@@ -67,7 +67,7 @@ export default async function LibraryPage( req: any ) {
     if ( ! tapes ) {
         return (
             <div className="page-content-header">
-                <h2>{`Viewing Library for ${username} failed: no tapes found`}</h2>
+                <h2>{`Viewing Collection of ${username} failed: no tapes found`}</h2>
             </div>
         )
     }
@@ -81,7 +81,7 @@ export default async function LibraryPage( req: any ) {
         <>
             <div className="page-content-header">
                 <h2>
-                    {error ? `Error: ${error}` : `Viewing Library of ${username} (${totalTapes})`}
+                    {error ? `Error: ${error}` : `Viewing Collection of ${username} (${totalTapes})`}
                 </h2>
             </div>
             { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }

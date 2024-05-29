@@ -21,7 +21,7 @@ export default async function LibraryPage( req: any ) {
     return (
         <>
             <div className="page-content-header">
-                <h2>My Library ({totalTapes})</h2>
+                <h2>My Collection ({totalTapes})</h2>
                 <CopyCollectionUrl username={username} />
             </div>
             

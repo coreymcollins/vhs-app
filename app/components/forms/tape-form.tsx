@@ -133,9 +133,9 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
                     </div>
 
                     <div className="form-row">
-                        <span className="label">Add To Library</span>
+                        <span className="label">Add To Collection</span>
                         <label htmlFor="add-to-library" className="checkbox-label">
-                            <input type="checkbox" id="add-to-library" name="add_to_library" value="true" /> Automatically add tape to your library
+                            <input type="checkbox" id="add-to-library" name="add_to_library" value="true" /> Automatically add tape to your collection
                         </label>
                     </div>
                 </>

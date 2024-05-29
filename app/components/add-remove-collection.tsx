@@ -12,12 +12,12 @@ interface AddRemoveTapeProps {
 const AddRemoveTape: React.FC<AddRemoveTapeProps> = (props: AddRemoveTapeProps) => {
     let {tapeId, userTapeIds, user} = props
     const [loading, setloading] = useState( true )
-    const [inLibrary, setInLibrary] = useState(false)
+    const [inCollection, setInCollection] = useState(false)
     
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setInLibrary( userTapeIds.includes( tapeId ) )
+                setInCollection( userTapeIds.includes( tapeId ) )
                 setloading( false )
             } catch ( error ) {
                 console.error( 'Error checking library for tape:', error )
@@ -30,13 +30,13 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = (props: AddRemoveTapeProps) 
 
     const handleButtonClick = async () => {
         try {
-            if ( inLibrary ) {
+            if ( inCollection ) {
                 await removeFromLibrary( tapeId, user.id )
             } else {
                 await addToLibrary( tapeId, user.id )
             }
             
-            setInLibrary( prevState => !prevState )
+            setInCollection( prevState => !prevState )
         } catch ( error ) {
             console.error( 'Error performing action:', error )
         }
@@ -48,7 +48,7 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = (props: AddRemoveTapeProps) 
 
     return (
         <button onClick={handleButtonClick} className="button-library">
-            {inLibrary ? `Remove from Library` : `Add to Library`}
+            {inCollection ? `Remove from Collection` : `Add to Collection`}
         </button>
     );
 };
