@@ -10,11 +10,11 @@ export default function LoginPage() {
         
         const metaDescription = document.querySelector( 'meta[name="description"]' );
         if ( metaDescription ) {
-            metaDescription.setAttribute( 'content', 'Log in to your Revival Video account.' );
+            metaDescription.setAttribute( 'content', 'Sign in to your Revival Video account.' );
         } else {
             const meta = document.createElement( 'meta' );
             meta.name = 'description';
-            meta.content = 'Log in to your Revival Video account.';
+            meta.content = 'Sign in to your Revival Video account.';
             document.head.appendChild(meta);
         }
     }, []);
@@ -23,7 +23,7 @@ export default function LoginPage() {
         <>
             <div className="page-section container-narrow">
                 <div className="page-content-header">
-                    <h2>Log in to your account</h2>
+                    <h2>Sign in to your account</h2>
                 </div>
                 <LoginUserForm />
             </div>

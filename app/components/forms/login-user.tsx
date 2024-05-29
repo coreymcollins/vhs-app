@@ -26,7 +26,7 @@ export default function LoginUserForm() {
                 <input id="password" name="password" type="password" required />
             </div>
             <div className="form-row form-row-single">
-                <button type="submit">Log in</button>
+                <button type="submit">Sign in</button>
             </div>
             <div className="form-row form-row-single">
                 { loginErrorMessage && <p aria-live="polite" role="status" className="form-message">{loginErrorMessage}</p>}
