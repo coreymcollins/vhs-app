@@ -70,7 +70,7 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
     return (
         <>
             <div className="page-content-header">
-                <h2>Edit existing tape</h2>
+                <h2>Edit "{tape.title}"</h2>
             </div>
             <RealtimeTape {...tape} />
         </>
