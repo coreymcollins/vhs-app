@@ -48,7 +48,7 @@ export function SearchForm({session, req}: {session: any, req: any}) {
             
             { searchResult ? (
                 <>
-                    <SearchResultGrid tapes={searchResult} session={session} pageNumber={page} />
+                    <SearchResultGrid tapes={searchResult} session={session} pageNumber={page} context="search" />
                 </>
             ) : (
                 <p aria-live="polite" role="status">

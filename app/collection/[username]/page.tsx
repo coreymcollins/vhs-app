@@ -77,6 +77,13 @@ export default async function LibraryPage( req: any ) {
     let { page } = req.searchParams
     page = undefined === page ? 1 : page
 
+    const props = {
+        tapes,
+        session: userAuth,
+        pageNumber: page,
+        context: 'collection'
+    }
+
     return (
         <>
             <div className="page-content-header">
@@ -84,7 +91,7 @@ export default async function LibraryPage( req: any ) {
                     {error ? `Error: ${error}` : `Viewing Collection of ${username} (${totalTapes})`}
                 </h2>
             </div>
-            { null !== tapes && <WithPagination tapes={tapes} session={userAuth} pageNumber={page} /> }
+            { null !== tapes && <WithPagination {...props} /> }
         </>
     )
 }

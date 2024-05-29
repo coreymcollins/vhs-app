@@ -40,7 +40,8 @@ export default async function LibraryPage( req: any ) {
     const paginationProps: PaginationProps = {
         tapes,
         session,
-        pageNumber: page
+        pageNumber: page,
+        context: 'library'
     }
     
     return (

@@ -1,10 +1,9 @@
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { PaginationProps } from './types';
-import RealtimeTapes from './realtime-tapes';
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { PaginationProps } from './types'
+import RealtimeTapes from './realtime-tapes'
 
 export interface MultiTapeGridProps extends PaginationProps {
-    context: string;
     userTapeIds: number[];
 }
 
@@ -31,10 +30,16 @@ export function MultiTapeGrid( props: MultiTapeGridProps ) {
         router.push( `?page=${(Number(pageNumber) + 1)}` )
     }
 
+    const updatedProps = {
+        ...props,
+        from,
+        to
+    }
+
     return (
         <>
             <div className="tape-results grid">
-                <RealtimeTapes tapes={tapes} from={from} to={to} props={props} />
+                <RealtimeTapes {...updatedProps} />
             </div>
             <div className="pagination">
                 { pageNumber > 1 && (
