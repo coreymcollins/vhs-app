@@ -155,7 +155,7 @@ li:not(last-child) {
 .site-header {
     background-color: rgba(72, 25, 66, 0);
     display: block;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
     max-width: 100%;
     padding: 1rem 0;
     text-align: center;
