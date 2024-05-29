@@ -37,7 +37,7 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form" ref={formRef}>
             { defaultValues.tape_id && (
-                <div className="form-row readonly">
+                <div className="form-row readonly screen-reader-only">
                     <label htmlFor="barcode">ID</label>
                     <input type="text" id="tape_id" name="tape_id" className="input-tape_id" maxLength={30} readOnly defaultValue={defaultValues.tape_id} />
                 </div>
