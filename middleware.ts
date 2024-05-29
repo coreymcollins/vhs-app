@@ -18,24 +18,14 @@ export async function middleware(request: NextRequest) {
         '/login',
     ];
 
-    const isLoggedIn = await checkLoginStatus();
-
     const { pathname } = request.nextUrl;
 
-    if ( isLoggedIn ) {
-        // If the user is logged in and tries to access the /login page, redirect them
-        if ( loggedInRedirectUrls.some( url => pathname === url ) ) {
-            return NextResponse.redirect( new URL( '/account', request.url ) );
-        }
-    } else {
-        // If the user is not logged in, check for restricted paths
-        if (
-            redirectUrls.some( url => pathname === url ) ||
-            // Check for all other paths that should start with the given prefix
-            redirectUrls.filter( url => url !== '/collection' ).some( url => pathname.startsWith( url ) )
-        ) {
-            return NextResponse.redirect( new URL( '/login', request.url ) );
-        }
+    if (
+        redirectUrls.some( url => pathname === url ) ||
+        // Check for all other paths that should start with the given prefix
+        redirectUrls.filter( url => url !== '/collection' ).some( url => pathname.startsWith( url ) )
+    ) {
+        return NextResponse.redirect( new URL( '/login', request.url ) );
     }
 
     return NextResponse.next();

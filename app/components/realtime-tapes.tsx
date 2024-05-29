@@ -5,15 +5,17 @@ import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { SingleTapeGrid } from './single-tape-grid'
 import { MultiTapeGridProps } from './multi-tape-grid'
-import { getUsersTapesByUuid } from '../actions'
+import { getUserCollection, getUsersTapesByUuid } from '../actions'
 
 export interface RealtimeTapesProps extends MultiTapeGridProps {
     from: number;
     to: number;
+    username: string | '';
 }
 
 export default function RealtimeTapes( props: RealtimeTapesProps) {
-    const {tapes, from, to, context, session} = props
+    const {tapes, from, to, context, session, username} = props
+    const signedInUserId = null !== session ? session.id : null
     const supabase = createClient()
     const router = useRouter()
     const [currentTapes, setCurrentTapes] = useState( tapes )
@@ -29,13 +31,15 @@ export default function RealtimeTapes( props: RealtimeTapesProps) {
             setCurrentTapes( updatedTapes );
 
         } else if ( 'collection' === context ) {
-            const userId = session.id
-            const updatedTapes = await getUsersTapesByUuid( userId )
+            const updatedTapes = await getUsersTapesByUuid( signedInUserId )
+            setCurrentTapes( updatedTapes );
+        } else if ( 'collection-public' === context ) {
+            const updatedTapes = await getUserCollection( username )
             setCurrentTapes( updatedTapes );
         }
 
         router.refresh();
-    }, [supabase, router, context, session.id]);
+    }, [supabase, router, context, signedInUserId, username]);
 
     useEffect(() => {
         const channel = supabase.channel( 'realtime tapes' )

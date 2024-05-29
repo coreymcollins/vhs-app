@@ -5,6 +5,7 @@ import RealtimeTapes from './realtime-tapes'
 
 export interface MultiTapeGridProps extends PaginationProps {
     userTapeIds: number[];
+    username: string | '';
 }
 
 export function MultiTapeGrid( props: MultiTapeGridProps ) {

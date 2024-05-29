@@ -25,7 +25,8 @@ export function SearchResultGrid( props: PaginationProps) {
 
     const updatedProps = {
         ...props,
-        userTapeIds
+        userTapeIds,
+        username: ''
     }
 
     return (

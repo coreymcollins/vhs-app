@@ -22,7 +22,8 @@ export default async function LibraryPage( req: any ) {
         tapes,
         session: userAuth,
         pageNumber: page,
-        context: 'collection'
+        context: 'collection',
+        username: ''
     }
 
     return (
