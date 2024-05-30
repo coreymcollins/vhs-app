@@ -13,11 +13,12 @@ export async function POST(req: NextRequest) {
     }
     
     revalidatePath( '/', 'layout' )
+    
     const response = NextResponse.redirect(new URL( '/login', req.url ), {
         status: 302,
     })
 
-    response.headers.set( 'Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate' )
+    response.headers.set( 'Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, private' )
 
     return response
 }
