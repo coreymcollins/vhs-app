@@ -3,16 +3,6 @@ import { revalidatePath } from 'next/cache'
 import { type NextRequest, NextResponse } from 'next/server'
 import { checkLoginStatus, resetCachedUser } from '../../actions/check-login-status'
 
-const revalidationPaths = [
-    '/',
-    '/library',
-    '/collection',
-    '/account',
-    '/search',
-    '/add-tape',
-    '/edit/'
-]
-
 export async function POST(req: NextRequest) {
     const supabase = createClient()
     const user = await checkLoginStatus()
@@ -22,10 +12,7 @@ export async function POST(req: NextRequest) {
         resetCachedUser()
     }
     
-    // revalidatePath( '/', 'layout' )
-    for ( const path of revalidationPaths ) {
-        await revalidatePath( path, 'layout' )
-    }
+    revalidatePath( '/', 'layout' )
 
     const response = NextResponse.redirect(new URL( '/login', req.url ), {
         status: 302,
