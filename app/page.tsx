@@ -1,9 +1,6 @@
 import Link from 'next/link'
-import { checkLoginStatus } from './actions/check-login-status'
 
 export default async function Home( req: any ) {
-    const userAuth = await checkLoginStatus()
-
     return (
         <>
             <div className="page-section container-narrow">
