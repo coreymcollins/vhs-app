@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import PageHeader from './components/header'
-import { checkLoginStatus } from './actions/check-login-status'
 import NextTopLoader from 'nextjs-toploader'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import { UserProvider } from './contexts/UserContext'
+import ClientComponentWrapper from './components/ClientComponentWrapper'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,12 +14,7 @@ export const metadata: Metadata = {
     description: 'Be kind. Revive.',
 };
 
-export default async function RootLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
-    let user = await checkLoginStatus()
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <html lang="en">
@@ -36,15 +31,16 @@ export default async function RootLayout({
                 sizes="<generated>"
             />
             <body className={inter.className}>
-                <NextTopLoader
-                    color="#ffffff"
-                />
-                <PageHeader user={user} />
-                <main>
-                    {children}
-                </main>
-                <SpeedInsights />
-                <Analytics />
+                <UserProvider>
+                    <NextTopLoader
+                        color="#ffffff"
+                    />
+                    <ClientComponentWrapper>
+                        {children}
+                    </ClientComponentWrapper>
+                    <SpeedInsights />
+                    <Analytics />
+                </UserProvider>
             </body>
         </html>
     );

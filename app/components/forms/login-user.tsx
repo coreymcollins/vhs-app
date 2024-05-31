@@ -1,8 +1,11 @@
 import { useState } from 'react'
 import { login } from '@/app/actions/signup'
+import { useSetUser } from '@/app/contexts/UserContext';
+import { createClient } from '@/utils/supabase/client'
 
 export default function LoginUserForm() {
     const [loginErrorMessage, setLoginErrorMessage] = useState<string>('');
+    const setUser = useSetUser()
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -12,6 +15,12 @@ export default function LoginUserForm() {
 
         if ( error ) {
             setLoginErrorMessage( error.message )
+        } else {
+            const supabase = createClient()
+            const {
+                data: { user },
+            } = await supabase.auth.getUser()
+            setUser( user )
         }
     }
 
