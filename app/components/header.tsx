@@ -14,8 +14,6 @@ const PageHeader: React.FC<PageHeaderProps> = ({ user }) => {
     let metadata = null !== user ? user.user_metadata : {}
 
     useEffect(() => {
-        const header = document.getElementById( 'site-header' )
-
         const handleScroll = () => {
             if ( window.scrollY > 0 ) {
                 setScrolled( true )
