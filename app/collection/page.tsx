@@ -11,6 +11,11 @@ export const metadata: Metadata = {
 
 export default async function LibraryPage( req: any ) {
     const userAuth = await checkLoginStatus()
+
+    if ( ! userAuth ) {
+        return
+    }
+    
     const username = await getUsernameByUuid( userAuth.id )
     const tapes = await getUsersTapesByUuid( userAuth.id )
     
