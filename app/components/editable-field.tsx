@@ -90,7 +90,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
                                 required
                             />
                             <button type="submit" className="button button-save button-padding">Save</button>
-                            <button type="button" onClick={() => { setIsEditing( false ); setInputValue( initialValue ); setError( '' ) }} className="button-cancel button-padding">Cancel</button>
+                            <button type="button" onClick={() => { setIsEditing( false ); setInputValue( initialValue ); setError( '' ) }} className="button button-cancel button-padding">Cancel</button>
                         </form>
                     ) : (
                         <>
@@ -99,7 +99,7 @@ const EditableField: React.FC<EditableFieldProps> = ({ label, name, type, value:
                             ) : (
                                 <input type={fieldType} id={name} name={name} className="readonly" maxLength={30} readOnly defaultValue={value} />
                             )}
-                            <button type="button" onClick={() => setIsEditing( true )} className="button-edit button-padding">Edit</button>
+                            <button type="button" onClick={() => setIsEditing( true )} className="button button-edit button-padding">Edit</button>
                         </>
                     )}
                 </div>
