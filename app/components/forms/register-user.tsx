@@ -38,7 +38,7 @@ export default function RegisterUserForm() {
                     <input id="password" name="password" type="password" required />
                 </div>
                 <div className="form-row form-row-single">
-                    <button type="submit">Sign up</button>
+                    <button className="button" type="submit">Sign up</button>
                 </div>
                 <div className="form-row form-row-single">
                     { signupErrorMessage && <p aria-live="polite" role="status" className="form-message">{signupErrorMessage}</p>}

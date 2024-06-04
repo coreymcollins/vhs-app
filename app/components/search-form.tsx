@@ -42,7 +42,7 @@ export function SearchForm({session, req}: {session: any, req: any}) {
                 <label htmlFor="search-query">Search Query</label>
                 <div>
                     <input type="text" id="search-query" name="search-query" required />
-                    <button type="submit">Search</button>
+                    <button className="button" type="submit">Search</button>
                 </div>
             </div>
             

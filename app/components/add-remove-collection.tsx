@@ -47,7 +47,7 @@ const AddRemoveTape: React.FC<AddRemoveTapeProps> = (props: AddRemoveTapeProps) 
     }
 
     return (
-        <button onClick={handleButtonClick} className="button-library">
+        <button onClick={handleButtonClick} className="button button-library">
             {inCollection ? `Remove from Collection` : `Add to Collection`}
         </button>
     );

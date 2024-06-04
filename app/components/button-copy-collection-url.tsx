@@ -50,7 +50,7 @@ const CopyCollectionUrl: FC<CopyCollectionUrlProps> = ( {username} ) => {
 
     return (
         <button
-            className="copy-collection-url button-library button-padding"
+            className="copy-collection-url button button-library button-padding"
             data-collection-url={`${siteUrl}/collection/${username}`}
             onClick={handleButtonClick}
         >

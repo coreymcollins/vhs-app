@@ -147,7 +147,7 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
             )}
             
             <div className="form-row form-row-single">
-                <button type="submit">{submitText}</button>
+                <button className="button" type="submit">{submitText}</button>
             </div>
 
             <div className="form-row form-row-single">

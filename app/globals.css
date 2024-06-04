@@ -345,7 +345,7 @@ label[for="coverfront"] {
 button[type="submit"],
 input[type="submit"],
 input[type="file"]::file-selector-button,
-.button-library,
+.button,
 .button-padding {
     appearance: none;
     background-color: #2b2a33;
@@ -357,12 +357,12 @@ input[type="file"]::file-selector-button,
     -webkit-appearance: none;
 }
 
-.button-library {
+.button {
     cursor: pointer;
 }
 
-.button-library:hover,
-.button-library:focus {
+.button:hover,
+.button:focus {
     opacity: 0.7;
 }
 
