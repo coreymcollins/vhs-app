@@ -4,9 +4,9 @@ let cachedUser: any = null
 
 export async function checkLoginStatus() {
 
-    if ( cachedUser ) {
-        return cachedUser;
-    }
+    // if ( cachedUser ) {
+    //     return cachedUser;
+    // }
     
     const supabase = createClient()
     
@@ -18,10 +18,12 @@ export async function checkLoginStatus() {
     if ( ! user ) {
         return null
     }
-    
-    cachedUser = { ...user } || null
 
-    return cachedUser;
+    return user
+    
+    // cachedUser = { ...user } || null
+
+    // return cachedUser;
 }
 
 export function resetCachedUser() {
