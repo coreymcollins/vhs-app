@@ -1,26 +1,26 @@
 import { useState } from 'react'
 import { login } from '@/app/actions/signup'
 import { useSetUser } from '@/app/contexts/UserContext';
-import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client'
 
 export default function LoginUserForm() {
     const [loginErrorMessage, setLoginErrorMessage] = useState<string>('');
     const setUser = useSetUser()
-    const router = useRouter()
 
     const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const formData = new FormData( event.currentTarget )
 
-        const loginData = await login( formData )
+        const error = await login( formData )
 
-        if ( 'error' === loginData.status ) {
-            setLoginErrorMessage( loginData.message ?? '' )
-        } else if ( 'success' === loginData.status ) {
-            if ( undefined !== loginData.user ) {
-                setUser( loginData.user.user )
-                router.push( '/' )
-            }
+        if ( error ) {
+            setLoginErrorMessage( error.message )
+        } else {
+            const supabase = createClient()
+            const {
+                data: { user },
+            } = await supabase.auth.getUser()
+            setUser( user )
         }
     }
 

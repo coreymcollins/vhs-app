@@ -4,10 +4,6 @@ let cachedUser: any = null
 
 export async function checkLoginStatus() {
 
-    // if ( cachedUser ) {
-    //     return cachedUser;
-    // }
-    
     const supabase = createClient()
     
     // Check if a user's logged in
@@ -20,10 +16,6 @@ export async function checkLoginStatus() {
     }
 
     return user
-    
-    // cachedUser = { ...user } || null
-
-    // return cachedUser;
 }
 
 export function resetCachedUser() {
