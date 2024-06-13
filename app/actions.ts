@@ -83,7 +83,7 @@ export async function updateEntry(
     const formUpdates: any = parse.data;
     const newCoverImage = formData.get( 'coverfront' ) as File | null
     
-    if ( null === newCoverImage || null !== newCoverImage && newCoverImage.size > 0 ) {
+    if ( null !== newCoverImage && newCoverImage.size > 0 ) {
         uploadImageToStorage( formUpdates.tape_id, newCoverImage )
     }
 
@@ -187,7 +187,7 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: Fi
 
     await addNewTapeGenres( genres, tapeId )
 
-    if ( null === coverfront || null !== coverfront && coverfront.size > 0 ) {
+    if ( null !== coverfront && coverfront.size > 0 ) {
         await uploadImageToStorage( tapeId, coverfront )
     }
 
@@ -283,7 +283,7 @@ export async function addNewTapeGenres( genres: any, tapeId: number ) {
 
 export async function uploadImageToStorage(tapeId: number, image: File | null) {
 
-    if ( null === image || null !== image && image.size > 0 ) {
+    if ( null === image || null !== image && image.size <= 0 ) {
         return
     }
 
