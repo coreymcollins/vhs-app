@@ -12,6 +12,7 @@ const initialState = {
 export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
     const [state, setState] = useState(initialState);
     const [searchResult, setSearchResult] = useState<any | null>(null)
+
     let { page } = req.searchParams
     page = undefined === page ? 1 : page
     
@@ -20,12 +21,16 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
         
         const formData = new FormData(event.currentTarget);
         const barcode = formData.get('barcode') as string;
+
         
         try {
+            setState({ message: 'Searching...' })
+            setSearchResult(null)
+
             const result = await searchByBarcode(barcode)
 
             if (result) {
-                setState({ message: `Tape found` })
+                setState({ message: `Tape found for barcode: ${barcode}` })
                 setSearchResult(result)
             } else {
                 setState({ message: `No tapes found for barcode: ${barcode}` })
@@ -38,19 +43,24 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
     };
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+        const fileInput = event.target;
+        const file = fileInput.files?.[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = async (e) => {
                 const image = new Image();
                 image.onload = async () => {
                     try {
+                        setState({ message: 'Decoding barcode...'} )
+                        setSearchResult(null)
+
                         // Decode barcode from the image
                         const barcode = await decodeBarcodeFromImage(image);
+
                         if (barcode) {
                             const result = await searchByBarcode(barcode);
                             if (result) {
-                                setState({ message: `Tape found` });
+                                setState({ message: `Tape found for barcode: ${barcode}` });
                                 setSearchResult(result);
                             } else {
                                 setState({ message: `No tapes found for barcode: ${barcode}` });
@@ -63,6 +73,8 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
                     } catch (error) {
                         setState({ message: `Error decoding barcode: ${error}` });
                         setSearchResult(null);
+                    } finally {
+                        fileInput.value = '';
                     }
                 };
                 image.src = e.target?.result as string;
@@ -100,16 +112,18 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
             <div className="form-row">
                 <label htmlFor="image">Upload Image</label>
                 <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
-            </div>      
-                    
-            { searchResult ? (
-                <>
-                    <SearchResultGrid tapes={searchResult} session={session} pageNumber={page} context="search" />
-                </>
-            ) : (
+            </div>
+
+            { state.message && (
                 <p aria-live="polite" role="status">
                     {state.message}
                 </p>
+            )}
+                    
+            { searchResult && (
+                <>
+                    <SearchResultGrid tapes={searchResult} session={session} pageNumber={page} context="search" />
+                </>
             )}
         </form>
     );
