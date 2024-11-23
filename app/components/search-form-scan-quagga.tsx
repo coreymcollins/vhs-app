@@ -15,32 +15,6 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
 
     let { page } = req.searchParams
     page = undefined === page ? 1 : page
-    
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        
-        const formData = new FormData(event.currentTarget);
-        const barcode = formData.get('barcode') as string;
-
-        
-        try {
-            setState({ message: 'Searching...' })
-            setSearchResult(null)
-
-            const result = await searchByBarcode(barcode)
-
-            if (result) {
-                setState({ message: `Tape found for barcode: ${barcode}` })
-                setSearchResult(result)
-            } else {
-                setState({ message: `No tapes found for barcode: ${barcode}` })
-                setSearchResult(null)
-            }
-        } catch (error) {
-            setState({ message: `Error searching for tape: ${error}` })
-            setSearchResult(null)
-        }
-    };
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const fileInput = event.target;
@@ -59,7 +33,7 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
 
                         if (barcode) {
                             const result = await searchByBarcode(barcode);
-                            if (result) {
+                            if (result && result.length > 0) {
                                 setState({ message: `Tape found for barcode: ${barcode}` });
                                 setSearchResult(result);
                             } else {
@@ -93,7 +67,7 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
                         size: 800,
                     },
                     decoder: {
-                        readers: ['upc_reader'], // Specify UPC-A reader
+                        readers: ['upc_reader', 'ean_reader'], // Specify readers
                     },
                 },
                 (result) => {
@@ -108,7 +82,7 @@ export function BarcodeScanQuagga({session, req}: {session: any, req: any}) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="search-form form">
+        <form className="search-form form">
             <div className="form-row">
                 <label htmlFor="image">Upload Image</label>
                 <input type="file" id="image" accept="image/*" onChange={handleImageUpload} />
