@@ -79,7 +79,7 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
             </div>
             
             <div className="form-row">
-                <label htmlFor="year">Year</label>
+                <label htmlFor="year">VHS Release Year</label>
                 <input type="number" id="year" name="year" className="input-year" required defaultValue={defaultValues.year} />
             </div>
 

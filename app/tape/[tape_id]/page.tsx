@@ -90,7 +90,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
 
                     { tape.year && (
                         <div className="container-single-tape-row">
-                            <h3>Release Year</h3>
+                            <h3>VHS Release Year</h3>
                             <p>{tape.year}</p>
                         </div>
                     )}

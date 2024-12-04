@@ -606,7 +606,7 @@ input.readonly {
     .form .form-row {
         align-items: center;
         display: grid;
-        grid-template-columns: 9rem 1fr;
+        grid-template-columns: 12rem 1fr;
         grid-template-rows: unset;
         gap: 2rem;
     }
