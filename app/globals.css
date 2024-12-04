@@ -612,7 +612,7 @@ input.readonly {
     }
     
     .form .form-row-single {
-        grid-template-columns: 9rem 1fr;
+        grid-template-columns: 12rem 1fr;
         grid-template-rows: unset;
     }
 
@@ -622,11 +622,11 @@ input.readonly {
     }
 
     .add-form button[type="submit"] {
-        margin: 1rem 0 1rem 11rem;
+        margin: 1rem 0 1rem 14rem;
     }
 
     .form-message {
-        margin: 0 0 1rem 11rem;
+        margin: 0 0 1rem 14rem;
     }
 
     .tape-results.grid {
