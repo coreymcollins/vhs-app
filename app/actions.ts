@@ -436,3 +436,41 @@ export async function getUserCollection( username: string ) {
 
     return {tapes};
 }
+
+export async function getTapesByGenre( genreName: string ) {
+
+    if ( null === genreName ) {
+        return { error: 'genre cannot be null' }
+    }
+
+    const supabase = createClient()
+
+    const { data: genre, error: genreError } = await supabase
+        .from('genres')
+        .select('genre_id')
+        .ilike('genre_name', genreName.replace( /-/g, ' ' ) )
+        .single();
+
+    if ( null === genre ) {
+        return { error: 'genre ID cannot be null' }
+    }
+
+    const { data: tapes, error: tapesError } = await supabase
+        .from('tapes')
+        .select(`
+            *,
+            tapes_genres:tapes_genres!inner (
+                genre_id
+            )
+        `)
+        .eq('tapes_genres.genre_id', genre.genre_id)
+        .order( 'title' );
+
+    if ( tapesError ) {
+        console.error('Error fetching tapes in collection:', tapesError.message);
+        return { error: `Error fetching tapes in collection: ${tapesError.message}`} 
+    }
+
+    return tapes;
+}
+
