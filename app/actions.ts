@@ -448,7 +448,7 @@ export async function getTapesByGenre( genreName: string ) {
     const { data: genre, error: genreError } = await supabase
         .from('genres')
         .select('genre_id')
-        .ilike('genre_name', genreName.replace( /-/g, ' ' ) )
+        .eq('genre_slug', genreName )
         .single();
 
     if ( null === genre ) {
@@ -472,5 +472,26 @@ export async function getTapesByGenre( genreName: string ) {
     }
 
     return tapes;
+}
+
+export async function getGenreNameBySlug( genreName: string ) {
+
+    if ( null === genreName ) {
+        return { error: 'genre cannot be null' }
+    }
+
+    const supabase = createClient()
+
+    const { data: genre, error: genreError } = await supabase
+        .from('genres')
+        .select('genre_name')
+        .eq('genre_slug', genreName )
+        .single();
+
+    if ( null === genre ) {
+        return { error: 'genre ID cannot be null' }
+    }
+
+    return genre.genre_name
 }
 
