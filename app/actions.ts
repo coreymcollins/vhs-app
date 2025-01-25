@@ -474,7 +474,28 @@ export async function getTapesByGenre( genreName: string ) {
     return tapes;
 }
 
-export async function getGenreNameBySlug( genreName: string ) {
+export async function getGenreNameBySlug( genreSlug: string ) {
+
+    if ( null === genreSlug ) {
+        return { error: 'genre cannot be null' }
+    }
+
+    const supabase = createClient()
+
+    const { data: genre, error: genreError } = await supabase
+        .from('genres')
+        .select('genre_name')
+        .eq('genre_slug', genreSlug )
+        .single();
+
+    if ( null === genre ) {
+        return { error: 'genre ID cannot be null' }
+    }
+
+    return genre.genre_name
+}
+
+export async function getGenreSlugByName( genreName: string ) {
 
     if ( null === genreName ) {
         return { error: 'genre cannot be null' }
@@ -484,7 +505,7 @@ export async function getGenreNameBySlug( genreName: string ) {
 
     const { data: genre, error: genreError } = await supabase
         .from('genres')
-        .select('genre_name')
+        .select('genre_slug')
         .eq('genre_slug', genreName )
         .single();
 
@@ -492,6 +513,6 @@ export async function getGenreNameBySlug( genreName: string ) {
         return { error: 'genre ID cannot be null' }
     }
 
-    return genre.genre_name
+    return genre.genre_slug
 }
 
