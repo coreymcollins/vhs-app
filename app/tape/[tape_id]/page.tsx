@@ -1,3 +1,4 @@
+import { getGenreSlugByName } from '@/app/actions';
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import AddRemoveTape from '@/app/components/add-remove-collection';
 import TapeImage from '@/app/components/tape-image';
@@ -38,7 +39,8 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
         tapes_genres:tapes_genres!inner (
             genre_id,
             genres:genre_id (
-                genre_name
+                genre_name,
+                genre_slug
             )
         )
     ` )
@@ -55,7 +57,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
         return;
     }
 
-    const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres.genre_name);
+    const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres);
     const user = await checkLoginStatus()
 
     return (
@@ -84,7 +86,14 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                     { genres && (
                         <div className="container-single-tape-row">
                             <h3>Genres</h3>
-                            {genres.join(', ')}
+                            {genres.map(( genre, index ) => {
+                                return (
+                                    <>
+                                        <Link key={genre.genre_name} href={`/genre/${genre.genre_slug}`}>{genre.genre_name}</Link>
+                                        {index < genres.length - 1 && ', '}
+                                    </>
+                                )
+                            })}
                         </div>
                     )}
 
