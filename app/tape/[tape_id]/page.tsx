@@ -4,6 +4,7 @@ import AddRemoveTape from '@/app/components/add-remove-collection';
 import TapeImage from '@/app/components/tape-image';
 import { supabase } from '@/app/lib/supabase'
 import Link from 'next/link';
+import React from 'react';
 
 export async function generateMetadata( { params }: { params: { tape_id: number } } ) {
     const tapeId = params.tape_id
@@ -88,10 +89,10 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                             <h3>Genres</h3>
                             {genres.map(( genre, index ) => {
                                 return (
-                                    <>
-                                        <Link key={genre.genre_name} href={`/genre/${genre.genre_slug}`}>{genre.genre_name}</Link>
+                                    <React.Fragment key={genre.genre_slug}>
+                                        <Link href={`/genre/${genre.genre_slug}`}>{genre.genre_name}</Link>
                                         {index < genres.length - 1 && ', '}
-                                    </>
+                                    </React.Fragment>
                                 )
                             })}
                         </div>
