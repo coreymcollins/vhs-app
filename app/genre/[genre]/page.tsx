@@ -1,13 +1,25 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 import { PaginationProps } from '@/app/components/types';
-import { Metadata } from 'next';
 import { getGenreNameBySlug, getTapesByGenre } from '@/app/actions';
 
-export const metadata: Metadata = {
-    title: 'Revival Video: Library',
-    description: 'View the full Revival Video Library.',
-};
+export async function generateMetadata( req: any ) {
+    const genreSlug = req.params.genre
+    
+    if ( ! genreSlug ) {
+        return {
+            title: 'Revival Video',
+            description: 'Be kind. Revive.',
+        }
+    }
+
+    const genreName = await getGenreNameBySlug( genreSlug )
+
+    return {
+        title: `Revival Video: ${genreName} Library`,
+        description: `View all tapes in the "${genreName}" genre.`,
+    }
+}
 
 export default async function GenrePage( req: any ) {
     const genreSlug = req.params.genre

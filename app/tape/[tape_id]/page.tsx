@@ -1,4 +1,3 @@
-import { getGenreSlugByName } from '@/app/actions';
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import AddRemoveTape from '@/app/components/add-remove-collection';
 import TapeImage from '@/app/components/tape-image';
