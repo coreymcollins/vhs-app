@@ -15,7 +15,7 @@ export async function generateMetadata( req: any ) {
 
     return {
         title: `Revival Video: ${year} Library`,
-        description: `View all tapes in the "${year}" genre.`,
+        description: `View all tapes from the year ${year}.`,
     }
 }
 
