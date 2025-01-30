@@ -327,6 +327,10 @@ label[for="coverfront"] {
     width: 250px;
 }
 
+.input-searchable {
+    color: rgb(0, 0, 0);
+}
+
 .genres-checkboxes {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

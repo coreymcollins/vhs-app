@@ -301,6 +301,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      insert_tape_distributor: {
+        Args: {
+          tape_id: number
+          distributor_id: number
+          uuid: string
+        }
+        Returns: undefined
+      }
       insert_user_tape: {
         Args: {
           user_id_query: string

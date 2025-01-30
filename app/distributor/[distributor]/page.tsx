@@ -1,36 +1,36 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 import { PaginationProps } from '@/app/components/types';
-import { getGenreNameBySlug, getTapesByGenre } from '@/app/actions';
+import { getDistributorNameBySlug, getTapesByDistributor } from '@/app/actions';
 
 export async function generateMetadata( req: any ) {
-    const genreSlug = req.params.genre
+    const distributorSlug = req.params.distributor
     
-    if ( ! genreSlug ) {
+    if ( ! distributorSlug ) {
         return {
             title: 'Revival Video',
             description: 'Be kind. Revive.',
         }
     }
 
-    const genreName = await getGenreNameBySlug( genreSlug )
+    const distributorName = await getDistributorNameBySlug( distributorSlug )
 
     return {
-        title: `Revival Video: ${genreName} Library`,
-        description: `View all tapes in the "${genreName}" genre.`,
+        title: `Revival Video: ${distributorName} Library`,
+        description: `View all tapes from ${distributorName}.`,
     }
 }
 
-export default async function GenrePage( req: any ) {
-    const genreSlug = req.params.genre
-    const genreName = getGenreNameBySlug( genreSlug )
-    const tapes = await getTapesByGenre( genreSlug )
-
+export default async function DistributorPage( req: any ) {
+    const distributorSlug = req.params.distributor
+    const distributorName = getDistributorNameBySlug( distributorSlug )
+    const tapes = await getTapesByDistributor( distributorSlug )
+    
     if ( 0 === Object.keys(tapes).length ) {
         return (
             <>
                 <div className="page-content-header">
-                    <h2>Genre "{ genreSlug }" does not exist in the database</h2>
+                    <h2>Distributor "{ distributorSlug }" does not exist in the database</h2>
                 </div>
             </>
         )
@@ -51,7 +51,7 @@ export default async function GenrePage( req: any ) {
     return (
         <>
             <div className="page-content-header">
-                <h2>{ genreName } Library ({ totalTapes })</h2>
+                <h2>{ distributorName } Library ({ totalTapes })</h2>
             </div>
             <WithPagination {...paginationProps} />
         </>

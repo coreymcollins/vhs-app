@@ -42,6 +42,13 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                 genre_name,
                 genre_slug
             )
+        ),
+        tapes_distributors!tapes_distributors_tape_id_fkey (
+            distributor_id,
+            distributors (
+                distributor_name,
+                distributor_slug
+            )
         )
     ` )
     .eq( 'tape_id', tapeId )
@@ -57,7 +64,8 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
         return;
     }
 
-    const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres);
+    const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres)
+    const distributor = ( tape.tapes_distributors as any )?.[0]?.distributors
     const user = await checkLoginStatus()
 
     return (
@@ -101,6 +109,17 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                         <div className="container-single-tape-row">
                             <h3>VHS Release Year</h3>
                             <p><Link href={`/year/${tape.year}`}>{tape.year}</Link></p>
+                        </div>
+                    )}
+
+                    { distributor && (
+                        <div className="container-single-tape-row">
+                            <h3>Distributor</h3>
+                                <Link href={`/distributor/${distributor.distributor_slug}`}>{distributor.distributor_name}</Link>
+                            {/* {
+                                return (
+                                )
+                            } */}
                         </div>
                     )}
 

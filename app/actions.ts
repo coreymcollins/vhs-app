@@ -16,6 +16,7 @@ export async function createEntry(
         description: z.string().min(1),
         year: z.number().min(4),
         date_added: z.string(),
+        distributor: z.number(),
         add_to_library: z.string().nullable(),
     })
 
@@ -25,6 +26,7 @@ export async function createEntry(
         description: formData.get( 'description' ),
         year: parseInt(formData.get( 'year' ) as string || '0'), // Convert to number or default to 0
         date_added: formData.get( 'date_added' ),
+        distributor: parseInt(formData.get( 'distributor' ) as string || '0' ),
         add_to_library: formData.get( 'add_to_library' ),
     })
 
@@ -62,6 +64,7 @@ export async function updateEntry(
         description: z.string().min(1),
         genres: z.array(z.string().min(1)),
         year: z.number().min(4),
+        distributor: z.number(),
         date_updated: z.string(),
     });
 
@@ -72,6 +75,7 @@ export async function updateEntry(
         description: formData.get('description'),
         genres: formData.getAll('genres'),
         year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
+        distributor: parseInt(formData.get( 'distributor' ) as string || '0' ),
         date_updated: formData.get('date_updated'),
     });
 
@@ -142,6 +146,22 @@ export async function searchGenres() {
     return genres;
 }
 
+export async function searchDistributors() {
+    const supabase = createClient()
+
+    let { data: distributors, error } = await supabase
+        .from( 'distributors' )
+        .select( `*` )
+        .order( 'distributor_name' )
+
+    if ( error ) {
+        console.error( 'error in adding a new tape:', error )
+        return null;
+    }
+
+    return distributors;
+}
+
 export async function getUserTapeIds( userId: string ) {
 
     if ( ! userId ) {
@@ -185,7 +205,10 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: Fi
         return;
     }
 
+    const distributorId = data.distributor
+
     await addNewTapeGenres( genres, tapeId )
+    await addNewTapeDistributor( distributorId, tapeId )
 
     if ( null !== coverfront && coverfront.size > 0 ) {
         await uploadImageToStorage( tapeId, coverfront )
@@ -279,6 +302,37 @@ export async function addNewTapeGenres( genres: any, tapeId: number ) {
             }
         }
     }    
+}
+
+export async function addNewTapeDistributor( distributorId: string, tapeId: number ) {
+    const supabase = createClient()
+    const user = await checkLoginStatus()
+
+    if ( ! user ) {
+        return;
+    }
+
+    const userUuid = user.id
+
+    if ( ! userUuid ) {
+        return;
+    }
+
+    if ( ! distributorId ) {
+        return;
+    }
+
+    const { data, error } = await supabase
+        .rpc( 'insert_tape_distributor', {
+            tape_id: tapeId,
+            distributor_id: distributorId,
+            uuid: userUuid
+        })
+
+    if ( error ) {
+        console.error( error )
+        return null
+    }
 }
 
 export async function uploadImageToStorage(tapeId: number, image: File | null) {
@@ -451,8 +505,8 @@ export async function getTapesByGenre( genreName: string ) {
         .eq('genre_slug', genreName )
         .single();
 
-    if ( null === genre ) {
-        return { error: 'genre ID cannot be null' }
+    if ( genreError || ! genre ) {
+        return []
     }
 
     const { data: tapes, error: tapesError } = await supabase
@@ -528,6 +582,85 @@ export async function getTapesByYear( year: number ) {
         .from('tapes')
         .select(`*`)
         .eq('year', year)
+        .order( 'title' );
+
+    if ( tapesError ) {
+        console.error('Error fetching tapes in collection:', tapesError.message);
+        return { error: `Error fetching tapes in collection: ${tapesError.message}`} 
+    }
+
+    return tapes;
+}
+
+export async function getDistributorNameBySlug( distributorSlug: string ) {
+    
+    if ( null === distributorSlug ) {
+        return { error: 'distributor cannot be null' }
+    }
+    
+    const supabase = createClient()
+    
+    const { data: distributor, error: distributorError } = await supabase
+        .from('distributors')
+        .select('distributor_name')
+        .eq('distributor_slug', distributorSlug )
+        .single();
+    
+    if ( null === distributor ) {
+        return { error: 'distributor ID cannot be null' }
+    }
+    
+    return distributor.distributor_name
+}
+
+export async function getDistributorSlugByName( distributorName: string ) {
+
+    if ( null === distributorName ) {
+        return { error: 'distributor cannot be null' }
+    }
+
+    const supabase = createClient()
+
+    const { data: distributor, error: distributorError } = await supabase
+        .from('distributors')
+        .select('distributor_slug')
+        .eq('distributor_slug', distributorName )
+        .single();
+
+    if ( null === distributor ) {
+        return { error: 'distributor ID cannot be null' }
+    }
+
+    return distributor.distributor_slug
+}
+
+export async function getTapesByDistributor( distributorName: string ) {
+
+    if ( null === distributorName ) {
+        return { error: 'distributor cannot be null' }
+    }
+
+    const supabase = createClient()
+
+    const { data: distributor, error: distributorError } = await supabase
+        .from('distributors')
+        .select('distributor_id')
+        .eq('distributor_slug', distributorName )
+        .single();
+
+    if ( distributorError || ! distributor ) {
+        return []
+    }
+
+    const { data: tapes, error: tapesError } = await supabase
+        .from('tapes')
+        .select(`
+            *,
+            tapes_distributors:tapes_distributors!inner (
+                distributor_id
+            )
+        `)
+        .eq('tapes_distributors.distributor_id', distributor.distributor_id)
         .order( 'title' );
 
     if ( tapesError ) {

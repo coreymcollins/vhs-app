@@ -2,6 +2,7 @@ import { ChangeEvent, FormEvent } from 'react';
 import FetchGenres from '../fetch-genres';
 import { format } from 'date-fns';
 import Image from 'next/image'
+import SearchableSelect from '../distributor-input';
 
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -20,6 +21,7 @@ interface TapeFormProps {
         year: number | string;
         cover_front_url: string;
         genres: string[];
+        distributor: string;
         date_added: string;
         date_updated: string;
     }
@@ -75,6 +77,13 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
                             </label>
                         )
                     })}
+                </div>
+            </div>
+
+            <div className="form-row">
+                <label htmlFor="Distributor">Distributor</label>
+                <div className="distributors-checkboxes">
+                    { SearchableSelect() }
                 </div>
             </div>
             
