@@ -30,7 +30,7 @@ export default async function DistributorPage( req: any ) {
         return (
             <>
                 <div className="page-content-header">
-                    <h2>Distributor "{ distributorSlug }" does not exist in the database</h2>
+                    <h2>Distributor { distributorSlug } does not exist in the database</h2>
                 </div>
             </>
         )

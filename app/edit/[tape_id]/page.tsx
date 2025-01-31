@@ -8,6 +8,7 @@ interface Tape {
     description: string;
     genre_names: string[];
     year: number;
+    distributor: number;
     date_added: string;
     date_updated: string;
     cover_front_url: string;
@@ -49,6 +50,9 @@ export default async function EditTapePage( { params }: { params: { tape_id: num
                 genres:genre_id (
                     genre_name
                 )
+            ),
+            tapes_distributors:tapes_distributors (
+                distributor_id
             )
         ` )
         .eq( 'tape_id', tape_id )

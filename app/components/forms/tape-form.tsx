@@ -1,8 +1,9 @@
-import { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import FetchGenres from '../fetch-genres';
 import { format } from 'date-fns';
 import Image from 'next/image'
 import SearchableSelect from '../distributor-input';
+import { getDistributorNameById } from '@/app/actions';
 
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
@@ -21,7 +22,7 @@ interface TapeFormProps {
         year: number | string;
         cover_front_url: string;
         genres: string[];
-        distributor: string;
+        distributor: number | null;
         date_added: string;
         date_updated: string;
     }
@@ -35,6 +36,20 @@ const getCurrentDate = (): string => {
 export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleImageChange, stateMessage, submitText, context, formRef, defaultValues }: TapeFormProps) {
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
+    const [distributorName, setDistributorName] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchDistributorName = async () => {
+            if ( defaultValues.distributor ) {
+                const name = await getDistributorNameById( defaultValues.distributor )
+                setDistributorName( name )
+            } else {
+                setDistributorName( null )
+            }
+        }
+
+        fetchDistributorName()
+    }, [defaultValues.distributor])
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form" ref={formRef}>
@@ -83,7 +98,10 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
             <div className="form-row">
                 <label htmlFor="Distributor">Distributor</label>
                 <div className="distributors-checkboxes">
-                    { SearchableSelect() }
+                    <SearchableSelect initialValue={defaultValues?.distributor ? {
+                        distributor_id: defaultValues.distributor,
+                        distributor_name: distributorName || 'Loading...'
+                    } : null} />
                 </div>
             </div>
             

@@ -42,6 +42,7 @@ export function AddForm() {
         cover_front_url: '',
         genres: [],
         date_added: '',
+        distributor: null as number | null,
         date_updated: '',
     }
 

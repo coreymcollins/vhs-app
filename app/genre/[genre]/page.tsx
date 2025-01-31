@@ -30,7 +30,7 @@ export default async function GenrePage( req: any ) {
         return (
             <>
                 <div className="page-content-header">
-                    <h2>Genre "{ genreSlug }" does not exist in the database</h2>
+                    <h2>Genre { genreSlug } does not exist in the database</h2>
                 </div>
             </>
         )

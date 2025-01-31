@@ -12,6 +12,7 @@ const initialState = {
 export function EditForm({ tape }: any) {
     const { tape_id, barcode, title, description, year, cover_front_url, date_added, date_updated } = tape;
     const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres.genre_name);
+    const distributor = ( tape.tapes_distributors as any )?.[0]?.distributor_id
     const [state, setState] = useState(initialState);
     const { selectedImage, imagePreviewUrl, handleImageChange } = ImageUpload();
     const formRef = useRef<HTMLFormElement>(null);
@@ -38,6 +39,7 @@ export function EditForm({ tape }: any) {
         cover_front_url,
         genres,
         date_added,
+        distributor,
         date_updated,
     }
 
