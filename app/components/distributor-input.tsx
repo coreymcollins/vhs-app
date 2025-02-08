@@ -21,19 +21,19 @@ export default function SearchableSelect( { initialValue }: SearchableSelectProp
     const [selectedOption, setSelectedOption] = useState<DistributorOption | null>(null);
 
     useEffect(() => {
-        if (initialValue) {
+        if (initialValue && distributors.length > 0) {
             setSelectedOption({
                 value: initialValue.distributor_id,
                 label: initialValue.distributor_name
             });
         }
-    }, [initialValue]);
+    }, [initialValue, distributors]);
 
     return (
         <CreateableSelect
             options={options}
             value={selectedOption}
-            onChange={setSelectedOption}
+            onChange={( option ) => setSelectedOption( option )}
             placeholder="Search for a distributor..."
             name="distributor"
             isSearchable
