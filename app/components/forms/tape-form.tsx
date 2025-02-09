@@ -23,6 +23,7 @@ interface TapeFormProps {
         cover_front_url: string;
         genres: string[];
         distributor: number | null;
+        distributor_name: string;
         date_added: string;
         date_updated: string;
     }
@@ -37,6 +38,10 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
     const [distributorName, setDistributorName] = useState<string | null>(null);
+    const [selectedDistributor, setSelectedDistributor] = useState({
+        distributor_id: defaultValues?.distributor || null,
+        distributor_name: distributorName || 'Loading...'
+    })
 
     useEffect(() => {
         const fetchDistributorName = async () => {
@@ -50,6 +55,13 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
 
         fetchDistributorName()
     }, [defaultValues.distributor])
+
+    useEffect(() => {
+        setSelectedDistributor({
+            distributor_id: defaultValues.distributor || null,
+            distributor_name: distributorName || '',
+        });
+    }, [distributorName, defaultValues.distributor])
 
     return (
         <form onSubmit={handleSubmit} className="add-form add-form-tape form" ref={formRef}>
@@ -98,10 +110,27 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
             <div className="form-row">
                 <label htmlFor="Distributor">Distributor</label>
                 <div className="distributors-checkboxes">
-                    <SearchableSelect initialValue={defaultValues?.distributor ? {
-                        distributor_id: defaultValues.distributor,
-                        distributor_name: distributorName || 'Loading...'
-                    } : null} />
+                    <SearchableSelect
+                        initialValue={selectedDistributor}
+                        onChange={( selected ) => {
+                            setSelectedDistributor(
+                                selected || {
+                                    distributor_id: null,
+                                    distributor_name: '',
+                                }
+                            )
+                        }}
+                    />
+
+                    <input
+                        type="text"
+                        id="distributor-name"
+                        name="distributor_name"
+                        className="input-title"
+                        defaultValue={selectedDistributor.distributor_name}
+                        value={selectedDistributor.distributor_name}
+                        hidden
+                    />
                 </div>
             </div>
             

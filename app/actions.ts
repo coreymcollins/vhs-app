@@ -16,7 +16,8 @@ export async function createEntry(
         description: z.string().min(1),
         year: z.number().min(4),
         date_added: z.string(),
-        distributor: z.number(),
+        distributor: z.number().nullable().optional(),
+        distributor_name: z.string().nullable(),
         add_to_library: z.string().nullable(),
     })
 
@@ -26,12 +27,13 @@ export async function createEntry(
         description: formData.get( 'description' ),
         year: parseInt(formData.get( 'year' ) as string || '0'), // Convert to number or default to 0
         date_added: formData.get( 'date_added' ),
-        distributor: parseInt(formData.get( 'distributor' ) as string || '0' ),
+        distributor: formData.get('distributor') && !isNaN(parseInt(formData.get('distributor') as string)) ? parseInt( formData.get( 'distributor' ) as string ) : null,
+        distributor_name: formData.get('distributor_name') || null,
         add_to_library: formData.get( 'add_to_library' ),
     })
 
     if ( ! parse.success ) {
-        console.error( 'Form data parsing failed:', parse.error )
+        console.error( 'Form data parsing failed when adding new entry:', parse.error )
         return { message: `Failed to add entry: ${parse.error.message}` }
     }
 
@@ -64,7 +66,8 @@ export async function updateEntry(
         description: z.string().min(1),
         genres: z.array(z.string().min(1)),
         year: z.number().min(4),
-        distributor: z.number(),
+        distributor: z.number().nullable().optional(),
+        distributor_name: z.string().nullable(),
         date_updated: z.string(),
     });
 
@@ -75,16 +78,18 @@ export async function updateEntry(
         description: formData.get('description'),
         genres: formData.getAll('genres'),
         year: parseInt(formData.get('year') as string || '0'), // Convert to number or default to 0
-        distributor: parseInt(formData.get( 'distributor' ) as string || '0' ),
+        distributor: formData.get('distributor') && !isNaN(parseInt(formData.get('distributor') as string)) ? parseInt( formData.get( 'distributor' ) as string ) : null,
+        distributor_name: formData.get('distributor_name') || null,
         date_updated: formData.get('date_updated'),
     });
 
     if ( ! parse.success ) {
-        console.error( 'Form data parsing failed:', parse.error );
+        console.error( 'Form data parsing failed when editing:', parse.error );
         return { message: `Failed to update entry: ${parse.error.message}` };
     }
 
     const formUpdates: any = parse.data;
+    formUpdates.distributor = formUpdates.distributor === '' ? null : formUpdates.distributor;
     const newCoverImage = formData.get( 'coverfront' ) as File | null
     
     if ( null !== newCoverImage && newCoverImage.size > 0 ) {

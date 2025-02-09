@@ -10,7 +10,7 @@ const initialState = {
 };
 
 export function EditForm({ tape }: any) {
-    const { tape_id, barcode, title, description, year, cover_front_url, date_added, date_updated } = tape;
+    const { tape_id, barcode, title, description, year, cover_front_url, date_added, date_updated, distributor_name } = tape;
     const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres.genre_name);
     const distributor = tape.tapes_distributors?.distributor_id
     const [state, setState] = useState(initialState);
@@ -30,6 +30,7 @@ export function EditForm({ tape }: any) {
         }
     };
 
+
     const defaultValues = {
         tape_id,
         barcode,
@@ -40,6 +41,7 @@ export function EditForm({ tape }: any) {
         genres,
         date_added,
         distributor,
+        distributor_name,
         date_updated,
     }
 

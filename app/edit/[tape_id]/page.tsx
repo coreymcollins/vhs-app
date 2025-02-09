@@ -9,6 +9,7 @@ interface Tape {
     genre_names: string[];
     year: number;
     distributor: number;
+    distributor_name: string;
     date_added: string;
     date_updated: string;
     cover_front_url: string;

@@ -43,6 +43,7 @@ export function AddForm() {
         genres: [],
         date_added: '',
         distributor: null as number | null,
+        distributor_name: '',
         date_updated: '',
     }
 
