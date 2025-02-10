@@ -15,6 +15,8 @@ interface Tape {
     cover_front_url: string;
 }
 
+export const fetchCache = 'force-no-store';
+
 export async function generateMetadata( { params }: { params: { tape_id: number } } ) {
     const tapeId = params.tape_id
 
