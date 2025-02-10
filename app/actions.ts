@@ -157,7 +157,7 @@ export async function searchDistributors() {
     let { data: distributors, error } = await supabase
         .from( 'distributors' )
         .select( `*` )
-        .order( 'distributor_name' )
+        .order( 'distributor_name_lower' )
 
     if ( error ) {
         console.error( 'error in adding a new tape:', error )

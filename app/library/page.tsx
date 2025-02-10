@@ -15,7 +15,7 @@ async function getTapesWithGenres() {
     const { data, error } = await supabase
         .from('tapes')
         .select('*')
-        .order('title', { ascending: true })
+        .order('title_lower', { ascending: true })
 
     if ( error ) {
         console.error( 'Error fetching tapes in library:', error.message );
