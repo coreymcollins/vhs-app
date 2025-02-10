@@ -45,7 +45,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
         ),
         tapes_distributors!tapes_distributors_tape_id_fkey (
             distributor_id,
-            distributors (
+            distributors:distributor_id (
                 distributor_name,
                 distributor_slug
             )
@@ -65,7 +65,7 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
     }
 
     const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres)
-    const distributor = ( tape.tapes_distributors as any )?.[0]?.distributors
+    const distributor = ( tape.tapes_distributors as any )?.distributors
     const user = await checkLoginStatus()
 
     return (
@@ -116,10 +116,6 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
                         <div className="container-single-tape-row">
                             <h3>Distributor</h3>
                                 <Link href={`/distributor/${distributor.distributor_slug}`}>{distributor.distributor_name}</Link>
-                            {/* {
-                                return (
-                                )
-                            } */}
                         </div>
                     )}
 
