@@ -7,20 +7,69 @@ export type Json =
   | Json[]
 
 export type Database = {
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          operationName?: string
+          query?: string
+          variables?: Json
+          extensions?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
+      distributors: {
+        Row: {
+          distributor_id: number
+          distributor_name: string
+          distributor_name_lower: string | null
+          distributor_slug: string
+        }
+        Insert: {
+          distributor_id?: number
+          distributor_name: string
+          distributor_name_lower?: string | null
+          distributor_slug: string
+        }
+        Update: {
+          distributor_id?: number
+          distributor_name?: string
+          distributor_name_lower?: string | null
+          distributor_slug?: string
+        }
+        Relationships: []
+      }
       genres: {
         Row: {
           genre_id: number
           genre_name: string
+          genre_slug: string | null
         }
         Insert: {
           genre_id?: number
           genre_name: string
+          genre_slug?: string | null
         }
         Update: {
           genre_id?: number
           genre_name?: string
+          genre_slug?: string | null
         }
         Relationships: []
       }
@@ -33,6 +82,7 @@ export type Database = {
           description: string
           tape_id: number
           title: string
+          title_lower: string | null
           uuid: string | null
           year: number
         }
@@ -44,6 +94,7 @@ export type Database = {
           description: string
           tape_id?: number
           title: string
+          title_lower?: string | null
           uuid?: string | null
           year: number
         }
@@ -55,16 +106,45 @@ export type Database = {
           description?: string
           tape_id?: number
           title?: string
+          title_lower?: string | null
           uuid?: string | null
           year?: number
         }
+        Relationships: []
+      }
+      tapes_distributors: {
+        Row: {
+          distributor_id: number
+          tape_distributor_id: number
+          tape_id: number
+          uuid: string | null
+        }
+        Insert: {
+          distributor_id: number
+          tape_distributor_id?: number
+          tape_id: number
+          uuid?: string | null
+        }
+        Update: {
+          distributor_id?: number
+          tape_distributor_id?: number
+          tape_id?: number
+          uuid?: string | null
+        }
         Relationships: [
           {
-            foreignKeyName: "tapes_uuid_fkey"
-            columns: ["uuid"]
+            foreignKeyName: "tapes_distributors_distributor_id_fkey"
+            columns: ["distributor_id"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "distributors"
+            referencedColumns: ["distributor_id"]
+          },
+          {
+            foreignKeyName: "tapes_distributors_tape_id_fkey"
+            columns: ["tape_id"]
+            isOneToOne: false
+            referencedRelation: "tapes"
+            referencedColumns: ["tape_id"]
           },
         ]
       }
@@ -102,13 +182,6 @@ export type Database = {
             referencedRelation: "tapes"
             referencedColumns: ["tape_id"]
           },
-          {
-            foreignKeyName: "tapes_genres_uuid_fkey"
-            columns: ["uuid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       users: {
@@ -133,15 +206,7 @@ export type Database = {
           username?: string
           uuid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_uuid_fkey"
-            columns: ["uuid"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       users_tapes: {
         Row: {
@@ -285,6 +350,18 @@ export type Database = {
         }
         Returns: unknown[]
       }
+      insert_distributor: {
+        Args: {
+          p_distributor_name: string
+        }
+        Returns: undefined
+      }
+      insert_genre: {
+        Args: {
+          p_genre_name: string
+        }
+        Returns: undefined
+      }
       insert_new_tape: {
         Args: {
           data: Json
@@ -293,18 +370,18 @@ export type Database = {
           tape_id: number
         }[]
       }
-      insert_tape_genre: {
-        Args: {
-          tape_id: number
-          genre_id: number
-          uuid: string
-        }
-        Returns: undefined
-      }
       insert_tape_distributor: {
         Args: {
           tape_id: number
           distributor_id: number
+          uuid: string
+        }
+        Returns: undefined
+      }
+      insert_tape_genre: {
+        Args: {
+          tape_id: number
+          genre_id: number
           uuid: string
         }
         Returns: undefined
@@ -412,4 +489,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
