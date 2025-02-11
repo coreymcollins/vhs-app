@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { PaginationProps } from './types'
 import RealtimeTapes from './realtime-tapes'
 
@@ -10,12 +10,16 @@ export interface MultiTapeGridProps extends PaginationProps {
 
 export function MultiTapeGrid( props: MultiTapeGridProps ) {
     let {tapes, pageNumber} = props
-    const router = useRouter()
-
+    
     if ( null === tapes ) {
         return;
     }
-
+    
+    const router = useRouter()
+    const searchParams = useSearchParams()
+    const updatedQuery = new URLSearchParams( searchParams.toString() )
+    const currentPage = Number( searchParams.get( 'page' ) ) || 1
+    updatedQuery.set( 'page', String( currentPage + 1 ) )
     const totalPosts = tapes.length
     const postsPerPage = 32
     const from = 1 === pageNumber ? 0 : ( pageNumber - 1 ) * postsPerPage
@@ -23,12 +27,13 @@ export function MultiTapeGrid( props: MultiTapeGridProps ) {
 
     const handlePrevPage = ( event: any ) => {
         event.preventDefault()
-        router.push( `?page=${(Number(pageNumber) - 1)}` )
+        updatedQuery.set( 'page', String( currentPage - 1 ) )
+        router.push( `?${updatedQuery.toString()}` )
     }
 
     const handleNextPage = ( event: any ) => {
         event.preventDefault()
-        router.push( `?page=${(Number(pageNumber) + 1)}` )
+        router.push( `?${updatedQuery.toString()}` )
     }
 
     const updatedProps = {
