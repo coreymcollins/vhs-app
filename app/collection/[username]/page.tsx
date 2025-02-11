@@ -1,6 +1,6 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
-import { getUserCollection } from '@/app/actions';
+import { getTapesByQueryArgs, getUserCollection } from '@/app/actions';
 
 export async function generateMetadata( req: any) {
     const username = req.params.username
@@ -20,7 +20,7 @@ export async function generateMetadata( req: any) {
 
 export default async function LibraryPage( req: any ) {
     const username = req.params.username
-    const {tapes, error} = await getUserCollection( username )
+    let {tapes, error} = await getUserCollection( username )
 
     if ( error ) {
         return (
@@ -36,6 +36,11 @@ export default async function LibraryPage( req: any ) {
                 <h2>{`Viewing Collection of ${username} failed: no tapes found`}</h2>
             </div>
         )
+    }
+
+    // If we have query args for distributor/genre, get only those results.
+    if ( undefined !== req.searchParams.genre && 0 !== req.searchParams.genre.length || undefined !== req.searchParams.distributor && 0 !== req.searchParams.distributor.length ) {
+        tapes = await getTapesByQueryArgs( tapes, req.searchParams )
     }
 
     const userAuth = await checkLoginStatus()
