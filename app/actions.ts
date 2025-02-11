@@ -660,9 +660,9 @@ export async function getDistributorSlugByName( distributorName: string ) {
     return distributor.distributor_slug
 }
 
-export async function getTapesByDistributor( distributorName: string ) {
+export async function getTapesByDistributor( distributorSlug: string ) {
 
-    if ( null === distributorName ) {
+    if ( null === distributorSlug ) {
         return { error: 'distributor cannot be null' }
     }
 
@@ -671,7 +671,7 @@ export async function getTapesByDistributor( distributorName: string ) {
     const { data: distributor, error: distributorError } = await supabase
         .from('distributors')
         .select('distributor_id')
-        .eq('distributor_slug', distributorName )
+        .eq('distributor_slug', distributorSlug )
         .single();
 
     if ( distributorError || ! distributor ) {
@@ -695,4 +695,39 @@ export async function getTapesByDistributor( distributorName: string ) {
     }
 
     return tapes;
+}
+
+export async function getTapesByQueryArgs( results: any, searchParams: any ) {
+
+    if ( undefined === searchParams ) {
+        return results
+    }
+
+    if ( undefined !== searchParams.distributor && undefined === searchParams.genre ) {
+        let distributorTapes = await getTapesByDistributor( searchParams.distributor )
+
+        if ( Array.isArray( distributorTapes ) && Array.isArray( results ) ) {
+            let foundTapes = new Set( distributorTapes.map( item => item.tape_id ) )
+            results = results.filter( item => foundTapes.has( item.tape_id ) )
+        }
+    } else if ( undefined !== searchParams.genre && undefined === searchParams.distributor ) {
+        let genreTapes = await getTapesByGenre( searchParams.genre )
+
+        if ( Array.isArray( genreTapes ) && Array.isArray( results ) ) {
+            let foundTapes = new Set( genreTapes.map( item => item.tape_id ) )
+            results = results.filter( item => foundTapes.has( item.tape_id ) )
+        }
+    } else if ( undefined !== searchParams.genre && undefined !== searchParams.distributor ) {
+        let distributorTapes = await getTapesByDistributor( searchParams.distributor )
+        let genreTapes = await getTapesByGenre( searchParams.genre )
+
+        if ( Array.isArray( distributorTapes ) && Array.isArray( genreTapes ) && Array.isArray( results ) ) {
+            let foundDistributorTapes = new Set( distributorTapes.map( item => item.tape_id ) )
+            let foundGenreTapes = new Set( genreTapes.map( item => item.tape_id ) )
+            
+            results = genreTapes.filter( item => foundDistributorTapes.has( item.tape_id ) && foundGenreTapes.has( item.tape_id ) )
+        }
+    }
+
+    return results
 }

@@ -1,6 +1,6 @@
 import { checkLoginStatus } from '../actions/check-login-status';
 import { WithPagination } from '../components/with-pagination';
-import { getUsernameByUuid, getUsersTapesByUuid } from '../actions';
+import { getTapesByQueryArgs, getUsernameByUuid, getUsersTapesByUuid } from '../actions';
 import CopyCollectionUrl from '@/app/components/button-copy-collection-url';
 import { Metadata } from 'next';
 
@@ -16,8 +16,14 @@ export default async function LibraryPage( req: any ) {
         return
     }
     
+    let tapes = await getUsersTapesByUuid( userAuth.id )
+
+    // If we have query args for distributor/genre, get only those results.
+    if ( undefined !== req.searchParams.genre && 0 !== req.searchParams.genre.length || undefined !== req.searchParams.distributor && 0 !== req.searchParams.distributor.length ) {
+        tapes = await getTapesByQueryArgs( tapes, req.searchParams )
+    }
+    
     const username = await getUsernameByUuid( userAuth.id )
-    const tapes = await getUsersTapesByUuid( userAuth.id )
     
     const totalTapes = tapes.length
     let { page } = req.searchParams
