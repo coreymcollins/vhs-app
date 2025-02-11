@@ -10,13 +10,13 @@ export interface MultiTapeGridProps extends PaginationProps {
 
 export function MultiTapeGrid( props: MultiTapeGridProps ) {
     let {tapes, pageNumber} = props
+    const router = useRouter()
+    const searchParams = useSearchParams()
     
     if ( null === tapes ) {
         return;
     }
     
-    const router = useRouter()
-    const searchParams = useSearchParams()
     const updatedQuery = new URLSearchParams( searchParams.toString() )
     const currentPage = Number( searchParams.get( 'page' ) ) || 1
     updatedQuery.set( 'page', String( currentPage + 1 ) )
