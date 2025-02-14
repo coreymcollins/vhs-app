@@ -1,7 +1,7 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 import { PaginationProps } from '@/app/components/types';
-import { getTapesByYear } from '@/app/actions';
+import { getTapesByYear } from '@/app/queries/getTapesByYear';
 
 export async function generateMetadata( req: any ) {
     const year = req.params.year

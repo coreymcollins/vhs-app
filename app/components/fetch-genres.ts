@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { searchGenres } from '../actions'
+import { getAllGenres } from '@/app/queries/getAllGenres'
 
 export default function FetchGenres() {
     const [genres, setGenres ] = useState<string[]>([]);
@@ -9,7 +9,7 @@ export default function FetchGenres() {
     useEffect(() => {
         async function fetchGenres() {
             try {
-                const genresData = await searchGenres()
+                const genresData = await getAllGenres()
 
                 if ( genresData ) {
                     const genreNames = genresData.map( genre => genre.genre_name )

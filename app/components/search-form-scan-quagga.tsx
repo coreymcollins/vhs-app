@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { searchByBarcode } from '@/app/actions';
+import { searchByBarcode } from '@/app/queries/searchByBarcode';
 import Quagga from '@ericblade/quagga2';
 import { SearchResultGrid } from './grid-search-result';
 

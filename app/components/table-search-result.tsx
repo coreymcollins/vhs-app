@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { MultiTapeRow } from './multi-tape-row';
-import { getUserTapeIds } from '../actions';
+import { getUserTapeIds } from '@/app/queries/getUserTapeIds';
 
 export function SearchResultTable({tapes, session}: {tapes: any, session: any}) {
     const [userTapeIds, setUserTapeIds] = useState<number[]>([]);

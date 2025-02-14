@@ -3,6 +3,8 @@ import { checkLoginStatus } from '../actions/check-login-status';
 import { WithPagination } from '../components/with-pagination';
 import { PaginationProps } from '../components/types';
 import { Metadata } from 'next';
+import MultiSelectFilters from '../components/multi-select-filters';
+import { getTapesByQueryArgs } from '@/app/queries/getTapesByQueryArgs';
 
 export const metadata: Metadata = {
     title: 'Revival Video: Library',
@@ -25,8 +27,9 @@ async function getTapesWithGenres() {
     return data;
 }
 
-export default async function LibraryPage( req: any ) {
-    const tapes = await getTapesWithGenres()
+export default async function LibraryPage( {searchParams}: {searchParams: {genre?: string; distributor?: string; page?: number}} ) {
+    let tapes = await getTapesWithGenres()
+    tapes = await getTapesByQueryArgs( tapes, searchParams )
 
     if ( null === tapes ) {
         return
@@ -34,7 +37,7 @@ export default async function LibraryPage( req: any ) {
     
     const session = await checkLoginStatus()
     const totalTapes = tapes.length
-    let { page } = req.searchParams
+    let page = searchParams?.page
     page = undefined === page ? 1 : page
 
     const paginationProps: PaginationProps = {
@@ -48,6 +51,7 @@ export default async function LibraryPage( req: any ) {
         <>
             <div className="page-content-header">
                 <h2>Full Library ({ totalTapes })</h2>
+                <MultiSelectFilters />
             </div>
             <WithPagination {...paginationProps} />
         </>

@@ -2,10 +2,11 @@
 
 import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { SingleTapeGrid } from './single-tape-grid'
 import { MultiTapeGridProps } from './multi-tape-grid'
-import { getUserCollection, getUsersTapesByUuid } from '../actions'
+import { getUserCollection } from '@/app/queries/getUserCollection';
+import { getUsersTapesByUuid } from '@/app/queries/getUsersTapesByUuid'
 
 export interface RealtimeTapesProps extends MultiTapeGridProps {
     from: number;
@@ -18,7 +19,6 @@ export default function RealtimeTapes( props: RealtimeTapesProps) {
     const signedInUserId = null !== session ? session.id : null
     const supabase = createClient()
     const router = useRouter()
-    const [currentTapes, setCurrentTapes] = useState( tapes )
 
     const fetchLatestTapes = useCallback( async () => {
 
@@ -28,14 +28,13 @@ export default function RealtimeTapes( props: RealtimeTapesProps) {
                 .select('*')
                 .order('title', { ascending: true })
 
-            setCurrentTapes( updatedTapes );
-
+            router.refresh()
         } else if ( 'collection' === context ) {
             const updatedTapes = await getUsersTapesByUuid( signedInUserId )
-            setCurrentTapes( updatedTapes );
+            router.refresh()
         } else if ( 'collection-public' === context ) {
             const updatedTapes = await getUserCollection( username )
-            setCurrentTapes( updatedTapes );
+            router.refresh()
         }
 
         router.refresh();
@@ -64,8 +63,12 @@ export default function RealtimeTapes( props: RealtimeTapesProps) {
         }
     }, [supabase, router, fetchLatestTapes])
 
+    const filteredTapes = useMemo(() => {
+        return tapes.slice( from, to )
+    }, [tapes, from, to])
+
     return (
-        currentTapes.slice( from, to ).map(( tape: object, index: number ) => {
+        filteredTapes.map(( tape: object, index: number ) => {
             const updatedProps = {
                 ...props,
                 tape,

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, MouseEvent, FC } from 'react';
 import { getSiteUrl } from '../actions'
+import { useSearchParams } from 'next/navigation';
 
 interface CopyCollectionUrlProps {
     username: string;
@@ -13,6 +14,8 @@ const CopyCollectionUrl: FC<CopyCollectionUrlProps> = ( {username} ) => {
     const errorButtonText = 'Could not copy URL to clipboard'
     const [siteUrl, setSiteUrl] = useState<string | null>(null)
     const [buttonText, setButtonText] = useState<string>( defaultButtonText )
+    const [buttonParams, setButtonParams] = useState<string>( window.location.search )
+    const searchParams = useSearchParams()
 
     useEffect(() => {
         const fetchSiteUrl = async () => {
@@ -22,6 +25,10 @@ const CopyCollectionUrl: FC<CopyCollectionUrlProps> = ( {username} ) => {
 
         fetchSiteUrl()
     }, [])
+
+    useEffect(() => {
+        setButtonParams( searchParams.toString() )
+    }, [searchParams])
 
     if ( ! siteUrl ) {
         return null
@@ -51,7 +58,7 @@ const CopyCollectionUrl: FC<CopyCollectionUrlProps> = ( {username} ) => {
     return (
         <button
             className="copy-collection-url button button-library button-padding"
-            data-collection-url={`${siteUrl}/collection/${username}/${window.location.search}`}
+            data-collection-url={`${siteUrl}/collection/${username}/${buttonParams}`}
             onClick={handleButtonClick}
         >
             {buttonText}

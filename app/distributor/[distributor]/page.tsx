@@ -1,7 +1,8 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 import { PaginationProps } from '@/app/components/types';
-import { getDistributorNameBySlug, getTapesByDistributor } from '@/app/actions';
+import { getTapesByDistributor } from '@/app/queries/getTapesByDistributor';
+import { getDistributorNameBySlug } from '@/app/queries/getDistributorNameBySlug';
 
 export async function generateMetadata( req: any ) {
     const distributorSlug = req.params.distributor

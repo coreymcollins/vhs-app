@@ -3,7 +3,7 @@ import FetchGenres from '../fetch-genres';
 import { format } from 'date-fns';
 import Image from 'next/image'
 import SearchableSelect from '../distributor-input';
-import { getDistributorNameById } from '@/app/actions';
+import { getDistributorNameById } from '@/app/queries/getDistributorNameById';
 
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;

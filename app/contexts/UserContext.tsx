@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { createClient } from '@/utils/supabase/client'
 import { User } from '@supabase/supabase-js'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 type UserContextType = User | null
 
@@ -12,6 +13,7 @@ const supabase = createClient()
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<UserContextType>(null)
+    const [queryClient] = useState( () => new QueryClient() )
     
     useEffect(() => {
         const checkSession = async () => {
@@ -31,11 +33,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }, [])
     
     return (
-        <UserContext.Provider value={user}>
-            <UserUpdateContext.Provider value={setUser}>
-                {children}
-            </UserUpdateContext.Provider>
-        </UserContext.Provider>
+        <QueryClientProvider client={queryClient}>
+            <UserContext.Provider value={user}>
+                <UserUpdateContext.Provider value={setUser}>
+                    {children}
+                </UserUpdateContext.Provider>
+            </UserContext.Provider>
+        </QueryClientProvider>
     )
 }
 

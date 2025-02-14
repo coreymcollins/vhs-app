@@ -2,7 +2,7 @@
 
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useRef, useState } from 'react'
-import { checkForUserByUsername } from '../actions';
+import { checkForUserByUsername } from '@/app/queries/checkForUserByUsername';
 
 interface EditableFieldProps {
     label: string;

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { searchDistributors } from '../actions'
+import { getAllDistributors } from '@/app/queries/getAllDistributors'
 
 interface Distributor {
     distributor_id: number;
@@ -14,7 +14,7 @@ export default function FetchDistributors() {
     useEffect(() => {
         async function fetchDistributors() {
             try {
-                const distributorsData = await searchDistributors()
+                const distributorsData = await getAllDistributors()
 
                 if ( distributorsData ) {
                     setDistributors( distributorsData )

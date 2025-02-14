@@ -1,7 +1,8 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
 import { PaginationProps } from '@/app/components/types';
-import { getGenreNameBySlug, getTapesByGenre } from '@/app/actions';
+import { getGenreNameBySlug } from '@/app/queries/getGenreNameBySlug';
+import { getTapesByGenre } from '@/app/queries/getTapesByGenre';
 
 export async function generateMetadata( req: any ) {
     const genreSlug = req.params.genre

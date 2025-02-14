@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { MultiTapeGrid } from './multi-tape-grid';
-import { getUserTapeIds } from '../actions';
 import { PaginationProps } from './types';
+import { getUserTapeIds } from '@/app/queries/getUserTapeIds';
 
 export function SearchResultGrid( props: PaginationProps) {
     let {session} = props

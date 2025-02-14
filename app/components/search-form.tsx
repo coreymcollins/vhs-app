@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { searchByQuery } from '@/app/actions';
+import { searchByQuery } from '@/app/queries/searchByQuery';
 import { SearchResultGrid } from './grid-search-result';
 
 const initialState = {

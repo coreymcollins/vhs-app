@@ -414,6 +414,20 @@ input.readonly {
     width: 100%;
 }
 
+.multi-select-row {
+    margin: 2rem auto 0;
+}
+
+.multi-select-column {
+    margin-bottom: 1rem;
+}
+
+.multi-select-label {
+    display: block;
+    font-size: 1rem;
+    padding-bottom: .5rem;
+}
+
 .container-single-tape-row + .container-single-tape-row {
     margin-top: 2rem;
 }
@@ -598,6 +612,16 @@ input.readonly {
 
     .site-header.scrolled {
         background-color: rgba(72, 25, 66, 1);
+    }
+
+    .multi-select-row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-gap: 2rem;
+    }
+
+    .multi-select-column {
+        margin-bottom: 0;
     }
 }
 

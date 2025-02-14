@@ -1,6 +1,7 @@
 import { checkLoginStatus } from '@/app/actions/check-login-status';
 import { WithPagination } from '@/app/components/with-pagination';
-import { getTapesByQueryArgs, getUserCollection } from '@/app/actions';
+import { getTapesByQueryArgs } from '@/app/queries/getTapesByQueryArgs';
+import { getUserCollection } from '@/app/queries/getUserCollection';
 
 export async function generateMetadata( req: any) {
     const username = req.params.username

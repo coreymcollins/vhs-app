@@ -1,4 +1,4 @@
-import { checkForUserByUsername } from '@/app/actions';
+import { checkForUserByUsername } from '@/app/queries/checkForUserByUsername';
 import { signup } from '@/app/actions/signup';
 import { useState } from 'react'
 
