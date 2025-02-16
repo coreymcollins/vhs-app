@@ -11,6 +11,8 @@ export const metadata: Metadata = {
     description: 'View the full Revival Video Library.',
 };
 
+export const fetchCache = 'force-no-store';
+
 async function getTapesWithGenres() {
     const supabase = createClient()    
 
