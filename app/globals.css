@@ -240,6 +240,7 @@ select {
     background-color: #2b2a33;
     border: none;
     border-radius: 0;
+    color: rgb(var(--foreground-rgb));
     padding: .5rem;
 }
 
