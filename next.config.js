@@ -14,7 +14,16 @@ const nextConfig = {
         ]
     },
     images: {
-        domains: ['aewnwotjayajvuoausjx.supabase.co', '127.0.0.1'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'aewnwotjayajvuoausjx.supabase.co',
+            },
+            {
+                protocol: 'http',
+                hostname: '127.0.0.1',
+            },
+        ],
     },
 }
 
