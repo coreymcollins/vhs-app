@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export const fetchCache = 'force-no-store';
 
 async function getTapesWithGenres() {
-    const supabase = createClient()    
+    const supabase = createClient()
 
     const { data, error } = await supabase
         .from('tapes')
