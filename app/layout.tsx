@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import NextTopLoader from 'nextjs-toploader'
@@ -9,9 +9,20 @@ import ClientComponentWrapper from './components/ClientComponentWrapper'
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+    themeColor: '#20121e',
+};
+
 export const metadata: Metadata = {
     title: 'Revival Video',
     description: 'Be kind. Revive.',
+    generator: 'Next.js',
+    manifest: '/manifest.ts',
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'default',
+        title: 'Revival Video',
+    },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
