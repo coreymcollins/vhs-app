@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Be Kind, Revive.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#ffffff',
+    background_color: '#20121e',
     theme_color: '#20121e',
     icons: [
       {
