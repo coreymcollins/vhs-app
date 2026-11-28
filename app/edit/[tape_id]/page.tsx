@@ -13,6 +13,7 @@ interface Tape {
     date_added: string;
     date_updated: string;
     cover_front_url: string;
+    cover_back_url: string;
 }
 
 export const fetchCache = 'force-no-store';

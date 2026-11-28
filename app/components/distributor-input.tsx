@@ -42,6 +42,7 @@ export default function SearchableSelect( { initialValue, onChange }: Searchable
 
     return (
         <CreateableSelect
+            instanceId="vhs-distributor-select-field"
             options={options}
             value={selectedOption}
             onChange={handleChange}

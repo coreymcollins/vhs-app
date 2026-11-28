@@ -1,37 +1,81 @@
 import { ChangeEvent, useEffect, useState } from 'react';
+import { createWorker } from 'tesseract.js';
+
+interface SelectedImages {
+    [key: string]: File | null;
+}
+
+interface ImagePreviews {
+    [key: string]: string | null;
+}
 
 export function ImageUpload() {
-    const [selectedImage, setSelectedImage] = useState<File | null>(null)
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
+    const [selectedImages, setSelectedImages] = useState<SelectedImages>({})
+    const [imagePreviewUrls, setImagePreviewUrls] = useState<ImagePreviews>({})
+    const [ocrText, setOcrText] = useState<string>('')
+    const [ocrLoading, setOcrLoading] = useState<boolean>(false)
 
-    const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        const { name } = event.target;
         const file = event.target.files?.[0]
 
-        if ( ! file ) {
+        if ( ! file || ! name ) {
             return;
         }
 
-        setSelectedImage(file);
-        setImagePreviewUrl( URL.createObjectURL( file ) )
-    }
-
-    const clearImage = () => {
-
-        if ( imagePreviewUrl ) {
-            URL.revokeObjectURL( imagePreviewUrl )
+        if (imagePreviewUrls[name]) {
+            URL.revokeObjectURL(imagePreviewUrls[name]!);
         }
 
-        setSelectedImage( null )
-        setImagePreviewUrl( null )
+        setSelectedImages(( prev ) => ({
+            ...prev,
+            [name]: file,
+        }));
+
+        setImagePreviewUrls(( prev ) => ({
+            ...prev,
+            [name]: URL.createObjectURL( file ),
+        }));
+
+        if (name === 'coverback') {
+            setOcrLoading(true);
+            setOcrText('');
+
+            try {
+                const worker = await createWorker('eng');
+                const { data } = await worker.recognize(file);
+
+                setOcrText(data.text);
+                await worker.terminate();
+            } catch (error) {
+                console.error('OCR Error:', error);
+                setOcrText('Failed to extract text.');
+            } finally {
+                setOcrLoading(false);
+            }
+        }
+    }
+
+    const clearImages = () => {
+
+        Object.values(imagePreviewUrls).forEach((url) => {
+            if (url) URL.revokeObjectURL(url);
+        });
+
+        setSelectedImages({});
+        setImagePreviewUrls({});
+        setOcrText('');
     };
 
     useEffect(() => {
         return () => {
-            if ( imagePreviewUrl ) {
-                URL.revokeObjectURL( imagePreviewUrl )
-            }
+            Object.values( imagePreviewUrls ).forEach(( url ) => {
+                if ( url ) {
+                    URL.revokeObjectURL( url );
+                }
+            });
         }
-    }, [imagePreviewUrl])
+    }, [imagePreviewUrls])
 
-    return { selectedImage, imagePreviewUrl, handleImageChange, clearImage }
+    return { selectedImages, imagePreviewUrls, handleImageChange, clearImages, ocrText, ocrLoading }
 }

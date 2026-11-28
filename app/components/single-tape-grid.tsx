@@ -24,7 +24,7 @@ export function SingleTapeGrid(props: SingleTapeGridProps) {
             { tape.cover_front_url && (
                 <Link href={`/tape/${tape.tape_id}`}>
                     <div className="cover-grid-container">
-                        <TapeImage tape={tape} layout="archive" priority={priority} />
+                        <TapeImage tape={tape} layout="archive" priority={priority} side="front" />
                     </div>
                 </Link>
             )}

@@ -71,15 +71,27 @@ export default async function SingleTapePage( { params }: { params: { tape_id: n
     return (
         <>
             <div className="container-single-tape">
-                { tape.cover_front_url && '\\x' !== tape.cover_front_url && tape.cover_front_url.length > 0 ? (
-                    <div className="container-single-tape-cover">
-                        <TapeImage tape={tape} layout="single" priority={true} />
-                    </div>
-                ) : (
-                    <>
-                        <em>No cover available.</em>
-                    </>
-                )}
+                <div className="container-single-tape-covers">
+                    { tape.cover_front_url && '\\x' !== tape.cover_front_url && tape.cover_front_url.length > 0 ? (
+                        <div className="container-single-tape-cover">
+                            <TapeImage tape={tape} layout="single" priority={true} side="front" />
+                        </div>
+                    ) : (
+                        <>
+                            <p><em>No front cover available.</em></p>
+                        </>
+                    )}
+
+                    { tape.cover_back_url && '\\x' !== tape.cover_back_url && tape.cover_back_url.length > 0 ? (
+                        <div className="container-single-tape-cover">
+                            <TapeImage tape={tape} layout="single" priority={true} side="back" />
+                        </div>
+                    ) : (
+                        <>
+                            <p><em>No back cover available.</em></p>
+                        </>
+                    )}
+                </div>
                 <div className="container-single-tape-content">
                     <h2>{tape.title}</h2>
                     { tape.description && (

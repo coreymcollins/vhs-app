@@ -28,7 +28,7 @@ export function SingleTapeRow({tape, context, session, userTapeIds}: {tape: any,
             </td>
             <td key={`${context}-${tape.barcode}-coverfront`} data-label="Cover">
                 { tape.cover_front_url ? (
-                    <TapeImage tape={tape} layout="archive" priority={true} />
+                    <TapeImage tape={tape} layout="archive" priority={true} side="front" />
                 ) : (
                     <>No image available</>
                 )}

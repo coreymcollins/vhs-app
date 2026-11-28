@@ -47,8 +47,9 @@ export async function createEntry(
 
     const data = parse.data
     const coverFrontFile = formData.get( 'coverfront' ) as File | null
+    const coverBackFile = formData.get( 'coverback' ) as File | null
 
-    await addNewTapeSupabase( data, genres, coverFrontFile )
+    await addNewTapeSupabase( data, genres, coverFrontFile, coverBackFile )
 }
 
 export async function updateEntry(
@@ -90,10 +91,15 @@ export async function updateEntry(
 
     const formUpdates: any = parse.data;
     formUpdates.distributor = formUpdates.distributor === '' ? null : formUpdates.distributor;
-    const newCoverImage = formData.get( 'coverfront' ) as File | null
+    const newFrontCoverImage = formData.get( 'coverfront' ) as File | null
+    const newBackCoverImage = formData.get( 'coverback' ) as File | null
     
-    if ( null !== newCoverImage && newCoverImage.size > 0 ) {
-        uploadImageToStorage( formUpdates.tape_id, newCoverImage )
+    if ( null !== newFrontCoverImage && newFrontCoverImage.size > 0 ) {
+        uploadImageToStorage( formUpdates.tape_id, newFrontCoverImage, 'front' )
+    }
+
+    if ( null !== newBackCoverImage && newBackCoverImage.size > 0 ) {
+        uploadImageToStorage( formUpdates.tape_id, newBackCoverImage, 'front' )
     }
 
     const { data, error } = await supabase
@@ -121,7 +127,7 @@ export async function removeFromLibrary( tapeId: number, userId: string ) {
     await supabase.rpc( 'delete_user_tape', { user_id_query: userId, tape_id_query: tapeId });
 }
 
-export async function addNewTapeSupabase( data: any, genres: any, coverfront: File | null ) {
+export async function addNewTapeSupabase( data: any, genres: any, coverfront: File | null, coverback: File | null ) {
     const newTapeData = await addNewTape( data )
     const tapeId = null !== newTapeData && undefined !== newTapeData ? newTapeData[0].tape_id : ''
 
@@ -135,7 +141,11 @@ export async function addNewTapeSupabase( data: any, genres: any, coverfront: Fi
     await addNewTapeDistributor( distributorId, tapeId )
 
     if ( null !== coverfront && coverfront.size > 0 ) {
-        await uploadImageToStorage( tapeId, coverfront )
+        await uploadImageToStorage( tapeId, coverfront, 'front' )
+    }
+
+    if ( null !== coverback && coverback.size > 0 ) {
+        await uploadImageToStorage( tapeId, coverback, 'back' )
     }
 
     const user = await checkLoginStatus()
@@ -259,14 +269,14 @@ export async function addNewTapeDistributor( distributorId: string, tapeId: numb
     }
 }
 
-export async function uploadImageToStorage(tapeId: number, image: File | null) {
+export async function uploadImageToStorage(tapeId: number, image: File | null, side: 'front' | 'back') {
 
     if ( null === image || null !== image && image.size <= 0 ) {
         return
     }
 
     const supabase = await createClient()
-    const imageFileName = `cover_tape_id_${tapeId}_${Date.now()}`
+    const imageFileName = `cover_${side}_tape_id_${tapeId}_${Date.now()}`
 
     try {
         const {data: imageUpload, error} = await supabase.storage
@@ -279,6 +289,7 @@ export async function uploadImageToStorage(tapeId: number, image: File | null) {
 
     } catch ( error ) {
         console.error( 'Error uploading image to storage:', error )
+        return
     }
 
     // Add the URL to the tapes table.
@@ -286,19 +297,20 @@ export async function uploadImageToStorage(tapeId: number, image: File | null) {
         .from( 'covers' )
         .getPublicUrl( imageFileName )
 
+    const columnToUpdate = side === 'front' ? 'cover_front_url' : 'cover_back_url'
     try {
         const {error: imageUrlError } = await supabase.from( 'tapes' )
-            .update({cover_front_url: imageUrl.publicUrl})
+            .update({[columnToUpdate]: imageUrl.publicUrl})
             .eq( 'tape_id', tapeId )
 
         if ( imageUrlError ) {
             throw imageUrlError
         }
     } catch ( imageUrlError ) {
-        console.error( 'Error adding image to tapes table:', imageUrlError )
+        console.error( 'Error adding ${side} image to tapes table:', imageUrlError )
     }
 }
 
-export const getSiteUrl = (): string => {
+export const getSiteUrl = async (): Promise<string> => {
     return process.env.NEXT_PUBLIC_SITE_URL || '';
 };

@@ -10,11 +10,11 @@ const initialState = {
 };
 
 export function EditForm({ tape }: any) {
-    const { tape_id, barcode, title, description, year, cover_front_url, date_added, date_updated, distributor_name } = tape;
+    const { tape_id, barcode, title, description, year, cover_front_url, cover_back_url, date_added, date_updated, distributor_name } = tape;
     const genres = tape.tapes_genres.map((tapes_genres: any) => tapes_genres.genres.genre_name);
     const distributor = tape.tapes_distributors?.distributor_id
     const [state, setState] = useState(initialState);
-    const { selectedImage, imagePreviewUrl, handleImageChange } = ImageUpload();
+    const { selectedImages, imagePreviewUrls, handleImageChange, ocrText, ocrLoading } = ImageUpload();
     const formRef = useRef<HTMLFormElement>(null);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +38,7 @@ export function EditForm({ tape }: any) {
         description,
         year,
         cover_front_url,
+        cover_back_url,
         genres,
         date_added,
         distributor,
@@ -48,14 +49,16 @@ export function EditForm({ tape }: any) {
     return (
         <TapeForm
             handleSubmit={handleSubmit}
-            selectedImage={selectedImage}
-            imagePreviewUrl={imagePreviewUrl}
+            selectedImages={selectedImages}
+            imagePreviewUrls={imagePreviewUrls}
             handleImageChange={handleImageChange}
             stateMessage={state.message}
             defaultValues={defaultValues}
             context='edit'
             submitText='Update Tape'
             formRef={formRef}
+            ocrText={ocrText}
+            ocrLoading={ocrLoading}
         />
     );
 }

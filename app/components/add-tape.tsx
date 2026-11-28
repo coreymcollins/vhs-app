@@ -11,7 +11,7 @@ const initialState = {
 
 export function AddForm() {
     const [state, setState] = useState(initialState);
-    const { selectedImage, handleImageChange, imagePreviewUrl, clearImage } = ImageUpload();
+    const { selectedImages, handleImageChange, imagePreviewUrls, clearImages, ocrText, ocrLoading } = ImageUpload();
     const formRef = useRef<HTMLFormElement>(null);
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -27,7 +27,7 @@ export function AddForm() {
                 formRef.current.reset()
             }
 
-            clearImage()
+            clearImages()
         } catch ( error ) {
             setState({message: `Failed to add "${formData.get( 'title' )}"`})
         }
@@ -40,6 +40,7 @@ export function AddForm() {
         description: '',
         year: '',
         cover_front_url: '',
+        cover_back_url: '',
         genres: [],
         date_added: '',
         distributor: null as number | null,
@@ -50,14 +51,16 @@ export function AddForm() {
     return (
         <TapeForm
             handleSubmit={handleSubmit}
-            selectedImage={selectedImage}
-            imagePreviewUrl={imagePreviewUrl}
+            selectedImages={selectedImages}
+            imagePreviewUrls={imagePreviewUrls}
             handleImageChange={handleImageChange}
             stateMessage={state.message}
             defaultValues={defaultValues}
             context='add'
             submitText='Add Tape'
             formRef={formRef}
+            ocrText={ocrText}
+            ocrLoading={ocrLoading}
         />
     );
 }

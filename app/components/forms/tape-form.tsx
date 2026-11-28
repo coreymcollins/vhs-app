@@ -7,13 +7,15 @@ import { getDistributorNameById } from '@/app/queries/getDistributorNameById';
 
 interface TapeFormProps {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => Promise<void>;
-    selectedImage: File | null;
-    imagePreviewUrl: string | null;
+    selectedImages: {[key: string]: File | null};
+    imagePreviewUrls: {[key:string]: string | null};
     handleImageChange: (event: ChangeEvent<HTMLInputElement>) => void;
     stateMessage: string;
     submitText: string;
     context: string;
     formRef: React.RefObject<HTMLFormElement>;
+    ocrText: string;
+    ocrLoading: boolean;
     defaultValues: {
         tape_id: string;
         barcode: string;
@@ -21,6 +23,7 @@ interface TapeFormProps {
         description: string;
         year: number | string;
         cover_front_url: string;
+        cover_back_url: string;
         genres: string[];
         distributor: number | null;
         distributor_name: string;
@@ -34,14 +37,27 @@ const getCurrentDate = (): string => {
     return format( currentDate, 'yyyy-MM-dd' )
 }
 
-export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleImageChange, stateMessage, submitText, context, formRef, defaultValues }: TapeFormProps) {
+export function TapeForm({ handleSubmit, selectedImages, imagePreviewUrls, handleImageChange, stateMessage, submitText, context, formRef, defaultValues, ocrText, ocrLoading }: TapeFormProps) {
     const { genres } = FetchGenres();
     const currentDate = getCurrentDate();
     const [distributorName, setDistributorName] = useState<string | null>(null);
     const [selectedDistributor, setSelectedDistributor] = useState({
         distributor_id: defaultValues?.distributor || null,
         distributor_name: distributorName || 'Loading...'
-    })
+    });
+    const [description, setDescription] = useState(defaultValues.description || '');
+
+    useEffect(() => {
+        setDescription(defaultValues.description || '');
+    }, [defaultValues.description]);
+
+    useEffect(() => {
+        if(ocrText) {
+            setDescription((prevText) => {
+                return prevText ? `${prevText}\n\n${ocrText}` : ocrText;
+            });
+        }
+    }, [ocrText]);
 
     useEffect(() => {
         const fetchDistributorName = async () => {
@@ -80,10 +96,108 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
                 <label htmlFor="title">Title</label>
                 <input type="text" id="title" name="title" className="input-title" required defaultValue={defaultValues.title} />
             </div>
+
+            <div className="form-row">
+                <label htmlFor="form-covers">Covers</label>
+                <div className="form-covers form-columns">
+                    <div className="image-container form-column">
+                        <label htmlFor="coverfront" className="heading-cover">Front Cover</label>
+                        <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" onChange={handleImageChange} />
+                        { imagePreviewUrls['coverfront'] && (
+                            <>
+                                <Image
+                                    src={imagePreviewUrls['coverfront']!}
+                                    alt="front cover"
+                                    sizes="(min-width: 1024px) 768px, 180px"
+                                    quality={90}
+                                    priority={true}
+                                    style={{
+                                        height: 'auto'
+                                    }}
+                                    width={178}
+                                    height={267}
+                                    className="image-upload-preview"
+                                />
+                            </>
+                        )}
+                        { ! imagePreviewUrls['coverfront'] && defaultValues.cover_front_url ? (
+                            <>
+                                <Image
+                                    src={defaultValues.cover_front_url}
+                                    alt={`${defaultValues.title} front cover`}
+                                    sizes="(min-width: 1024px) 768px, 180px"
+                                    quality={90}
+                                    priority={true}
+                                    style={{
+                                        height: 'auto'
+                                    }}
+                                    width={178}
+                                    height={267}
+                                    className="image-upload-preview"
+                                />
+                                <input type="hidden" name="existing_coverfront" value={defaultValues.cover_front_url} />
+                            </>
+                        ) : null }
+                    </div>
+                    
+                    <div className="image-container form-column">
+                        <label htmlFor="coverback" className="heading-cover">
+                            Back Cover
+                        </label>
+                        <input type="file" id="coverback" name="coverback" accept="image/*" className="input-cover" onChange={handleImageChange} />
+                        { imagePreviewUrls['coverback'] && (
+                            <>
+                                <Image
+                                    src={imagePreviewUrls['coverback']!}
+                                    alt="back cover"
+                                    sizes="(min-width: 1024px) 768px, 180px"
+                                    quality={90}
+                                    priority={true}
+                                    style={{
+                                        height: 'auto'
+                                    }}
+                                    width={178}
+                                    height={267}
+                                    className="image-upload-preview"
+                                />
+                            </>
+                        )}
+                        { ! imagePreviewUrls['coverback'] && defaultValues.cover_back_url ? (
+                            <>
+                                <Image
+                                    src={defaultValues.cover_back_url}
+                                    alt={`${defaultValues.title} back cover`}
+                                    sizes="(min-width: 1024px) 768px, 180px"
+                                    quality={90}
+                                    priority={true}
+                                    style={{
+                                        height: 'auto'
+                                    }}
+                                    width={178}
+                                    height={267}
+                                    className="image-upload-preview"
+                                />
+                                <input type="hidden" name="existing_coverback" value={defaultValues.cover_back_url} />
+                            </>
+                        ) : null }
+                        <br />
+                        <em>The uploader will attempt to grab the text from the back cover and fill the Deescription field below.</em>
+                    </div>
+                </div>
+            </div>
             
             <div className="form-row">
                 <label htmlFor="description">Description</label>
-                <textarea id="description" name="description" className="input-description" rows={5} required defaultValue={defaultValues.description} />
+                <textarea
+                    id="description"
+                    name="description"
+                    className="input-description"
+                    rows={10}
+                    required
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder={ocrLoading ? "Grabbing text from back cover..." : "Enter description."}
+                />
             </div>
             
             <div className="form-row">
@@ -128,7 +242,7 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
                         name="distributor_name"
                         className="input-title"
                         defaultValue={selectedDistributor.distributor_name}
-                        value={selectedDistributor.distributor_name}
+                        readOnly
                         hidden
                     />
                 </div>
@@ -137,48 +251,6 @@ export function TapeForm({ handleSubmit, selectedImage, imagePreviewUrl, handleI
             <div className="form-row">
                 <label htmlFor="year">VHS Release Year</label>
                 <input type="number" id="year" name="year" className="input-year" required defaultValue={defaultValues.year} />
-            </div>
-
-            <div className="form-row">
-                <label htmlFor="coverfront">Front Cover</label>
-                <div className="image-container">
-                    <input type="file" id="coverfront" name="coverfront" accept="image/*" className="input-cover" onChange={handleImageChange} />
-                    { imagePreviewUrl && (
-                        <>
-                            <Image
-                                src={imagePreviewUrl}
-                                alt="front cover"
-                                sizes="(min-width: 1024px) 768px, 180px"
-                                quality={90}
-                                priority={true}
-                                style={{
-                                    height: 'auto'
-                                }}
-                                width={178}
-                                height={267}
-                                className="image-upload-preview"
-                            />
-                        </>
-                    )}
-                    { ! imagePreviewUrl && defaultValues.cover_front_url ? (
-                        <>
-                            <Image
-                                src={defaultValues.cover_front_url}
-                                alt={`${defaultValues.title} front cover`}
-                                sizes="(min-width: 1024px) 768px, 180px"
-                                quality={90}
-                                priority={true}
-                                style={{
-                                    height: 'auto'
-                                }}
-                                width={178}
-                                height={267}
-                                className="image-upload-preview"
-                            />
-                            <input type="hidden" name="existing_coverfront" value={defaultValues.cover_front_url} />
-                        </>
-                    ) : null }
-                </div>
             </div>
 
             { 'add' === context ? (
